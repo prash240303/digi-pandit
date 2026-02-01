@@ -42,7 +42,7 @@ type SignInRequest struct {
 type OAuthRequest struct {
 	AccessToken  string `json:"access_token" validate:"required"`
 	RefreshToken string `json:"refresh_token,omitempty"`
-	Provider     string `json:"provider" validate:"required,oneof=google apple"`
+	Provider     string `json:"provider,omitempty"`
 }
 
 // RefreshRequest represents a token refresh request

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {
-    View,
-    Text,
     TextInput,
     TouchableOpacity,
     KeyboardAvoidingView,
@@ -10,13 +8,36 @@ import {
     ActivityIndicator,
     Alert,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from "expo-auth-session";
+import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/contexts";
 import { API_BASE_URL } from "@/services/api";
+import { authService } from "@/services/auth";
+import { Box } from "@/components/ui/box";
+import { Text as GText } from "@/components/ui/text";
+import { VStack } from "@/components/ui/vstack";
+import { HStack } from "@/components/ui/hstack";
+import { Heading } from "@/components/ui/heading";
+import { COLOR } from "@/constants/colors";
 
 // Required for OAuth to work properly
 WebBrowser.maybeCompleteAuthSession();
+
+// Shared input style for consistency
+const inputStyle = {
+    backgroundColor: COLOR.cream,
+    color: COLOR.ink,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: COLOR.creamDark,
+    fontSize: 16,
+    outlineWidth: 0, // Remove focus outline on web
+} as const;
 
 export default function LoginScreen() {
     const { signIn, isLoading } = useAuth();
@@ -51,165 +72,341 @@ export default function LoginScreen() {
             setOauthLoading(true);
             setError("");
 
-            // For now, show a message that OAuth needs to be configured
-            Alert.alert(
-                "OAuth Setup Required",
-                `To use ${provider === "google" ? "Google" : "Apple"} login:\n\n` +
-                "1. Go to Supabase Dashboard → Authentication → Providers\n" +
-                `2. Enable ${provider === "google" ? "Google" : "Apple"} provider\n` +
-                "3. Configure OAuth credentials\n\n" +
-                "Once configured, OAuth will work automatically.",
-                [{ text: "OK" }]
-            );
+            // Create a redirect URL that Expo can handle
+            const redirectUrl = AuthSession.makeRedirectUri({
+                scheme: "digipandit",
+                path: "(auth)/callback",
+            });
 
-            // Uncomment below once OAuth is configured in Supabase:
-            /*
-            const redirectUrl = Linking.createURL("/(auth)/callback");
-            const response = await fetch(
-                `${API_BASE_URL}/api/v1/auth/oauth?provider=${provider}&redirect_url=${encodeURIComponent(redirectUrl)}`
-            );
-            const data = await response.json();
-            
-            if (data.success && data.data?.url) {
+            console.log("OAuth redirect URL:", redirectUrl);
+
+            // Get OAuth URL from backend
+            const response = await authService.getOAuthUrl(provider, redirectUrl);
+
+            console.log("OAuth response:", JSON.stringify(response, null, 2));
+
+            if (response.success && response.data?.url) {
+                const oauthUrl = response.data.url;
+                console.log("Opening OAuth URL:", oauthUrl);
+
+                // Validate URL before opening
+                if (!oauthUrl || typeof oauthUrl !== 'string' || !oauthUrl.startsWith('http')) {
+                    setError("Invalid OAuth URL received from server");
+                    return;
+                }
+
+                // Open the OAuth URL in a browser
                 const result = await WebBrowser.openAuthSessionAsync(
-                    data.data.url,
+                    oauthUrl,
                     redirectUrl
                 );
-                
-                if (result.type === "success") {
-                    // Handle successful OAuth - extract token from URL
-                    // and call your auth context to set the user
+
+                console.log("OAuth result:", result);
+
+                if (result.type === "success" && result.url) {
+                    // Parse the callback URL for tokens
+                    const url = new URL(result.url);
+                    const accessToken = url.searchParams.get("access_token") ||
+                        url.hash?.match(/access_token=([^&]+)/)?.[1];
+
+                    if (accessToken) {
+                        // Verify the token with our backend
+                        const verifyResponse = await fetch(
+                            `${API_BASE_URL}/api/v1/auth/oauth/verify`,
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ access_token: accessToken }),
+                            }
+                        );
+                        const verifyData = await verifyResponse.json();
+
+                        if (verifyData.success) {
+                            // Login successful, navigate to main app
+                            router.replace("/(tabs)");
+                            return;
+                        }
+                    }
+
+                    setError("Failed to complete authentication");
+                } else if (result.type === "cancel") {
+                    // User cancelled, no error needed
+                    console.log("OAuth cancelled by user");
+                } else {
+                    setError("Authentication was cancelled or failed");
                 }
+            } else {
+                // Show setup required message if backend doesn't have OAuth configured
+                Alert.alert(
+                    "OAuth Setup Required",
+                    `To use ${provider === "google" ? "Google" : "Apple"} login:\n\n` +
+                    "1. Go to Supabase Dashboard → Authentication → Providers\n" +
+                    `2. Enable ${provider === "google" ? "Google" : "Apple"} provider\n` +
+                    "3. Configure OAuth credentials\n\n" +
+                    "Once configured, OAuth will work automatically.",
+                    [{ text: "OK" }]
+                );
             }
-            */
         } catch (err) {
             console.error("OAuth error:", err);
-            setError("OAuth login failed");
+            setError("OAuth login failed. Please try again.");
         } finally {
             setOauthLoading(false);
         }
     };
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className="flex-1 bg-gray-900"
-        >
-            <ScrollView
-                contentContainerStyle={{ flexGrow: 1 }}
-                keyboardShouldPersistTaps="handled"
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLOR.cream }}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}
             >
-                <View className="flex-1 justify-center px-6 py-12">
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        paddingHorizontal: 24,
+                        paddingTop: 40,
+                        paddingBottom: 32,
+                        justifyContent: "center",
+                    }}
+                    keyboardShouldPersistTaps="handled"
+                >
                     {/* Header */}
-                    <View className="items-center mb-12">
-                        <Text className="text-4xl font-bold text-orange-500 mb-2">
-                            🙏 DigiPandit
-                        </Text>
-                        <Text className="text-gray-400 text-center">
-                            Your spiritual companion for Hindu practices
-                        </Text>
-                    </View>
-
-                    {/* Login Form */}
-                    <View className="space-y-4">
-                        <View>
-                            <Text className="text-gray-300 mb-2 font-medium">Email</Text>
-                            <TextInput
-                                value={email}
-                                onChangeText={setEmail}
-                                placeholder="Enter your email"
-                                placeholderTextColor="#6B7280"
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                className="bg-gray-800 text-white px-4 py-4 rounded-xl border border-gray-700 text-base"
-                            />
-                        </View>
-
-                        <View className="mt-4">
-                            <Text className="text-gray-300 mb-2 font-medium">Password</Text>
-                            <TextInput
-                                value={password}
-                                onChangeText={setPassword}
-                                placeholder="Enter your password"
-                                placeholderTextColor="#6B7280"
-                                secureTextEntry
-                                className="bg-gray-800 text-white px-4 py-4 rounded-xl border border-gray-700 text-base"
-                            />
-                        </View>
-
-                        {/* Error Message */}
-                        {error ? (
-                            <View className="bg-red-900/30 border border-red-500/50 rounded-lg p-3 mt-4">
-                                <Text className="text-red-400 text-center">{error}</Text>
-                            </View>
-                        ) : null}
-
-                        {/* Login Button */}
-                        <TouchableOpacity
-                            onPress={handleLogin}
-                            disabled={isLoading}
-                            className={`mt-6 py-4 rounded-xl ${isLoading ? "bg-orange-700" : "bg-orange-500"
-                                }`}
+                    <VStack className="items-center gap-3" style={{ marginBottom: 40 }}>
+                        {/* Logo circle */}
+                        <Box
+                            className="rounded-full items-center justify-center"
+                            style={{
+                                width: 80,
+                                height: 80,
+                                backgroundColor: COLOR.terracotta + "15",
+                                borderWidth: 2,
+                                borderColor: COLOR.terracotta + "30",
+                            }}
                         >
-                            {isLoading ? (
-                                <ActivityIndicator color="white" />
-                            ) : (
-                                <Text className="text-white text-center font-bold text-lg">
-                                    Sign In
-                                </Text>
-                            )}
-                        </TouchableOpacity>
+                            <GText style={{ fontSize: 40 }}>🙏</GText>
+                        </Box>
+                        <Heading
+                            size="2xl"
+                            style={{
+                                color: COLOR.terracotta,
+                                fontFamily: Platform.select({
+                                    ios: "Georgia",
+                                    android: "serif",
+                                    web: "Georgia, serif",
+                                }),
+                                letterSpacing: -0.5,
+                            }}
+                        >
+                            DigiPandit
+                        </Heading>
+                        <GText
+                            size="sm"
+                            style={{ color: COLOR.inkMuted, textAlign: "center" }}
+                        >
+                            Your spiritual companion for Hindu practices
+                        </GText>
+                    </VStack>
 
-                        {/* Divider */}
-                        <View className="flex-row items-center my-6">
-                            <View className="flex-1 h-px bg-gray-700" />
-                            <Text className="text-gray-500 mx-4">or continue with</Text>
-                            <View className="flex-1 h-px bg-gray-700" />
-                        </View>
+                    {/* Login Card */}
+                    <Box
+                        className="rounded-3xl"
+                        style={{
+                            backgroundColor: COLOR.cardBg,
+                            borderWidth: 1,
+                            borderColor: COLOR.creamDark,
+                            padding: 24,
+                        }}
+                    >
+                        <VStack style={{ gap: 16 }}>
+                            {/* Email Field */}
+                            <VStack style={{ gap: 6 }}>
+                                <GText
+                                    size="sm"
+                                    style={{ color: COLOR.ink, fontWeight: "600" }}
+                                >
+                                    Email
+                                </GText>
+                                <TextInput
+                                    value={email}
+                                    onChangeText={setEmail}
+                                    placeholder="Enter your email"
+                                    placeholderTextColor={COLOR.inkLight}
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    style={inputStyle}
+                                />
+                            </VStack>
 
-                        {/* OAuth Buttons */}
-                        <View className="flex-row gap-4">
+                            {/* Password Field */}
+                            <VStack style={{ gap: 6 }}>
+                                <GText
+                                    size="sm"
+                                    style={{ color: COLOR.ink, fontWeight: "600" }}
+                                >
+                                    Password
+                                </GText>
+                                <TextInput
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    placeholder="Enter your password"
+                                    placeholderTextColor={COLOR.inkLight}
+                                    secureTextEntry
+                                    style={inputStyle}
+                                />
+                            </VStack>
+
+                            {/* Error Message */}
+                            {error ? (
+                                <Box
+                                    className="rounded-xl"
+                                    style={{
+                                        backgroundColor: "#FEE2E2",
+                                        borderWidth: 1,
+                                        borderColor: "#FECACA",
+                                        padding: 12,
+                                    }}
+                                >
+                                    <GText
+                                        size="sm"
+                                        style={{ color: "#DC2626", textAlign: "center" }}
+                                    >
+                                        {error}
+                                    </GText>
+                                </Box>
+                            ) : null}
+
+                            {/* Login Button */}
                             <TouchableOpacity
-                                onPress={() => handleOAuth("google")}
-                                disabled={oauthLoading}
-                                className="flex-1 bg-gray-800 py-4 rounded-xl border border-gray-700"
+                                onPress={handleLogin}
+                                disabled={isLoading}
+                                activeOpacity={0.85}
+                                style={{
+                                    backgroundColor: isLoading ? COLOR.terracottaLight : COLOR.terracotta,
+                                    paddingVertical: 16,
+                                    borderRadius: 14,
+                                    marginTop: 8,
+                                }}
                             >
-                                {oauthLoading ? (
-                                    <ActivityIndicator color="white" size="small" />
+                                {isLoading ? (
+                                    <ActivityIndicator color={COLOR.white} />
                                 ) : (
-                                    <Text className="text-white text-center font-medium">
-                                        🔵 Google
-                                    </Text>
+                                    <GText
+                                        size="md"
+                                        style={{
+                                            color: COLOR.white,
+                                            textAlign: "center",
+                                            fontWeight: "700",
+                                        }}
+                                    >
+                                        Sign In
+                                    </GText>
                                 )}
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => handleOAuth("apple")}
-                                disabled={oauthLoading}
-                                className="flex-1 bg-gray-800 py-4 rounded-xl border border-gray-700"
-                            >
-                                {oauthLoading ? (
-                                    <ActivityIndicator color="white" size="small" />
-                                ) : (
-                                    <Text className="text-white text-center font-medium">
-                                        ⚫ Apple
-                                    </Text>
-                                )}
-                            </TouchableOpacity>
-                        </View>
 
-                        {/* Sign Up Link */}
-                        <View className="flex-row justify-center mt-8">
-                            <Text className="text-gray-400">Don't have an account? </Text>
-                            <Link href="/(auth)/signup" asChild>
-                                <TouchableOpacity>
-                                    <Text className="text-orange-500 font-bold">Sign Up</Text>
+                            {/* Divider */}
+                            <HStack className="items-center" style={{ marginVertical: 8 }}>
+                                <Box style={{ flex: 1, height: 1, backgroundColor: COLOR.creamDark }} />
+                                <GText
+                                    size="xs"
+                                    style={{ color: COLOR.inkLight, marginHorizontal: 16 }}
+                                >
+                                    or continue with
+                                </GText>
+                                <Box style={{ flex: 1, height: 1, backgroundColor: COLOR.creamDark }} />
+                            </HStack>
+
+                            {/* OAuth Buttons */}
+                            <HStack style={{ gap: 12 }}>
+                                <TouchableOpacity
+                                    onPress={() => handleOAuth("google")}
+                                    disabled={oauthLoading}
+                                    activeOpacity={0.85}
+                                    style={{
+                                        flex: 1,
+                                        backgroundColor: COLOR.cream,
+                                        paddingVertical: 14,
+                                        borderRadius: 12,
+                                        borderWidth: 1.5,
+                                        borderColor: COLOR.creamDark,
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    {oauthLoading ? (
+                                        <ActivityIndicator color={COLOR.ink} size="small" />
+                                    ) : (
+                                        <>
+                                            <Ionicons name="logo-google" size={18} color="#DB4437" />
+                                            <GText
+                                                size="sm"
+                                                style={{ color: COLOR.ink, fontWeight: "600" }}
+                                            >
+                                                Google
+                                            </GText>
+                                        </>
+                                    )}
                                 </TouchableOpacity>
-                            </Link>
-                        </View>
-                    </View>
-                </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                                <TouchableOpacity
+                                    onPress={() => handleOAuth("apple")}
+                                    disabled={oauthLoading}
+                                    activeOpacity={0.85}
+                                    style={{
+                                        flex: 1,
+                                        backgroundColor: COLOR.cream,
+                                        paddingVertical: 14,
+                                        borderRadius: 12,
+                                        borderWidth: 1.5,
+                                        borderColor: COLOR.creamDark,
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: 8,
+                                    }}
+                                >
+                                    {oauthLoading ? (
+                                        <ActivityIndicator color={COLOR.ink} size="small" />
+                                    ) : (
+                                        <>
+                                            <Ionicons name="logo-apple" size={18} color={COLOR.ink} />
+                                            <GText
+                                                size="sm"
+                                                style={{ color: COLOR.ink, fontWeight: "600" }}
+                                            >
+                                                Apple
+                                            </GText>
+                                        </>
+                                    )}
+                                </TouchableOpacity>
+                            </HStack>
+                        </VStack>
+                    </Box>
+
+                    {/* Sign Up Link */}
+                    <HStack
+                        className="items-center justify-center"
+                        style={{ marginTop: 24 }}
+                    >
+                        <GText size="sm" style={{ color: COLOR.inkMuted }}>
+                            Don't have an account?{" "}
+                        </GText>
+                        <Link href="/(auth)/signup" asChild>
+                            <TouchableOpacity>
+                                <GText
+                                    size="sm"
+                                    style={{ color: COLOR.terracotta, fontWeight: "700" }}
+                                >
+                                    Sign Up
+                                </GText>
+                            </TouchableOpacity>
+                        </Link>
+                    </HStack>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
