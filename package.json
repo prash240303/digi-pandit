@@ -17,6 +17,7 @@
     "@gluestack-ui/utils": "^3.0.15",
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react-native": "^1.0.11",
+    "@ishubhamx/panchangam-js": "^2.1.2",
     "@legendapp/motion": "^2.5.3",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
