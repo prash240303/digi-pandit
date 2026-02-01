@@ -3,7 +3,13 @@ import { HStack } from "@/components/ui/hstack";
 import { COLOR } from "@/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { USER_NAME } from "@/constants/user-mock-data";
+import { getPanchangam, Observer } from "@ishubhamx/panchangam-js";
+const observer = new Observer(12.9716, 77.5946, 920);
+// 2. Define Date
+const date = new Date(); // or new Date('2025-06-15')
 
+// 3. Get Panchangam
+const panchangam = getPanchangam(date, observer);
 import { Text as GText } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { Platform, TouchableOpacity } from "react-native";
@@ -50,6 +56,15 @@ function TopBar({ name }: { name: string | null }) {
 }
 
 export default function TabTwoScreen() {
+  console.log("Tithi:", panchangam.tithi);
+  console.log("Nakshatra:", panchangam.nakshatra);
+  console.log("Sunrise:", panchangam.sunrise);
+  console.log(
+    "Rahu Kalam:",
+    panchangam.rahuKalamStart,
+    "-",
+    panchangam.rahuKalamEnd,
+  );
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
       <FadeSlideIn delay={80}>
