@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/contexts";
 import { Box } from "@/components/ui/box";
 import { Text as GText } from "@/components/ui/text";
@@ -28,7 +27,7 @@ const inputStyle = {
     borderWidth: 1.5,
     borderColor: COLOR.creamDark,
     fontSize: 16,
-    outlineWidth: 0, // Remove focus outline on web
+    outlineWidth: 0,
 } as const;
 
 export default function SignUpScreen() {

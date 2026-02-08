@@ -44,13 +44,13 @@ function RootLayoutNav() {
   return (
     <GluestackUIProvider mode="dark">
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <AuthGate>
+        {/* <AuthGate> */}
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
           </Stack>
-        </AuthGate>
+        {/* </AuthGate>  */}
         <StatusBar style="auto" />
       </ThemeProvider>
     </GluestackUIProvider>
