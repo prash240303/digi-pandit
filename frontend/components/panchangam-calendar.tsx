@@ -42,6 +42,7 @@ import {
   Observer,
 } from "@ishubhamx/panchangam-js";
 import { format, getDate, getTime, isDate, parseISO } from "date-fns";
+import SunriseSunset from "./sun-moon-timings";
 
 /* -------------------- Types -------------------- */
 interface CalendarDayData {
@@ -262,6 +263,21 @@ const PanchangamCalendar: React.FC = () => {
     weeks.push(calendarDays.slice(i, i + 7));
   }
 
+  function parseTime12h(timeStr) {
+    // "07:09 AM" -> { hour: 7, minute: 9 }
+    const [time, modifier] = timeStr.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (modifier === "PM" && hours !== 12) {
+      hours += 12;
+    }
+    if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return { hour: hours, minute: minutes };
+  }
+
   const years = Array.from({ length: 100 }, (_, i) => 1980 + i);
 
   return (
@@ -426,13 +442,27 @@ const PanchangamCalendar: React.FC = () => {
                   </View>
                 </View>
 
-                <View className="bg-blue-100 mb-3  p-4 rounded-lg">
-                  <Text className="text-blue-700">
-                    🌅 Sunrise: {formatTime(selectedDay.panchangam.sunrise)}
-                  </Text>
-                  <Text className="text-blue-700">
-                    🌇 Sunset: {formatTime(selectedDay.panchangam.sunset)}
-                  </Text>
+                <View className="mb-3  p-4 rounded-lg">
+                  {(() => {
+                    const sunriseStr = formatTime(
+                      selectedDay.panchangam.sunrise,
+                    );
+                    const sunsetStr = formatTime(selectedDay.panchangam.sunset);
+
+                    const sunrise = parseTime12h(sunriseStr);
+                    const sunset = parseTime12h(sunsetStr);
+
+                    return (
+                      <SunriseSunset
+                        sunriseHour={sunrise.hour}
+                        sunriseMinute={sunrise.minute}
+                        sunsetHour={sunset.hour}
+                        sunsetMinute={sunset.minute}
+                      />
+                    );
+                  })()}
+                </View>
+                <View className="bg-blue-100 mb-3 p-4 rounded-lg">
                   <Text className="text-blue-700">
                     🌕 Chandrabalam: {selectedDay.panchangam.chandrabalam}
                   </Text>

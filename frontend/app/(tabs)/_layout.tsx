@@ -50,7 +50,7 @@ export default function TabLayout() {
             <HugeiconsIcon icon={AlphabetHindiIcon} color={color} />
           ),
         }}
-      />{" "}
+      />
       <Tabs.Screen
         name="rituals"
         options={{
@@ -59,7 +59,7 @@ export default function TabLayout() {
             <HugeiconsIcon icon={HandPrayerFreeIcons} color={color} />
           ),
         }}
-      />{" "}
+      />
       <Tabs.Screen
         name="temples"
         options={{
