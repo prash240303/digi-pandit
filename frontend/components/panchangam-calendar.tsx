@@ -34,6 +34,11 @@ import {
   ChevronFirst,
   ChevronLast,
   Cancel01FreeIcons,
+  HugeiconsFreeIcons,
+  ArrowLeft01FreeIcons,
+  ArrowRight,
+  ArrowRight02FreeIcons,
+  ArrowRight02Icon,
 } from "@hugeicons/core-free-icons";
 import { TouchableHighlight, TouchableOpacity, View, Text } from "react-native";
 import {
@@ -43,6 +48,8 @@ import {
 } from "@ishubhamx/panchangam-js";
 import { format, getDate, getTime, isDate, parseISO } from "date-fns";
 import SunriseSunset from "./sun-moon-timings";
+import PeriodCard from "./period-card";
+import { PlanetaryPositions } from "./planetary-positions";
 
 /* -------------------- Types -------------------- */
 interface CalendarDayData {
@@ -145,6 +152,18 @@ const getGulikaKalam = (panchangam: any) => {
 
   const start = new Date(bm.start); // ISO UTC -> local Date
   const end = new Date(bm.end);
+
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
+
+  return {
+    start: format(start, "dd MMM yyyy hh:mm a"),
+    end: format(end, "dd MMM yyyy hh:mm a"),
+  };
+};
+
+const getRahuKalam = (panchangam: any) => {
+  const start = panchangam.rahuKalamStart;
+  const end = panchangam.rahuKalamEnd;
 
   if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
 
@@ -279,7 +298,59 @@ const PanchangamCalendar: React.FC = () => {
   }
 
   const years = Array.from({ length: 100 }, (_, i) => 1980 + i);
+  const brahma = selectedDay ? getBrahmaMuhurta(selectedDay.panchangam) : null;
+  const gulika = selectedDay ? getGulikaKalam(selectedDay.panchangam) : null;
+  const rahu = selectedDay ? getRahuKalam(selectedDay.panchangam) : null;
+  const yamaganda = selectedDay
+    ? getYamagandaKalam(selectedDay.panchangam)
+    : null;
 
+  const planetaryData = (selectedDay: any) => {
+    const sunData = {
+      degree: selectedDay.panchangam.planetaryPositions.sun.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.sun.rashiName,
+    };
+    const moonData = {
+      degree: selectedDay.panchangam.planetaryPositions.moon.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.moon.rashiName,
+    };
+    const marsData = {
+      degree: selectedDay.panchangam.planetaryPositions.mars.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.mars.rashiName,
+    };
+    const mercuryData = {
+      degree: selectedDay.panchangam.planetaryPositions.mercury.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.mercury.rashiName,
+    };
+    const jupiterData = {
+      degree: selectedDay.panchangam.planetaryPositions.jupiter.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.jupiter.rashiName,
+    };
+    const venusData = {
+      degree: selectedDay.panchangam.planetaryPositions.venus.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.venus.rashiName,
+    };
+    const rahuData = {
+      degree: selectedDay.panchangam.planetaryPositions.venus.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.venus.rashiName,
+    };
+    const ketusData = {
+      degree: selectedDay.panchangam.planetaryPositions.venus.degree,
+      rashiName: selectedDay.panchangam.planetaryPositions.venus.rashiName,
+    };
+    return {
+      planetaryPositions: {
+        sun: sunData,
+        moon: moonData,
+        mars: marsData,
+        mercury: mercuryData,
+        jupiter: jupiterData,
+        venus: venusData,
+        rahu: rahuData,
+        ketu: ketusData,
+      },
+    };
+  };
   return (
     <View className="flex-1 p-4 bg-amber-50">
       {/* Header */}
@@ -462,97 +533,40 @@ const PanchangamCalendar: React.FC = () => {
                     );
                   })()}
                 </View>
-                <View className="bg-blue-100 mb-3 p-4 rounded-lg">
-                  <Text className="text-blue-700">
-                    🌕 Chandrabalam: {selectedDay.panchangam.chandrabalam}
+                <View className="bg-blue-100 flex flex-col gap-2 items-center justify-center mb-3 p-4 rounded-lg">
+                  <Text className="text-blue-700 text-4xl">
+                    {getChandrabalam(selectedDay)}
                   </Text>
-                  <Text className="text-blue-700">
-                    sun rashi : {getCurrentSunRashi(selectedDay.panchangam)}
-                  </Text>
-                  <Text className="text-blue-700">
-                    moon rashi : {getCurrentMoonRashi(selectedDay.panchangam)}
+                  <Text className="text-blacl">
+                    {selectedDay.panchangam.chandrabalam} % illuminated
                   </Text>
                 </View>
 
-                <View className="bg-green-100 mb-3  p-4 rounded-lg">
-                  <Text className="font-semibold text-green-900 mb-2">
-                    Auspicious & Inauspicious Periods
-                  </Text>
-                  <Text className="text-green-700">
-                    Brahma Muhurta : start:{" "}
-                    {getBrahmaMuhurta(selectedDay.panchangam).start}{" "}
-                    {getBrahmaMuhurta(selectedDay.panchangam).end}
-                  </Text>
-                </View>
+                <PeriodCard
+                  title="Brahma Muhurta"
+                  start={brahma?.start}
+                  end={brahma?.end}
+                  status="AUSPICIOUS"
+                  icon="🌅"
+                />
 
-                <View className="bg-purple-100 p-4  mb-3  rounded-lg">
-                  <Text className="font-semibold text-purple-900 mb-2">
-                    Planetary Positions (Graha Sthiti)
-                  </Text>
-                  <Text className="text-purple-700">
-                    sun : Surya :{" "}
-                    {selectedDay.panchangam.planetaryPositions.sun.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {selectedDay.panchangam.planetaryPositions.sun.rashiName}
-                  </Text>
-                  <Text className="text-purple-700">
-                    Moon : chandra :{" "}
-                    {selectedDay.panchangam.planetaryPositions.moon.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {selectedDay.panchangam.planetaryPositions.moon.rashiName}
-                  </Text>{" "}
-                  <Text className="text-purple-700">
-                    Mars : Mangal :{" "}
-                    {selectedDay.panchangam.planetaryPositions.mars.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {selectedDay.panchangam.planetaryPositions.mars.rashiName}
-                  </Text>{" "}
-                  <Text className="text-purple-700">
-                    Mercury : budha :{" "}
-                    {selectedDay.panchangam.planetaryPositions.mercury.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {
-                      selectedDay.panchangam.planetaryPositions.mercury
-                        .rashiName
-                    }
-                  </Text>{" "}
-                  <Text className="text-purple-700">
-                    Jupiter : guru :{" "}
-                    {selectedDay.panchangam.planetaryPositions.jupiter.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {
-                      selectedDay.panchangam.planetaryPositions.jupiter
-                        .rashiName
-                    }
-                  </Text>
-                  <Text className="text-purple-700">
-                    Venus : Shukra :{" "}
-                    {selectedDay.panchangam.planetaryPositions.venus.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {selectedDay.panchangam.planetaryPositions.venus.rashiName}
-                  </Text>
-                  <Text className="text-purple-700">
-                    Rahu : Rahu :{" "}
-                    {selectedDay.panchangam.planetaryPositions.rahu.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {selectedDay.panchangam.planetaryPositions.rahu.rashiName}
-                  </Text>
-                  <Text className="text-purple-700">
-                    ketu : ketu :{" "}
-                    {selectedDay.panchangam.planetaryPositions.ketu.degree.toFixed(
-                      2,
-                    )}{" "}
-                    {selectedDay.panchangam.planetaryPositions.ketu.rashiName}
-                  </Text>
-                </View>
+                <PeriodCard
+                  title="Rahu Kalam"
+                  start={rahu?.start}
+                  end={rahu?.end}
+                  status="AVOID"
+                  icon="🚫"
+                />
 
+                <PeriodCard
+                  title="Yamaganda"
+                  start={yamaganda?.start}
+                  end={yamaganda?.end}
+                  status="AVOID"
+                  icon="⚠️"
+                />
+
+                <PlanetaryPositions data={planetaryData(selectedDay)} />
                 {selectedDay.panchangam.festivals?.length > 0 && (
                   <>
                     <View className="bg-pink-100 p-4 rounded-lg">
