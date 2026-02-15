@@ -16,6 +16,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import PanchangamCalendar from "@/components/panchangam-calendar";
+import { Link } from "expo-router";
+import { Button } from "@/components/ui/button";
 
 // function TopBar({ name }: { name: string | null }) {
 //   return (
@@ -78,24 +80,24 @@ import PanchangamCalendar from "@/components/panchangam-calendar";
 // }
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-function getSunriseBasedPanchang(
-  year: number,
-  month: number, // 1–12
-  day: number,
-  observer: Observer,
-) {
-  // Step 1: temporary date just to get sunrise
-  const tempDate = new Date(year, month - 1, day, 6, 0, 0);
-  const tempPanchang = getPanchangam(tempDate, observer);
+// function getSunriseBasedPanchang(
+//   year: number,
+//   month: number, // 1–12
+//   day: number,
+//   observer: Observer,
+// ) {
+//   // Step 1: temporary date just to get sunrise
+//   const tempDate = new Date(year, month - 1, day, 6, 0, 0);
+//   const tempPanchang = getPanchangam(tempDate, observer);
 
-  const sunrise = tempPanchang.sunrise;
+//   const sunrise = tempPanchang.sunrise;
 
-  // Step 2: anchor time = sunrise + 1 hour
-  const anchorDate = new Date(sunrise.getTime() + 60 * 60 * 1000);
+//   // Step 2: anchor time = sunrise + 1 hour
+//   const anchorDate = new Date(sunrise.getTime() + 60 * 60 * 1000);
 
-  // Step 3: final Panchang for the day
-  return getPanchangam(anchorDate, observer);
-}
+//   // Step 3: final Panchang for the day
+//   return getPanchangam(anchorDate, observer);
+// }
 
 export default function TabTwoScreen() {
   const CalObserver = new Observer(23.1, 75.46, 494);
@@ -107,6 +109,7 @@ export default function TabTwoScreen() {
       {/* <FadeSlideIn delay={80}>
         <TopBar name={USER_NAME} />
       </FadeSlideIn> */}
+  
       <View className="px-4 py-6 text-black">
         <PanchangamCalendar />
       </View>

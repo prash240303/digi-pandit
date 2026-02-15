@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { ScrollView } from "react-native";
-
+import { Link, useRouter } from "expo-router";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -47,7 +47,7 @@ import {
   Observer,
 } from "@ishubhamx/panchangam-js";
 import { format, getDate, getTime, isDate, parseISO } from "date-fns";
-import SunriseSunset from "./sun-moon-timings";
+import SunriseSunset from "./sun-moon-timings-v2";
 import PeriodCard from "./period-card";
 import { PlanetaryPositions } from "./planetary-positions";
 
@@ -84,14 +84,6 @@ const MONTH_NAMES = [
 ];
 
 /* -------------------- Helper Functions -------------------- */
-const formatTime = (isoString: string) => {
-  const date = new Date(isoString);
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-};
 
 const getCurrentTithi = (
   panchangam: any,
@@ -109,11 +101,6 @@ const getCurrentNakshatra = (panchangam: any) => {
   if (!panchangam.nakshatras || panchangam.nakshatras.length === 0)
     return "N/A";
   return panchangam?.nakshatras[1]?.name;
-};
-
-const getCurrentYoga = (panchangam: any) => {
-  if (!panchangam.yogas) return "N/A";
-  return panchangam?.yogas[1]?.name;
 };
 
 const getBrahmaMuhurta = (panchangam: any) => {
@@ -173,43 +160,6 @@ const getRahuKalam = (panchangam: any) => {
   };
 };
 
-const getSunTimings = (panchangam: any) => {
-  const sunrise = panchangam.sunrise;
-  const sunset = panchangam.sunset;
-
-  if (isNaN(sunrise.getTime()) || isNaN(sunset.getTime())) return null;
-
-  return {
-    sunrise: format(sunrise, "dd MMM yyyy hh:mm a"),
-    sunset: format(sunset, "dd MMM yyyy hh:mm a"),
-  };
-};
-
-const getMoonTimings = (panchangam: any) => {
-  const moonrise = panchangam.sunrise;
-  const moonset = panchangam.sunset;
-
-  if (isNaN(moonrise.getTime()) || isNaN(moonset.getTime())) return null;
-
-  return {
-    moonrise: format(moonrise, "dd MMM yyyy hh:mm a"),
-    moonset: format(moonset, "dd MMM yyyy hh:mm a"),
-  };
-};
-
-const getCurrentKarana = (panchangam: any) => {
-  const karanas = panchangam?.karanas;
-  if (!Array.isArray(karanas) || karanas.length === 0) return "N/A";
-
-  console.log("karanas array:", karanas);
-  return karanas[karanas.length - 1].name;
-};
-
-const getCurrentSunRashi = (panchangam: any) => {
-  if (!panchangam.sunRashi) return "N/A";
-  return panchangam.sunRashi.name;
-};
-
 const getChandrabalam = (panchangam: any) => {
   const value = panchangam.chandrabalam ?? 0;
   let moon = "";
@@ -233,11 +183,6 @@ const getChandrabalam = (panchangam: any) => {
   }
 
   return <Text>{moon}</Text>;
-};
-
-const getCurrentMoonRashi = (panchangam: any) => {
-  if (!panchangam.moonRashi) return "N/A";
-  return panchangam.moonRashi.name;
 };
 
 /* -------------------- Component -------------------- */
@@ -351,6 +296,18 @@ const PanchangamCalendar: React.FC = () => {
       },
     };
   };
+
+  const router = useRouter();
+
+  const handlePress = (selectedDay: Date) => {
+    router.push({
+      pathname: "/calendar/details",
+      params: {
+        date: selectedDay.toISOString(),
+      },
+    });
+  };
+
   return (
     <View className="flex-1 p-4 bg-amber-50">
       {/* Header */}
@@ -412,10 +369,11 @@ const PanchangamCalendar: React.FC = () => {
           day ? (
             <TouchableOpacity
               key={i}
-              onPress={() => {
-                setSelectedDay(day);
-                setIsOpen(true);
-              }}
+              onPress={() => handlePress(day.date)}
+              // onPress={() => {
+              //   setSelectedDay(day);
+              //   setIsOpen(true);
+              // }}
               className={`aspect-square ${
                 day.panchangam.festivals.length > 0
                   ? "bg-purple-300"
@@ -447,10 +405,9 @@ const PanchangamCalendar: React.FC = () => {
       </View>
 
       {/* AlertDialog */}
-      <AlertDialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      {/* <AlertDialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <AlertDialogBackdrop />
         <AlertDialogContent>
-          {/* Header */}
           <AlertDialogHeader>
             <View>
               <Text className="text-xl font-bold text-amber-900">
@@ -465,13 +422,11 @@ const PanchangamCalendar: React.FC = () => {
             </AlertDialogCloseButton>
           </AlertDialogHeader>
 
-          {/* Body */}
           <AlertDialogBody>
             {selectedDay && (
               <ScrollView className="max-h-96">
                 <View className="w-full p-4 mb-6 bg-neutral-200 rounded-3xl shadow-md">
                   <View className="bg-white shadow-sm rounded-2xl p-5 flex-row flex-wrap">
-                    {/* Tithi */}
                     <View className="w-1/2 mb-6">
                       <Text className="text-gray-400 text-lg font-medium">
                         Tithi
@@ -481,7 +436,6 @@ const PanchangamCalendar: React.FC = () => {
                       </Text>
                     </View>
 
-                    {/* Nakshatra */}
                     <View className="w-1/2 mb-6">
                       <Text className="text-gray-400 text-lg font-medium">
                         Nakshatra
@@ -491,7 +445,6 @@ const PanchangamCalendar: React.FC = () => {
                       </Text>
                     </View>
 
-                    {/* Karana */}
                     <View className="w-1/2">
                       <Text className="text-gray-400 text-lg font-medium">
                         Karana
@@ -501,7 +454,6 @@ const PanchangamCalendar: React.FC = () => {
                       </Text>
                     </View>
 
-                    {/* Yoga */}
                     <View className="w-1/2">
                       <Text className="text-gray-400 text-lg font-medium">
                         Yoga
@@ -587,7 +539,7 @@ const PanchangamCalendar: React.FC = () => {
             )}
           </AlertDialogBody>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog> */}
     </View>
   );
 };
