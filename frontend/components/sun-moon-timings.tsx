@@ -1,5 +1,20 @@
-import { Image } from "expo-image";
 import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Image } from "expo-image";
+import Svg, {
+  Circle,
+  Defs,
+  Filter,
+  FeGaussianBlur,
+  FeOffset,
+  FeFlood,
+  FeComposite,
+  FeComponentTransfer,
+  FeFuncA,
+  FeMerge,
+  FeMergeNode,
+  Path,
+} from "react-native-svg";
 
 function SunriseSunsetCards({
   sunriseHour = 7,
@@ -7,140 +22,152 @@ function SunriseSunsetCards({
   sunsetHour = 16,
   sunsetMinute = 20,
 }) {
-  function pad(n) {
-    return String(n).padStart(2, "0");
-  }
+  const pad = (n) => String(n).padStart(2, "0");
 
   const sunriseTime = `${pad(sunriseHour)}:${pad(sunriseMinute)}`;
   const sunsetTime = `${pad(sunsetHour)}:${pad(sunsetMinute)}`;
 
-  // Calculate daylight duration
-  const sunriseMin = sunriseHour * 60 + sunriseMinute;
-  const sunsetMin = sunsetHour * 60 + sunsetMinute;
-  const totalDay = sunsetMin - sunriseMin;
+  const totalDay =
+    sunsetHour * 60 + sunsetMinute - (sunriseHour * 60 + sunriseMinute);
   const dayHours = Math.floor(totalDay / 60);
   const dayMins = totalDay % 60;
 
+  const GlowingSun = ({ cx, cy }) => (
+    <>
+      <Defs>
+        <Filter id="sunGlow" x="-100%" y="-100%" width="300%" height="300%">
+          {/* 3. Layer Blur (0.2) - Applied to the Source */}
+          <FeGaussianBlur
+            in="SourceGraphic"
+            stdDeviation="0.2"
+            result="layerBlur"
+          />
+
+          {/* 2. Drop Shadow (0, 0, blur 4.5, spread 3) */}
+          {/* Note: 'Spread' in SVG is simulated by dilating or thickening the alpha */}
+          <FeGaussianBlur
+            in="SourceAlpha"
+            stdDeviation="4.5"
+            result="dropBlur"
+          />
+          <FeFlood floodColor="#FFD283" result="dropColor" />
+          <FeComposite
+            in="dropColor"
+            in2="dropBlur"
+            operator="in"
+            result="dropShadow"
+          />
+
+          {/* 1. Inner Shadow (0, 0, blur 7, spread 2) */}
+          <FeGaussianBlur
+            in="SourceAlpha"
+            stdDeviation="7"
+            result="innerBlur"
+          />
+          <FeOffset dx="0" dy="0" />
+          <FeComposite
+            in2="SourceAlpha"
+            operator="arithmetic"
+            k2="-1"
+            k3="1"
+            result="innerShadowMask"
+          />
+          <FeFlood floodColor="#FFEA97" result="innerColor" />
+          <FeComposite
+            in="innerColor"
+            in2="innerShadowMask"
+            operator="in"
+            result="innerShadowFinal"
+          />
+
+          {/* Composition: Put it all together */}
+          <FeMerge>
+            <FeMergeNode in="dropShadow" />
+            <FeMergeNode in="layerBlur" />
+            <FeMergeNode in="innerShadowFinal" />
+          </FeMerge>
+        </Filter>
+      </Defs>
+
+      <Circle cx={cx} cy={cy} r="18" fill="white" filter="url(#sunGlow)" />
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-slate-100 p-8 flex items-center justify-center">
-      <div className="flex flex-col gap-6 w-full max-w-md">
+    <View className="flex-1 bg-slate-100 p-8 items-center justify-center">
+      <View className="flex flex-col gap-6 w-full max-w-md">
         {/* Sunrise Card */}
-        <div className="relative rounded-3xl shadow-2xl overflow-hidden min-h-[350px]">
-          <div className="absolute inset-0">
-            <Image
-              source={require("../assets/images/sunset.png")}
-              style={{ width: "100%", height: "100%" }}
-              contentFit="cover"
-            />
-          </div>
+        <View className="relative rounded-3xl shadow-2xl overflow-hidden min-h-[300px] bg-slate-800">
+          <Image
+            source={require("../assets/images/sunset.png")}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+          />
 
-          <div className="absolute left-4 top-4 z-10">
-            <h2 className="text-2xl font-light text-white mb-1 shadow-sm">
+          <View className="p-6">
+            <Text className="text-2xl font-light text-white mb-1">
               Today's Sunrise
-            </h2>
-            <div className="text-6xl font-bold text-white shadow-sm">
-              {sunriseTime} <span className="text-2xl font-normal">am</span>
-            </div>
-          </div>
+            </Text>
+            <Text className="text-6xl font-bold text-white">
+              {sunriseTime} <Text className="text-2xl font-normal">am</Text>
+            </Text>
+          </View>
 
-          {/* Arc visualization */}
-          <div className="absolute w-full bottom-0 left-0">
-            <svg
-              viewBox="0 0 300 150"
-              className="w-full relative border border-white h-full"
-              preserveAspectRatio="xMidYMax meet"
-            >
-              {/* White Arch */}
-              <circle
-                className="top-2 left-0 absolute"
+          <View className="absolute bottom-0 w-full h-48">
+            <Svg viewBox="0 0 300 150" width="100%" height="100%">
+              <Circle
                 cx="150"
                 cy="200"
-                r="170"
+                r="180"
                 fill="none"
                 stroke="white"
-                strokeWidth="11"
-                strokeLinecap="round"
-                style={{
-                  filter: "blur(0.1px)",
-                  boxShadow: "inset 0 0 7px 2px #FFEA97, 0 0 4.5px 3px #FFD283",
-                }}
+                strokeWidth="24"
               />
+              <GlowingSun cx="244" cy="46" />
+            </Svg>
+          </View>
+        </View>
 
-              {/* Sun with specified effects */}
-              <circle
-                cx="50"
-                cy="140"
-                r="15"
-                fill="white"
-                style={{
-                  filter: "blur(0.1px)",
-                  boxShadow: "inset 0 0 7px 2px #FFEA97, 0 0 4.5px 3px #FFD283",
-                }}
+        {/* Sunrise Card */}
+        <View className="relative rounded-3xl shadow-2xl overflow-hidden min-h-[300px] bg-slate-800">
+          <Image
+            source={require("../assets/images/sunset.png")}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+          />
+
+          <View className="p-6">
+            <Text className="text-2xl font-light text-white mb-1">
+              Today's Sunset
+            </Text>
+            <Text className="text-6xl font-bold text-white">
+              {sunriseTime} <Text className="text-2xl font-normal">am</Text>
+            </Text>
+          </View>
+
+          <View className="absolute bottom-0 w-full h-48">
+            <Svg viewBox="0 0 300 150" width="100%" height="100%">
+              <Circle
+                cx="150"
+                cy="200"
+                r="180"
+                fill="none"
+                stroke="white"
+                strokeWidth="24"
               />
-            </svg>
-          </div>
-        </div>
-
-        {/* Sunset Card */}
-        <div className="relative rounded-3xl p-8 shadow-2xl overflow-hidden min-h-[350px]">
-          <div className="absolute inset-0">
-            <Image
-              source={require("../assets/images/sunset.png")}
-              style={{ width: "100%", height: "100%" }}
-              contentFit="cover"
-            />
-          </div>
-
-          <div className="relative z-10 flex flex-col h-full justify-between">
-            <div>
-              <h2 className="text-2xl font-light text-white mb-1 shadow-sm">
-                Today's Sunset
-              </h2>
-              <div className="text-6xl font-bold text-white shadow-sm">
-                {sunsetTime} <span className="text-2xl font-normal">pm</span>
-              </div>
-            </div>
-
-            {/* Arc visualization */}
-            <div className="relative h-48">
-              <svg
-                viewBox="0 0 300 150"
-                className="w-full h-full"
-                preserveAspectRatio="xMidYMax meet"
-              >
-                {/* White Arch */}
-                <path
-                  d="M 0 150 A 140 140 0 0 1 300 150"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="11"
-                />
-
-                {/* Sun with specified effects */}
-                <circle
-                  cx="250"
-                  cy="140"
-                  r="15"
-                  fill="white"
-                  style={{
-                    filter: "blur(0.1px)",
-                    boxShadow:
-                      "inset 0 0 7px 2px #FFEA97, 0 0 4.5px 3px #FFD283",
-                  }}
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
+              <GlowingSun cx="244" cy="46" />
+            </Svg>
+          </View>
+        </View>
 
         {/* Info footer */}
-        <div className="text-center">
-          <p className="text-slate-600 text-sm">
+        <View className="items-center">
+          <Text className="text-slate-600 text-sm">
             {dayHours}h {dayMins}m of daylight
-          </p>
-        </div>
-      </div>
-    </div>
+          </Text>
+        </View>
+      </View>
+    </View>
   );
 }
 
