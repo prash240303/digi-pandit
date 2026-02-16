@@ -1,7 +1,15 @@
 "use client";
 import React from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import Svg, { Path, Circle, G, Defs, LinearGradient, Stop } from "react-native-svg";
+import Svg, {
+  Path,
+  Circle,
+  G,
+  Defs,
+  LinearGradient,
+  Stop,
+} from "react-native-svg";
+import { JupiterFreeIcons } from "@hugeicons/core-free-icons";
 
 interface PlanetaryData {
   degree: number;
@@ -50,20 +58,26 @@ const SunIcon = () => (
   </Svg>
 );
 
-const MoonIcon = () => (
+export const MoonIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
     <Path
       d="M28 12C23.5817 12 20 15.5817 20 20C20 24.4183 23.5817 28 28 28C28.7956 28 29.5587 27.8834 30.2761 27.6685C28.2794 29.6174 25.5294 30.8 22.5 30.8C17.0294 30.8 12.5 26.2706 12.5 20.8C12.5 15.3294 17.0294 10.8 22.5 10.8C24.2891 10.8 25.9578 11.2873 27.3985 12.1315C27.7326 12.0447 28.0805 12 28.4375 12H28Z"
-      fill="#E8D5F2"
-      opacity="0.9"
+      fill="#D4B5E8"
+      opacity="1"
     />
-    <Circle cx="24" cy="20" r="12" stroke="#D4B5E8" strokeWidth="1.5" opacity="0.6" />
   </Svg>
 );
 
-const MarsIcon = () => (
+export const MarsIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-    <Circle cx="20" cy="28" r="8" stroke="#FF7B9C" strokeWidth="2.5" fill="none" />
+    <Circle
+      cx="20"
+      cy="28"
+      r="8"
+      stroke="#FF7B9C"
+      strokeWidth="2.5"
+      fill="none"
+    />
     <Path
       d="M26 22L34 14M34 14H28M34 14V20"
       stroke="#FF7B9C"
@@ -74,12 +88,29 @@ const MarsIcon = () => (
   </Svg>
 );
 
-const MercuryIcon = () => (
+export const MercuryIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-    <Circle cx="24" cy="24" r="7" stroke="#A8DADC" strokeWidth="2.5" fill="none" />
-    <Path d="M24 17V12M21 12H27" stroke="#A8DADC" strokeWidth="2.5" strokeLinecap="round" />
+    {/* Centered Circle */}
+    <Circle
+      cx="24"
+      cy="23"
+      r="6"
+      stroke="#A8DADC"
+      strokeWidth="2.5"
+      fill="none"
+    />
+
+    {/* Top Crescent / Horns */}
     <Path
-      d="M24 31V36M18 36H30"
+      d="M18.5 19.5 C18.5 12 29.5 12 29.5 19.5"
+      stroke="#A8DADC"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
+
+    {/* Bottom Cross */}
+    <Path
+      d="M24 29 V39 M19 34 H29"
       stroke="#A8DADC"
       strokeWidth="2.5"
       strokeLinecap="round"
@@ -87,31 +118,39 @@ const MercuryIcon = () => (
     />
   </Svg>
 );
-
-const JupiterIcon = () => (
+export const JupiterIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+    {/* The sweeping "2" shape */}
     <Path
-      d="M20 16C20 16 20 24 20 24C20 28.4183 23.5817 32 28 32"
-      stroke="#B4A7D6"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-    />
-    <Path d="M15 24H26" stroke="#B4A7D6" strokeWidth="2.5" strokeLinecap="round" />
-    <Path
-      d="M28 26L32 32"
+      d="M17 20 C17 12 29 12 29 20 C29 26 17 32 17 32 H35"
       stroke="#B4A7D6"
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
+
+    {/* The intersecting vertical stroke */}
+    <Path
+      d="M29 14 V40"
+      stroke="#B4A7D6"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
   </Svg>
 );
 
-const VenusIcon = () => (
+export const VenusIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-    <Circle cx="24" cy="20" r="7" stroke="#FFB4D1" strokeWidth="2.5" fill="none" />
+    <Circle
+      cx="24"
+      cy="18"
+      r="8"
+      stroke="#FFB4D1"
+      strokeWidth="2.5"
+      fill="none"
+    />
     <Path
-      d="M24 27V36M19 31H29"
+      d="M24 26V38M18 32H30"
       stroke="#FFB4D1"
       strokeWidth="2.5"
       strokeLinecap="round"
@@ -120,31 +159,57 @@ const VenusIcon = () => (
   </Svg>
 );
 
-const RahuIcon = () => (
+export const RahuIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
     <Path
-      d="M12 24C12 17.3726 17.3726 12 24 12C30.6274 12 36 17.3726 36 24"
+      d="M16 30V24C16 18 20 16 24 16C28 16 32 18 32 24V30"
       stroke="#9D8CA1"
       strokeWidth="2.5"
       strokeLinecap="round"
     />
-    <Circle cx="16" cy="24" r="2" fill="#9D8CA1" />
-    <Circle cx="32" cy="24" r="2" fill="#9D8CA1" />
-    <Path d="M24 12V8" stroke="#9D8CA1" strokeWidth="2.5" strokeLinecap="round" />
+    <Circle
+      cx="13"
+      cy="30"
+      r="3"
+      stroke="#9D8CA1"
+      strokeWidth="2.5"
+      fill="none"
+    />
+    <Circle
+      cx="35"
+      cy="30"
+      r="3"
+      stroke="#9D8CA1"
+      strokeWidth="2.5"
+      fill="none"
+    />
   </Svg>
 );
 
-const KetuIcon = () => (
+export const KetuIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
     <Path
-      d="M12 24C12 30.6274 17.3726 36 24 36C30.6274 36 36 30.6274 36 24"
+      d="M16 18V24C16 30 20 32 24 32C28 32 32 30 32 24V18"
       stroke="#C9ADA7"
       strokeWidth="2.5"
       strokeLinecap="round"
     />
-    <Circle cx="16" cy="24" r="2" fill="#C9ADA7" />
-    <Circle cx="32" cy="24" r="2" fill="#C9ADA7" />
-    <Path d="M24 36V40" stroke="#C9ADA7" strokeWidth="2.5" strokeLinecap="round" />
+    <Circle
+      cx="13"
+      cy="18"
+      r="3"
+      stroke="#C9ADA7"
+      strokeWidth="2.5"
+      fill="none"
+    />
+    <Circle
+      cx="35"
+      cy="18"
+      r="3"
+      stroke="#C9ADA7"
+      strokeWidth="2.5"
+      fill="none"
+    />
   </Svg>
 );
 
@@ -251,9 +316,6 @@ export function PlanetaryPositions({
         <View style={styles.header}>
           <Text style={styles.subtitle}>Graha Sthiti</Text>
           <Text style={styles.title}>Your Planetary Chart</Text>
-          <Text style={styles.description}>
-            Current positions of celestial bodies in your birth chart
-          </Text>
         </View>
 
         {/* Featured Planet Card */}
@@ -264,7 +326,9 @@ export function PlanetaryPositions({
             </View>
             <View style={styles.featuredInfo}>
               <Text style={styles.featuredLabel}>Soul Planet</Text>
-              <Text style={styles.featuredName}>Sun in {data.planetaryPositions.sun.rashiName}</Text>
+              <Text style={styles.featuredName}>
+                Sun in {data.planetaryPositions.sun.rashiName}
+              </Text>
               <Text style={styles.featuredDegree}>
                 {data.planetaryPositions.sun.degree.toFixed(2)}°
               </Text>
@@ -308,15 +372,12 @@ export function PlanetaryPositions({
                   <View style={styles.iconWrapper}>
                     <IconComponent />
                   </View>
-                  <View style={styles.romanNumeral}>
-                    <Text style={[styles.romanText, { color: planet.textColor }]}>
-                      {["I", "II", "III", "IV", "V", "VI", "VII"][index]}
-                    </Text>
-                  </View>
                 </View>
 
                 <View style={styles.cardBody}>
-                  <Text style={[styles.planetName, { color: planet.textColor }]}>
+                  <Text
+                    style={[styles.planetName, { color: planet.textColor }]}
+                  >
                     {planet.name}
                   </Text>
                   <Text style={styles.sanskritName}>{planet.sanskrit}</Text>
@@ -325,14 +386,18 @@ export function PlanetaryPositions({
                 <View style={styles.cardFooter}>
                   <View style={styles.dataRow}>
                     <Text style={styles.dataLabel}>Rashi</Text>
-                    <Text style={[styles.dataValue, { color: planet.textColor }]}>
+                    <Text
+                      style={[styles.dataValue, { color: planet.textColor }]}
+                    >
                       {planetData.rashiName}
                     </Text>
                   </View>
                   <View style={styles.divider} />
                   <View style={styles.dataRow}>
                     <Text style={styles.dataLabel}>Degree</Text>
-                    <Text style={[styles.dataValue, { color: planet.textColor }]}>
+                    <Text
+                      style={[styles.dataValue, { color: planet.textColor }]}
+                    >
                       {planetData.degree.toFixed(2)}°
                     </Text>
                   </View>
