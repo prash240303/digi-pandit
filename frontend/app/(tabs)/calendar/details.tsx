@@ -5,29 +5,12 @@ import { useLocalSearchParams } from "expo-router";
 import { Observer, getPanchangam } from "@ishubhamx/panchangam-js";
 import { format } from "date-fns";
 import { PlanetaryPositions } from "@/components/planetary-positions";
-import SunriseSunsetCard from "@/components/sun-moon-timings"; // Assuming this is where the new card is saved
+import SunriseSunsetCard from "@/components/sun-moon-timings";
 import PanchangamDetails from "@/components/core-panchang-details";
 import MoonDetails from "@/components/moon-details";
 import MuhurataDetails from "@/components/muhurata-details";
 
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
 /* -------------------- Helper Functions -------------------- */
-
-
 export default function DetailsPage() {
   const { date } = useLocalSearchParams();
 
@@ -43,7 +26,6 @@ export default function DetailsPage() {
   const moonset = new Date(panchangam.moonset);
 
   console.log("moon", moonrise, moonset);
-
 
   // --- NEW: Calculate Duration and Formatted Timings for Card ---
   const diffMs = sunset.getTime() - sunrise.getTime();
@@ -101,7 +83,6 @@ export default function DetailsPage() {
         />
 
         <MuhurataDetails panchangam={panchangam} />
-      
 
         {/* Planetary Positions */}
         <PlanetaryPositions

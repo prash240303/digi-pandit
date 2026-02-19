@@ -5,14 +5,12 @@ import PeriodCard from "./period-card";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { ClockIcon } from "@hugeicons/core-free-icons";
 
-// Helper to extract only the time string for the UI
 const formatTime = (date: any) => {
   if (!date || isNaN(new Date(date).getTime())) return null;
   return format(new Date(date), "hh:mm a");
 };
 
 function MuhurataDetails({ panchangam }: any) {
-  // Extracting timings
   const rahu = {
     start: formatTime(panchangam?.rahuKalamStart),
     end: formatTime(panchangam?.rahuKalamEnd),
