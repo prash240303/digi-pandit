@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { USER_NAME } from "@/constants/user-mock-data";
 import { Text as GText, Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
-import { Platform, TouchableOpacity, View } from "react-native";
+import { Platform, ScrollView, TouchableOpacity, View } from "react-native";
 import { Box } from "@/components/ui/box";
 import { getPanchangam } from "@ishubhamx/panchangam-js";
 import { Observer, yogaNames } from "@ishubhamx/panchangam-js";
@@ -110,9 +110,9 @@ export default function TabTwoScreen() {
         <TopBar name={USER_NAME} />
       </FadeSlideIn> */}
   
-      <View className="px-4 py-6 text-black">
+      <ScrollView className="px-1 pb-2 text-black">
         <PanchangamCalendar />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

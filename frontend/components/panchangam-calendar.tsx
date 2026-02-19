@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useMemo } from "react";
-import { ScrollView } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -15,41 +14,13 @@ import {
   SelectDragIndicatorWrapper,
   SelectItem,
   SelectScrollView,
-  SelectVirtualizedList,
-  SelectFlatList,
-  SelectSectionList,
-  SelectSectionHeaderText,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogCloseButton,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogBody,
-  AlertDialogBackdrop,
-} from "@/components/ui/alert-dialog";
 import { HugeiconsIcon } from "@hugeicons/react-native";
-import {
-  ChevronFirst,
-  ChevronLast,
-  Cancel01FreeIcons,
-  HugeiconsFreeIcons,
-  ArrowLeft01FreeIcons,
-  ArrowRight,
-  ArrowRight02FreeIcons,
-  ArrowRight02Icon,
-} from "@hugeicons/core-free-icons";
-import { TouchableHighlight, TouchableOpacity, View, Text } from "react-native";
-import {
-  getNakshatra,
-  getPanchangam,
-  Observer,
-} from "@ishubhamx/panchangam-js";
-import { format, getDate, getTime, isDate, parseISO } from "date-fns";
-import SunriseSunset from "./sun-moon-timings-v2";
-import PeriodCard from "./period-card";
-import { PlanetaryPositions } from "./planetary-positions";
+import { ChevronFirst, ChevronLast, ChevronsDown } from "@hugeicons/core-free-icons";
+import { TouchableOpacity, View, Text } from "react-native";
+import { getPanchangam, Observer } from "@ishubhamx/panchangam-js";
+import { format } from "date-fns";
+import { ArrowDownIcon, ChevronDownIcon, ChevronLeftIcon, ChevronsUpDownIcon } from "./ui/icon";
 
 /* -------------------- Types -------------------- */
 interface CalendarDayData {
@@ -58,15 +29,7 @@ interface CalendarDayData {
 }
 
 /* -------------------- Mock Data -------------------- */
-const WEEKDAY_NAMES = [
-  "SUNDAY",
-  "MONDAY",
-  "TUEDAY",
-  "WEDDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
-];
+const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 const MONTH_NAMES = [
   "January",
@@ -309,26 +272,30 @@ const PanchangamCalendar: React.FC = () => {
   };
 
   return (
-    <View className="flex-1 p-4 bg-amber-50">
-      {/* Header */}
-      <View className="flex-row items-center justify-between mb-4">
-        <Button onPress={() => setCurrentDate(new Date(year, month - 1, 1))}>
+    <View className="flex-1 pt-10">
+      {/* Header Controls */}
+      <View className="flex-row justify-between items-center mb-6 px-2">
+        <TouchableOpacity
+          className="p-2 bg-gray-200 rounded-lg"
+          onPress={() => setCurrentDate(new Date(year, month - 1, 1))}
+        >
           <HugeiconsIcon icon={ChevronFirst} />
-        </Button>
+        </TouchableOpacity>
+
         <View className="flex-row items-center gap-2">
-          <Text className="text-2xl font-bold text-amber-800">
+          <Text className="text-2xl font-bold text-amber-900">
             {MONTH_NAMES[month]}
           </Text>
+
           <Select
-            selectedValue={yearValue}
             onValueChange={(value) => {
               setYearValue(value);
               setCurrentDate(new Date(Number(value), month, 1));
             }}
           >
-            <SelectTrigger>
-              <SelectInput placeholder="Select year" />
-              <SelectIcon />
+            <SelectTrigger className="w-24 border-neutral-400">
+              <SelectInput placeholder={yearValue} className="text-neutral-900" />
+              <SelectIcon className="mr-3" as={ChevronDownIcon}/>
             </SelectTrigger>
             <SelectPortal>
               <SelectBackdrop />
@@ -349,197 +316,84 @@ const PanchangamCalendar: React.FC = () => {
             </SelectPortal>
           </Select>
         </View>
-        <Button onPress={() => setCurrentDate(new Date(year, month + 1, 1))}>
+
+        <TouchableOpacity
+          className="p-2 bg-gray-200 rounded-lg"
+          onPress={() => setCurrentDate(new Date(year, month + 1, 1))}
+        >
           <HugeiconsIcon icon={ChevronLast} />
-        </Button>
+        </TouchableOpacity>
       </View>
 
-      {/* Weekdays */}
-      <View className="flex-row mb-2">
+      {/* --- GRID HEADER (Weekdays) --- */}
+      <View className="flex-row w-full mb-2">
         {WEEKDAY_NAMES.map((d) => (
-          <View key={d} className="flex-1 items-center">
-            <Text className="text-xs font-semibold text-amber-600">{d}</Text>
+          <View
+            key={d}
+            style={{ width: "14.28%" }}
+            className="items-center justify-center"
+          >
+            <Text className="text-orange-500 font-bold text-xs uppercase tracking-wider">
+              {d}
+            </Text>
           </View>
         ))}
       </View>
 
-      {/* Calendar */}
-      <View className="flex-row flex-wrap">
-        {weeks.flat().map((day, i) =>
-          day ? (
-            <TouchableOpacity
-              key={i}
-              onPress={() => handlePress(day.date)}
-              // onPress={() => {
-              //   setSelectedDay(day);
-              //   setIsOpen(true);
-              // }}
-              className={`aspect-square ${
-                day.panchangam.festivals.length > 0
-                  ? "bg-purple-300"
-                  : "bg-amber-100"
-              } p-2 rounded-lg border border-amber-200`}
-              style={{ width: "14.28%" }}
-            >
-              <View>
-                <Text className="text-sm font-bold text-amber-900">
-                  {day.date.getDate()}
-                </Text>
-                {getChandrabalam(day.panchangam)}
-                <Text className="text-xs text-amber-700">
-                  {getCurrentTithi(day.panchangam).tithi} vara{" "}
-                  {getCurrentTithi(day.panchangam).vara}
-                </Text>
-                <Text className="text-xs text-amber-600">
-                  {day.panchangam?.tithiTransitions[1]?.name}
-                </Text>
-                <Text className="text-xs text-amber-600">
-                  {getCurrentNakshatra(day.panchangam)}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ) : (
-            <View key={i} style={{ width: "14.28%" }} />
-          ),
-        )}
-      </View>
+      {/* --- GRID BODY (Days) --- */}
+      <View className="flex-row  flex-wrap w-full">
+        {weeks.flat().map((day, i) => {
+          // 1. Handle Empty Placeholder Days
+          if (!day) {
+            return <View key={`empty-${i}`} style={{ width: "14.28%" }} />;
+          }
 
-      {/* AlertDialog */}
-      {/* <AlertDialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <AlertDialogBackdrop />
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <View>
-              <Text className="text-xl font-bold text-amber-900">
-                {selectedDay &&
-                  `${WEEKDAY_NAMES[selectedDay.date.getMonth()]} `}
-                {selectedDay &&
-                  `${MONTH_NAMES[selectedDay.date.getMonth()]} ${selectedDay.date.getDate()}, ${selectedDay.date.getFullYear()}`}
-              </Text>
+          // 2. Handle Actual Days
+          const isFestival = day.panchangam.festivals.length > 0;
+
+          return (
+            <View key={i} style={{ width: "14.28%" }} className="p-[2px]">
+              <TouchableOpacity
+                onPress={() => handlePress(day.date)}
+                className={`w-full aspect-[0.6] rounded-md h-24 border flex justify-between p-[2px] ${
+                  isFestival
+                    ? "bg-purple-100 border-purple-300"
+                    : "bg-amber-50 border-amber-200"
+                }`}
+              >
+                {/* Date Number & Moon Phase */}
+                <View className="items-center">
+                  <Text
+                    className={`text-lg font-bold ${isFestival ? "text-purple-900" : "text-amber-900"}`}
+                  >
+                    {day.date.getDate()}
+                  </Text>
+                  <Text className="text-xs mt-1">
+                    {getChandrabalam(day.panchangam)}
+                  </Text>
+                </View>
+
+                {/* Panchang Info (Bottom aligned) */}
+                <View>
+                  <Text
+                    numberOfLines={1}
+                    className={`text-[7px] text-center font-medium leading-tight ${isFestival ? "text-purple-700" : "text-amber-700"}`}
+                  >
+                    {day.panchangam?.tithiTransitions[1]?.name ||
+                      day.panchangam?.tithi}
+                  </Text>
+                  <Text
+                    numberOfLines={1}
+                    className="text-[7px] text-center text-stone-500 italic"
+                  >
+                    {getCurrentNakshatra(day.panchangam)}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
-            <AlertDialogCloseButton onPress={() => setIsOpen(false)}>
-              <HugeiconsIcon icon={Cancel01FreeIcons} />
-            </AlertDialogCloseButton>
-          </AlertDialogHeader>
-
-          <AlertDialogBody>
-            {selectedDay && (
-              <ScrollView className="max-h-96">
-                <View className="w-full p-4 mb-6 bg-neutral-200 rounded-3xl shadow-md">
-                  <View className="bg-white shadow-sm rounded-2xl p-5 flex-row flex-wrap">
-                    <View className="w-1/2 mb-6">
-                      <Text className="text-gray-400 text-lg font-medium">
-                        Tithi
-                      </Text>
-                      <Text className="text-sky-500 text-2xl font-bold mt-1">
-                        {getCurrentTithi(selectedDay.panchangam).tithi}
-                      </Text>
-                    </View>
-
-                    <View className="w-1/2 mb-6">
-                      <Text className="text-gray-400 text-lg font-medium">
-                        Nakshatra
-                      </Text>
-                      <Text className="text-blue-600 text-2xl font-bold mt-1">
-                        {getCurrentNakshatra(selectedDay.panchangam)}
-                      </Text>
-                    </View>
-
-                    <View className="w-1/2">
-                      <Text className="text-gray-400 text-lg font-medium">
-                        Karana
-                      </Text>
-                      <Text className="text-amber-500 text-2xl font-bold mt-1">
-                        {getCurrentKarana(selectedDay.panchangam)}
-                      </Text>
-                    </View>
-
-                    <View className="w-1/2">
-                      <Text className="text-gray-400 text-lg font-medium">
-                        Yoga
-                      </Text>
-                      <Text className="text-rose-500 text-2xl font-bold mt-1">
-                        {getCurrentYoga(selectedDay.panchangam)}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-
-                <View className="mb-3  p-4 rounded-lg">
-                  {(() => {
-                    const sunriseStr = formatTime(
-                      selectedDay.panchangam.sunrise,
-                    );
-                    const sunsetStr = formatTime(selectedDay.panchangam.sunset);
-
-                    const sunrise = parseTime12h(sunriseStr);
-                    const sunset = parseTime12h(sunsetStr);
-
-                    return (
-                      <SunriseSunset
-                        sunriseHour={sunrise.hour}
-                        sunriseMinute={sunrise.minute}
-                        sunsetHour={sunset.hour}
-                        sunsetMinute={sunset.minute}
-                      />
-                    );
-                  })()}
-                </View>
-                <View className="bg-blue-100 flex flex-col gap-2 items-center justify-center mb-3 p-4 rounded-lg">
-                  <Text className="text-blue-700 text-4xl">
-                    {getChandrabalam(selectedDay)}
-                  </Text>
-                  <Text className="text-blacl">
-                    {selectedDay.panchangam.chandrabalam} % illuminated
-                  </Text>
-                </View>
-
-                <PeriodCard
-                  title="Brahma Muhurta"
-                  start={brahma?.start}
-                  end={brahma?.end}
-                  status="AUSPICIOUS"
-                  icon="🌅"
-                />
-
-                <PeriodCard
-                  title="Rahu Kalam"
-                  start={rahu?.start}
-                  end={rahu?.end}
-                  status="AVOID"
-                  icon="🚫"
-                />
-
-                <PeriodCard
-                  title="Yamaganda"
-                  start={yamaganda?.start}
-                  end={yamaganda?.end}
-                  status="AVOID"
-                  icon="⚠️"
-                />
-
-                <PlanetaryPositions data={planetaryData(selectedDay)} />
-                {selectedDay.panchangam.festivals?.length > 0 && (
-                  <>
-                    <View className="bg-pink-100 p-4 rounded-lg">
-                      <Text className="font-semibold text-pink-900 mb-2">
-                        🎉 Festivals
-                      </Text>
-                      {selectedDay.panchangam.festivals.map(
-                        (festival: string, idx: number) => (
-                          <View key={idx} className="ml-2">
-                            <Text className="text-pink-700">• {festival}</Text>
-                          </View>
-                        ),
-                      )}
-                    </View>
-                  </>
-                )}
-              </ScrollView>
-            )}
-          </AlertDialogBody>
-        </AlertDialogContent>
-      </AlertDialog> */}
+          );
+        })}
+      </View>
     </View>
   );
 };

@@ -1,51 +1,71 @@
-import { View, Text } from "react-native";
+import { ArrowDown } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
-import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
-import { LinearGradient } from "react-native-svg";
+import React from "react";
+import { View, Text } from "react-native";
+
+interface PeriodCardProps {
+  title: string;
+  subtitle: string;
+  start: string;
+  end: string;
+  status: "AUSPICIOUS" | "AVOID";
+  icon?: string | React.ReactNode;
+}
 
 export default function PeriodCard({
   title,
+  subtitle,
   start,
   end,
-  status, // "AUSPICIOUS" | "AVOID"
+  status,
   icon,
-}) {
-  const isGood = status === "AUSPICIOUS";
+}: PeriodCardProps) {
+  const isAvoid = status === "AVOID";
+
+  // Tailwind Class Mappings
+  const containerBg = isAvoid ? "bg-amber-50" : "bg-emerald-50";
+  const textColor = isAvoid ? "text-amber-700" : "text-emerald-700";
+  const iconColor = isAvoid ? "#c2410c" : "#047857"; // tailwind amber-700 : emerald-700
 
   return (
-    <View className="mb-4 overflow-hidden rounded-2xl">
-      <LinearGradient>
-        {/* Header Row */}
-        <View className="flex-row items-center justify-between mb-2">
-          <View className="flex-row items-center gap-2">
-            <Text className="text-xl">{icon}</Text>
-            <Text className="text-lg font-semibold text-neutral-900">
-              {title}
-            </Text>
-          </View>
-
-          <View
-            className={`px-3 py-1 rounded-full ${
-              isGood ? "bg-green-200" : "bg-red-200"
-            }`}
-          >
-            <Text
-              className={`text-xs font-semibold tracking-wide ${
-                isGood ? "text-green-700" : "text-red-700"
-              }`}
-            >
-              {status}
-            </Text>
-          </View>
+    <View className="flex-row items-center justify-between px-3 py-2 mb-3 bg-white rounded-xl shadow-sm shadow-slate-900/5">
+      <View className="flex-row items-center flex-1">
+        {/* Icon Container */}
+        <View
+          className={`w-10 h-10 rounded-lg items-center justify-center mr-3 ${containerBg}`}
+        >
+          {typeof icon === "string" ? (
+            <Text className="text-lg">{icon}</Text>
+          ) : (
+            icon || <Text className="text-lg">✨</Text>
+          )}
         </View>
 
-        {/* Time Row */}
-        <View className="flex-row items-center gap-2">
-          <Text className="text-base text-neutral-700">{start}</Text>
-          <HugeiconsIcon icon={ArrowRight02Icon} size={16} />
-          <Text className="text-base text-neutral-700">{end}</Text>
+        {/* Labels */}
+        <View className="flex-1">
+          <Text className="text-sm font-bold text-slate-900">{title}</Text>
+          <Text className="text-xs text-slate-500">{subtitle}</Text>
         </View>
-      </LinearGradient>
+      </View>
+
+      {/* Time Range */}
+      <View className="items-center">
+        <Text className={`text-xs font-bold ${textColor}`}>
+          {start}
+        </Text>
+        
+        <View className="py-0.5">
+          <HugeiconsIcon
+            icon={ArrowDown}
+            color={iconColor}
+            size={14}
+          />
+        </View>
+        
+        <Text className={`text-xs font-bold ${textColor}`}>
+          {end}
+        </Text>
+      </View>
     </View>
   );
 }

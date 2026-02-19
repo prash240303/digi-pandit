@@ -1,15 +1,15 @@
 "use client";
+import { SolarSystem01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import Svg, {
   Path,
   Circle,
-  G,
   Defs,
   LinearGradient,
   Stop,
 } from "react-native-svg";
-import { JupiterFreeIcons } from "@hugeicons/core-free-icons";
 
 interface PlanetaryData {
   degree: number;
@@ -29,13 +29,15 @@ interface PanchangamData {
   };
 }
 
-// Custom SVG Icons inspired by astronomical symbols
+// Icons remain SVG-based as Tailwind doesn't replace path logic
+
+// / Custom SVG Icons inspired by astronomical symbols
 const SunIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <Svg width="48" height="48" viewBox="0 0 48 48">
     <Defs>
       <LinearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <Stop offset="0%" stopColor="#FFD93D" stopOpacity="1" />
-        <Stop offset="100%" stopColor="#FF9A3D" stopOpacity="1" />
+        <Stop offset="0%" stopColor="#FFD93D" />
+        <Stop offset="100%" stopColor="#FF9A3D" />
       </LinearGradient>
     </Defs>
     <Circle cx="24" cy="24" r="10" fill="url(#sunGrad)" />
@@ -57,7 +59,6 @@ const SunIcon = () => (
     })}
   </Svg>
 );
-
 export const MoonIcon = () => (
   <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
     <Path
@@ -213,191 +214,158 @@ export const KetuIcon = () => (
   </Svg>
 );
 
-interface Planet {
-  key: keyof PanchangamData["planetaryPositions"];
-  name: string;
-  sanskrit: string;
-  icon: React.ComponentType;
-  gradient: [string, string];
-  textColor: string;
-}
-
-const PLANET_METADATA: Planet[] = [
+// --- Metadata with Tailwind Classes ---
+const PLANET_METADATA = [
   {
     key: "sun",
     name: "Sun",
     sanskrit: "Surya",
     icon: SunIcon,
-    gradient: ["#FFF4E6", "#FFE5CC"],
-    textColor: "#D97706",
+    bgColor: "bg-orange-50",
+    borderColor: "border-orange-100",
+    textColor: "text-orange-700",
+    accentColor: "text-amber-500",
   },
   {
     key: "moon",
     name: "Moon",
     sanskrit: "Chandra",
     icon: MoonIcon,
-    gradient: ["#F3E8FF", "#E9D5FF"],
-    textColor: "#7C3AED",
+    bgColor: "bg-purple-50",
+    borderColor: "border-purple-100",
+    textColor: "text-purple-700",
   },
   {
     key: "mars",
     name: "Mars",
     sanskrit: "Mangal",
     icon: MarsIcon,
-    gradient: ["#FFE4E6", "#FECDD3"],
-    textColor: "#E11D48",
+    bgColor: "bg-rose-50",
+    borderColor: "border-rose-100",
+    textColor: "text-rose-700",
   },
   {
     key: "mercury",
     name: "Mercury",
     sanskrit: "Budha",
     icon: MercuryIcon,
-    gradient: ["#E0F2FE", "#BAE6FD"],
-    textColor: "#0284C7",
+    bgColor: "bg-sky-50",
+    borderColor: "border-sky-100",
+    textColor: "text-sky-700",
   },
   {
     key: "jupiter",
     name: "Jupiter",
     sanskrit: "Guru",
     icon: JupiterIcon,
-    gradient: ["#EDE9FE", "#DDD6FE"],
-    textColor: "#7C3AED",
+    bgColor: "bg-indigo-50",
+    borderColor: "border-indigo-100",
+    textColor: "text-indigo-700",
   },
   {
     key: "venus",
     name: "Venus",
     sanskrit: "Shukra",
     icon: VenusIcon,
-    gradient: ["#FCE7F3", "#FBCFE8"],
-    textColor: "#DB2777",
+    bgColor: "bg-pink-50",
+    borderColor: "border-pink-100",
+    textColor: "text-pink-700",
   },
   {
     key: "rahu",
     name: "Rahu",
     sanskrit: "Rāhu",
     icon: RahuIcon,
-    gradient: ["#F5F3FF", "#EDE9FE"],
-    textColor: "#6B21A8",
+    bgColor: "bg-slate-100",
+    borderColor: "border-slate-200",
+    textColor: "text-slate-700",
   },
   {
     key: "ketu",
     name: "Ketu",
     sanskrit: "Kētu",
     icon: KetuIcon,
-    gradient: ["#FAF5FF", "#F3E8FF"],
-    textColor: "#86198F",
+    bgColor: "bg-zinc-100",
+    borderColor: "border-zinc-200",
+    textColor: "text-zinc-700",
   },
-];
+] as const;
 
-const MOCK_PANCHANGAM: PanchangamData = {
-  planetaryPositions: {
-    sun: { degree: 24.52, rashiName: "Sagittarius" },
-    moon: { degree: 12.34, rashiName: "Capricorn" },
-    mars: { degree: 18.76, rashiName: "Libra" },
-    mercury: { degree: 9.21, rashiName: "Cancer" },
-    jupiter: { degree: 28.43, rashiName: "Pisces" },
-    venus: { degree: 15.98, rashiName: "Leo" },
-    rahu: { degree: 5.12, rashiName: "Gemini" },
-    ketu: { degree: 25.64, rashiName: "Sagittarius" },
-  },
-};
+export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
+  if (!data) return null;
 
-interface PlanetaryPositionsProps {
-  data?: PanchangamData;
-}
+  const sunData = data.planetaryPositions.sun;
 
-export function PlanetaryPositions({
-  data = MOCK_PANCHANGAM,
-}: PlanetaryPositionsProps) {
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.content}>
+    <ScrollView
+      className="flex-1 bg-slate-50"
+      showsVerticalScrollIndicator={false}
+    >
+      <View className="py-5">
         {/* Header Section */}
-        <View style={styles.header}>
-          <Text style={styles.subtitle}>Graha Sthiti</Text>
-          <Text style={styles.title}>Your Planetary Chart</Text>
+        <View className="mb-6 flex-row items-center gap-2">
+          {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
+          <HugeiconsIcon size={24} color="#b45309" icon={SolarSystem01Icon} />
+          <Text className="text-lg font-bold text-amber-800">Graha Sthiti</Text>
         </View>
 
-        {/* Featured Planet Card */}
-        <View style={[styles.featuredCard, { backgroundColor: "#2D1B4E" }]}>
-          <View style={styles.featuredContent}>
-            <View style={styles.featuredIcon}>
+        {/* Featured Planet Card (Sun) */}
+        <View className="bg-neutral-800 rounded-3xl p-6 mb-8 relative overflow-hidden shadow-md">
+          <View className="flex-row items-center z-10">
+            <View className="mr-5">
               <SunIcon />
             </View>
-            <View style={styles.featuredInfo}>
-              <Text style={styles.featuredLabel}>Soul Planet</Text>
-              <Text style={styles.featuredName}>
-                Sun in {data.planetaryPositions.sun.rashiName}
+            <View className="flex-1">
+              <Text className="text-xs font-bold text-amber-400 tracking-widest uppercase mb-1">
+                Atmakaraka (Soul)
               </Text>
-              <Text style={styles.featuredDegree}>
-                {data.planetaryPositions.sun.degree.toFixed(2)}°
+              <Text className="text-xl font-bold text-white mb-1">
+                Sun in {sunData.rashiName}
+              </Text>
+              <Text className="text-base font-medium text-slate-300">
+                {sunData.degree.toFixed(2)}°
               </Text>
             </View>
-          </View>
-          <View style={styles.constellation}>
-            {[...Array(12)].map((_, i) => (
-              <View
-                key={i}
-                style={[
-                  styles.star,
-                  {
-                    top: `${Math.random() * 80 + 10}%`,
-                    left: `${Math.random() * 80 + 10}%`,
-                    opacity: Math.random() * 0.6 + 0.4,
-                  },
-                ]}
-              />
-            ))}
           </View>
         </View>
 
         {/* Grid of Planet Cards */}
-        <View style={styles.grid}>
-          {PLANET_METADATA.slice(1).map((planet, index) => {
+        <View className="grid grid-cols-2 gap-2">
+          {PLANET_METADATA.slice(1).map((planet) => {
             const planetData = data.planetaryPositions[planet.key];
             const IconComponent = planet.icon;
 
             return (
               <View
                 key={planet.key}
-                style={[
-                  styles.card,
-                  {
-                    backgroundColor: planet.gradient[0],
-                    borderColor: planet.gradient[1],
-                  },
-                ]}
+                className={`w-full rounded-xl p-2 border-2 shadow-sm ${planet.bgColor} ${planet.borderColor}`}
               >
-                <View style={styles.cardHeader}>
-                  <View style={styles.iconWrapper}>
-                    <IconComponent />
-                  </View>
+                <View className="mb-3">
+                  <IconComponent />
                 </View>
 
-                <View style={styles.cardBody}>
-                  <Text
-                    style={[styles.planetName, { color: planet.textColor }]}
-                  >
+                <View className="mb-4">
+                  <Text className={`text-base font-bold ${planet.textColor}`}>
                     {planet.name}
                   </Text>
-                  <Text style={styles.sanskritName}>{planet.sanskrit}</Text>
+                  <Text className="text-xs text-slate-500 italic font-medium">
+                    {planet.sanskrit}
+                  </Text>
                 </View>
 
-                <View style={styles.cardFooter}>
-                  <View style={styles.dataRow}>
-                    <Text style={styles.dataLabel}>Rashi</Text>
-                    <Text
-                      style={[styles.dataValue, { color: planet.textColor }]}
-                    >
+                <View className="bg-white/80 rounded-lg p-3">
+                  <View className="flex-row justify-between items-center mb-1">
+                    <Text className="text-xs text-slate-400">Rashi</Text>
+                    <Text className={`text-xs font-bold ${planet.textColor}`}>
                       {planetData.rashiName}
                     </Text>
                   </View>
-                  <View style={styles.divider} />
-                  <View style={styles.dataRow}>
-                    <Text style={styles.dataLabel}>Degree</Text>
-                    <Text
-                      style={[styles.dataValue, { color: planet.textColor }]}
-                    >
+
+                  <View className="h-[1px] bg-slate-200 my-1" />
+
+                  <View className="flex-row justify-between items-center mt-1">
+                    <Text className="text-xs text-slate-400">Deg</Text>
+                    <Text className={`text-xs font-bold ${planet.textColor}`}>
                       {planetData.degree.toFixed(2)}°
                     </Text>
                   </View>
@@ -407,183 +375,8 @@ export function PlanetaryPositions({
           })}
         </View>
 
-        {/* Bottom Spacer */}
-        <View style={styles.bottomSpacer} />
+        <View className="h-10" />
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FAFBFC",
-  },
-  content: {
-    padding: 20,
-  },
-  header: {
-    marginBottom: 24,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#6B7280",
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#111827",
-    marginBottom: 8,
-    letterSpacing: -0.5,
-  },
-  description: {
-    fontSize: 15,
-    color: "#6B7280",
-    lineHeight: 22,
-  },
-  featuredCard: {
-    borderRadius: 24,
-    padding: 24,
-    marginBottom: 28,
-    minHeight: 180,
-    position: "relative",
-    overflow: "hidden",
-    shadowColor: "#2D1B4E",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  featuredContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    zIndex: 2,
-  },
-  featuredIcon: {
-    marginRight: 20,
-  },
-  featuredInfo: {
-    flex: 1,
-  },
-  featuredLabel: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: "#D4AF37",
-    letterSpacing: 1.2,
-    textTransform: "uppercase",
-    marginBottom: 8,
-  },
-  featuredName: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#FFFFFF",
-    marginBottom: 4,
-    letterSpacing: -0.3,
-  },
-  featuredDegree: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#E0E7FF",
-  },
-  constellation: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  star: {
-    position: "absolute",
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
-    backgroundColor: "#FFFFFF",
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginHorizontal: -8,
-  },
-  card: {
-    width: "47%",
-    marginHorizontal: "1.5%",
-    marginBottom: 16,
-    borderRadius: 20,
-    padding: 18,
-    borderWidth: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 14,
-  },
-  iconWrapper: {
-    width: 48,
-    height: 48,
-  },
-  romanNumeral: {
-    backgroundColor: "rgba(255, 255, 255, 0.6)",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  romanText: {
-    fontSize: 11,
-    fontWeight: "700",
-    letterSpacing: 0.5,
-  },
-  cardBody: {
-    marginBottom: 14,
-  },
-  planetName: {
-    fontSize: 18,
-    fontWeight: "700",
-    marginBottom: 2,
-    letterSpacing: -0.2,
-  },
-  sanskritName: {
-    fontSize: 13,
-    color: "#6B7280",
-    fontStyle: "italic",
-  },
-  cardFooter: {
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    borderRadius: 12,
-    padding: 12,
-  },
-  dataRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 4,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.08)",
-    marginVertical: 6,
-  },
-  dataLabel: {
-    fontSize: 12,
-    fontWeight: "500",
-    color: "#6B7280",
-    textTransform: "uppercase",
-    letterSpacing: 0.8,
-  },
-  dataValue: {
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  bottomSpacer: {
-    height: 40,
-  },
-});
