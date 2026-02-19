@@ -2,7 +2,7 @@
 import { SolarSystem01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 import Svg, {
   Path,
   Circle,
@@ -224,7 +224,6 @@ const PLANET_METADATA = [
     bgColor: "bg-orange-50",
     borderColor: "border-orange-100",
     textColor: "text-orange-700",
-    accentColor: "text-amber-500",
   },
   {
     key: "moon",
@@ -297,86 +296,63 @@ export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
   const sunData = data.planetaryPositions.sun;
 
   return (
-    <ScrollView
-      className="flex-1 bg-slate-50"
-      showsVerticalScrollIndicator={false}
-    >
-      <View className="py-5">
-        {/* Header Section */}
-        <View className="mb-6 flex-row items-center gap-2">
-          {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
-          <HugeiconsIcon size={24} color="#b45309" icon={SolarSystem01Icon} />
-          <Text className="text-lg font-bold text-amber-800">Graha Sthiti</Text>
-        </View>
+    <View className="flex flex-col gap-4">
+      {/* Header Section */}
+      <View className="flex-row items-center gap-2 mb-1">
+        {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
+        <HugeiconsIcon size={24} color="#92400e" icon={SolarSystem01Icon} />
+        <Text className="text-lg font-bold text-amber-800">Graha Sthiti</Text>
+      </View>
 
-        {/* Featured Planet Card (Sun) */}
-        <View className="bg-neutral-800 rounded-3xl p-6 mb-8 relative overflow-hidden shadow-md">
-          <View className="flex-row items-center z-10">
-            <View className="mr-5">
-              <SunIcon />
-            </View>
-            <View className="flex-1">
-              <Text className="text-xs font-bold text-amber-400 tracking-widest uppercase mb-1">
-                Atmakaraka (Soul)
-              </Text>
-              <Text className="text-xl font-bold text-white mb-1">
-                Sun in {sunData.rashiName}
-              </Text>
-              <Text className="text-base font-medium text-slate-300">
-                {sunData.degree.toFixed(2)}°
-              </Text>
-            </View>
-          </View>
-        </View>
+      {/* Grid of Planet Cards */}
+      <View className="flex-row flex-wrap gap-3">
+        {PLANET_METADATA.map((planet) => {
+          const planetData = data.planetaryPositions[planet.key];
+          const IconComponent = planet.icon;
 
-        {/* Grid of Planet Cards */}
-        <View className="grid grid-cols-2 gap-2">
-          {PLANET_METADATA.slice(1).map((planet) => {
-            const planetData = data.planetaryPositions[planet.key];
-            const IconComponent = planet.icon;
+          return (
+            <View
+              key={planet.key}
+              className={`flex-1 min-w-[45%] rounded-xl p-3 border shadow-sm ${planet.bgColor} ${planet.borderColor}`}
+            >
+              <View className="mb-3">
+                <IconComponent />
+              </View>
 
-            return (
-              <View
-                key={planet.key}
-                className={`w-full rounded-xl p-2 border-2 shadow-sm ${planet.bgColor} ${planet.borderColor}`}
-              >
-                <View className="mb-3">
-                  <IconComponent />
-                </View>
+              <View className="mb-3">
+                <Text className={`text-base font-bold ${planet.textColor}`}>
+                  {planet.name}
+                </Text>
+                <Text className="text-xs text-neutral-500 italic font-medium">
+                  {planet.sanskrit}
+                </Text>
+              </View>
 
-                <View className="mb-4">
-                  <Text className={`text-base font-bold ${planet.textColor}`}>
-                    {planet.name}
+              <View className="bg-white/60 rounded-lg p-2.5">
+                <View className="flex-row justify-between items-center mb-1.5">
+                  <Text className="text-[10px] uppercase font-bold text-neutral-400">
+                    Rashi
                   </Text>
-                  <Text className="text-xs text-slate-500 italic font-medium">
-                    {planet.sanskrit}
+                  <Text className={`text-xs font-bold ${planet.textColor}`}>
+                    {planetData.rashiName}
                   </Text>
                 </View>
 
-                <View className="bg-white/80 rounded-lg p-3">
-                  <View className="flex-row justify-between items-center mb-1">
-                    <Text className="text-xs text-slate-400">Rashi</Text>
-                    <Text className={`text-xs font-bold ${planet.textColor}`}>
-                      {planetData.rashiName}
-                    </Text>
-                  </View>
+                <View className="h-[1px] bg-neutral-200/50 my-1.5" />
 
-                  <View className="h-[1px] bg-slate-200 my-1" />
-
-                  <View className="flex-row justify-between items-center mt-1">
-                    <Text className="text-xs text-slate-400">Deg</Text>
-                    <Text className={`text-xs font-bold ${planet.textColor}`}>
-                      {planetData.degree.toFixed(2)}°
-                    </Text>
-                  </View>
+                <View className="flex-row justify-between items-center">
+                  <Text className="text-[10px] uppercase font-bold text-neutral-400">
+                    Deg
+                  </Text>
+                  <Text className={`text-xs font-bold ${planet.textColor}`}>
+                    {planetData.degree.toFixed(2)}°
+                  </Text>
                 </View>
               </View>
-            );
-          })}
-        </View>
-
-        <View className="h-10" />
+            </View>
+          );
+        })}
       </View>
-    </ScrollView>
+    </View>
   );
 }

@@ -27,48 +27,57 @@ function MoonDetails({ panchangam, moonriseTime, moonsetTime }: any) {
   };
 
   return (
-    <View className="bg-neutral-900 w-full rounded-3xl p-6 my-4 shadow-lg">
-      <View className="bg-white/10 mb-6 px-4 py-1.5 w-fit rounded-full">
+    <View className="bg-neutral-900 w-full rounded-xl p-5 my-0 shadow-lg border border-neutral-800">
+      <View className="bg-neutral-800 mb-6 px-4 py-2 self-start rounded-full border border-neutral-700">
         <Text className="text-white text-xs font-bold tracking-widest uppercase">
           {getPhaseLabel(illumination)}
         </Text>
       </View>
 
       <View className="flex-row items-center mb-8 gap-6">
-        <View className="w-20 h-20 items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 shadow-sm">
-          <Text className="text-5xl">{getMoonEmoji(illumination)}</Text>
+        <View className="w-20 h-20 items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 shadow-sm relative">
+          <Text
+            className="text-5xl absolute"
+            style={{ textAlign: "center", lineHeight: 60 }}
+          >
+            {getMoonEmoji(illumination)}
+          </Text>
         </View>
 
         <View>
-          <Text className="text-white text-5xl font-bold">{illumination}%</Text>
-          <Text className="text-neutral-400 text-lg font-medium">
+          <Text className="text-white text-4xl font-bold">{illumination}%</Text>
+          <Text className="text-neutral-400 text-base font-medium">
             Illuminated
           </Text>
         </View>
       </View>
 
-      <View className="h-[1px] bg-white/10 w-full mb-6" />
+      <View className="h-[1px] bg-neutral-800 w-full mb-6" />
 
       <View className="flex-row justify-between items-center">
         <View className="flex-row items-center gap-3">
-          <MoveUpRight size={20} color="white" style={{ marginTop: 4 }} />
+          <MoveUpRight size={20} color="#a3a3a3" />
           <View>
-            <Text className="text-neutral-400 text-sm mb-0.5">Moonrise</Text>
-            <Text className="text-white text-xl font-bold">
+            <Text className="text-neutral-500 text-xs uppercase font-semibold mb-0.5 tracking-wider">
+              Moonrise
+            </Text>
+            <Text className="text-white text-lg font-bold">
               {moonriseTime || "--:--"}
             </Text>
           </View>
         </View>
 
-        <View className="w-[1px] h-10 bg-white/10" />
+        <View className="w-[1px] h-10 bg-neutral-800" />
         <View className="flex-row items-center gap-3">
           <View className="items-end">
-            <Text className="text-neutral-400 text-sm mb-0.5">Moonset</Text>
-            <Text className="text-white text-xl font-bold">
+            <Text className="text-neutral-500 text-xs uppercase font-semibold mb-0.5 tracking-wider">
+              Moonset
+            </Text>
+            <Text className="text-white text-lg font-bold">
               {moonsetTime || "--:--"}
             </Text>
           </View>
-          <MoveDownLeft size={20} color="white" style={{ marginTop: 4 }} />
+          <MoveDownLeft size={20} color="#a3a3a3" />
         </View>
       </View>
     </View>

@@ -35,61 +35,54 @@ function Panchangalgetails({ panchangam }: any) {
   };
 
   return (
-    <View className="flex flex-col gap-2 py-4 ">
-      <View className="flex flex-row w-full gap-2">
-        <HugeiconsIcon color={"#d97706"} className="w-6 h-6" icon={AiContentGenerator01Icon} />
-        <Text className="text-amber-700 text-xl font-semibold">
-          {" "}
-          Core Panchang
-        </Text>
+    <View className="flex flex-col gap-4">
+      <View className="flex flex-row items-center w-full gap-2 mb-1">
+        <HugeiconsIcon
+          color="#b45309"
+          className="w-6 h-6"
+          icon={AiContentGenerator01Icon}
+        />
+        <Text className="text-amber-700 text-lg font-bold">Core Panchang</Text>
       </View>
-      <View className="grid gap-2 grid-cols-2">
-        <View className=" rounded-lg  px-3 py-2 flex flex-col items-start justify-center bg-white ">
-          <Text className="text-gray-400 text-xs uppercase font-medium">
+      <View className="flex-row flex-wrap gap-3">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Tithi
           </Text>
-          <Text className="text-amber-600 text-xl font-semibold mt-1">
+          <Text className="text-neutral-900 text-lg font-bold mt-1">
             {getCurrentTithi(panchangam)?.tithi || "N/A"}
           </Text>
-          <Text className="text-neutral-500 text-sm mt-1">
-            Ends : //time here
-          </Text>
+          <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>
         </View>
 
-        <View className="rounded-lg  px-3 py-2 flex flex-col items-start justify-center bg-white ">
-          <Text className="text-gray-400 text-xs uppercase font-medium">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Nakshatra
           </Text>
-          <Text className="text-amber-600 text-xl font-semibold mt-1">
+          <Text className="text-neutral-900 text-lg font-bold mt-1">
             {getCurrentNakshatra(panchangam)}
           </Text>
-          <Text className="text-neutral-500 text-sm  mt-1">
-            Ends : //time here
-          </Text>
+          <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>
         </View>
 
-        <View className=" rounded-lg  px-3 py-2 flex flex-col items-start justify-center bg-white ">
-          <Text className="text-gray-400 text-xs uppercase font-medium">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Karana
           </Text>
-          <Text className="text-amber-600 text-xl font-semibold mt-1">
+          <Text className="text-neutral-900 text-lg font-bold mt-1">
             {getCurrentKarana(panchangam)}
           </Text>
-          <Text className="text-neutral-500 text-sm mt-1">
-            Ends : //time here
-          </Text>
+          <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>
         </View>
 
-        <View className="rounded-lg px-3 py-2 flex flex-col items-start justify-center bg-white ">
-          <Text className="text-gray-400 text-xs uppercase font-medium">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Yoga
           </Text>
-          <Text className="text-amber-600 text-xl font-semibold mt-1">
+          <Text className="text-neutral-900 text-lg font-bold mt-1">
             {getCurrentYoga(panchangam)}
           </Text>
-          <Text className="text-neutral-500 text-sm mt-1">
-            Ends : //time here
-          </Text>
+          <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>
         </View>
       </View>
     </View>

@@ -23,12 +23,12 @@ export default function PeriodCard({
   const isAvoid = status === "AVOID";
 
   // Tailwind Class Mappings
-  const containerBg = isAvoid ? "bg-amber-50" : "bg-emerald-50";
-  const textColor = isAvoid ? "text-amber-700" : "text-emerald-700";
+  const containerBg = isAvoid ? "bg-red-50" : "bg-emerald-50";
+  const textColor = isAvoid ? "text-red-700" : "text-emerald-700/60";
   const iconColor = isAvoid ? "#c2410c" : "#047857"; // tailwind amber-700 : emerald-700
 
   return (
-    <View className="flex-row items-center justify-between px-3 py-2 mb-3 bg-white rounded-xl shadow-sm shadow-slate-900/5">
+    <View className="flex-row items-center justify-between px-3 py-2 bg-white rounded-xl shadow-sm shadow-slate-900/5">
       <View className="flex-row items-center flex-1">
         {/* Icon Container */}
         <View

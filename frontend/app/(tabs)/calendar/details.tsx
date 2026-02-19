@@ -49,20 +49,20 @@ export default function DetailsPage() {
   // --------------------------------------------------------------
 
   return (
-    <ScrollView className="flex-1 bg-neutral-50">
+    <ScrollView className="flex-1 bg-neutral-100">
       {/* Header */}
-      <View className="w-full bg-white pt-2 border-b border-neutral-300 text-center flex flex-col items-center justify-center">
-        <Text className="text-2xl font-bold text-neutral-900 mb-2">
+      <View className="w-full bg-white py-4 border-b border-neutral-200 flex flex-col items-center justify-center shadow-sm">
+        <Text className="text-xl font-bold text-neutral-900 mb-1">
           {format(selectedDate, "MMMM dd, yyyy")}
         </Text>
-        <Text className="text-base uppercase text-neutarl-800 mb-6">
+        <Text className="text-sm uppercase tracking-wider text-neutral-500 font-medium">
           {panchangam.masa.name} {panchangam.paksha} Paksha
         </Text>
       </View>
 
-      <View className="p-4">
+      <View className="px-4 py-6 flex flex-col gap-6">
         {/* Sun/Moon Timings - UPDATED */}
-        <View className="mb-4">
+        <View>
           <SunriseSunsetCard
             duration={formattedDuration}
             sunriseTime={sunriseTime}
@@ -91,18 +91,22 @@ export default function DetailsPage() {
 
         {/* Festivals */}
         {panchangam.festivals?.length > 0 && (
-          <View className="bg-pink-100 p-4 rounded-lg mt-4 mb-4">
-            <Text className="font-semibold text-pink-900 mb-2">
-              🎉 Festivals
+          <View className="bg-pink-50 p-4 rounded-xl border border-pink-100">
+            <Text className="font-semibold text-pink-700 mb-2 flex-row items-center">
+              🎉 <Text className="ml-2">Festivals</Text>
             </Text>
             {panchangam.festivals.map((festival: string, i: number) => (
-              <Text key={i} className="text-pink-700 ml-2">
+              <Text
+                key={i}
+                className="text-pink-600 ml-2 mb-1 text-sm font-medium"
+              >
                 • {festival}
               </Text>
             ))}
           </View>
         )}
       </View>
+      <View className="h-10" />
     </ScrollView>
   );
 }
