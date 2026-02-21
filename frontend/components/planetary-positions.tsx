@@ -1,7 +1,5 @@
 "use client";
 import {
-  Male02Icon,
-  MaleSymbolFreeIcons,
   Moon02Icon,
   SolarSystem01Icon,
   Sun03Icon,
@@ -9,13 +7,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { View, Text } from "react-native";
-import Svg, {
-  Path,
-  Circle,
-  Defs,
-  LinearGradient,
-  Stop,
-} from "react-native-svg";
+import Svg, { Path, Circle } from "react-native-svg";
+const PRIMARY = "#DE6A4D";
 
 interface PlanetaryData {
   degree: number;
@@ -162,7 +155,7 @@ const PLANET_METADATA = [
     bgColor: "bg-orange-50",
     borderColor: "border-orange-200",
     textColor: "text-orange-700",
-    hex: "#C2410C", // orange-700
+    hex: "#C2410C",
   },
   {
     key: "moon",
@@ -172,7 +165,7 @@ const PLANET_METADATA = [
     bgColor: "bg-purple-50",
     borderColor: "border-purple-200",
     textColor: "text-purple-700",
-    hex: "#7E22CE", // purple-700
+    hex: "#7E22CE",
   },
   {
     key: "mars",
@@ -182,7 +175,7 @@ const PLANET_METADATA = [
     bgColor: "bg-rose-50",
     borderColor: "border-rose-200",
     textColor: "text-rose-700",
-    hex: "#BE123C", // rose-700
+    hex: "#BE123C",
   },
   {
     key: "mercury",
@@ -192,7 +185,7 @@ const PLANET_METADATA = [
     bgColor: "bg-sky-50",
     borderColor: "border-sky-200",
     textColor: "text-sky-700",
-    hex: "#0369A1", // sky-700
+    hex: "#0369A1",
   },
   {
     key: "jupiter",
@@ -202,7 +195,7 @@ const PLANET_METADATA = [
     bgColor: "bg-indigo-50",
     borderColor: "border-indigo-200",
     textColor: "text-indigo-700",
-    hex: "#4338CA", // indigo-700
+    hex: "#4338CA",
   },
   {
     key: "venus",
@@ -212,7 +205,7 @@ const PLANET_METADATA = [
     bgColor: "bg-pink-50",
     borderColor: "border-pink-200",
     textColor: "text-pink-700",
-    hex: "#BE185D", // pink-700
+    hex: "#BE185D",
   },
   {
     key: "rahu",
@@ -222,7 +215,7 @@ const PLANET_METADATA = [
     bgColor: "bg-slate-100",
     borderColor: "border-slate-300",
     textColor: "text-slate-700",
-    hex: "#334155", // slate-700
+    hex: "#334155",
   },
   {
     key: "ketu",
@@ -232,7 +225,7 @@ const PLANET_METADATA = [
     bgColor: "bg-zinc-100",
     borderColor: "border-zinc-300",
     textColor: "text-zinc-700",
-    hex: "#3F3F46", // zinc-700
+    hex: "#3F3F46",
   },
 ] as const;
 
@@ -246,8 +239,8 @@ export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
       {/* Header Section */}
       <View className="flex-row items-center gap-2 mb-1">
         {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
-        <HugeiconsIcon size={32} color="#D97757" icon={SolarSystem01Icon} />
-        <Text className="text-2xl font-merriweather-semibold text-neutral-800">
+        <HugeiconsIcon size={32} color={PRIMARY} icon={SolarSystem01Icon} />
+        <Text className="text-2xl font-merriweather-semibold text-primary">
           Graha Sthiti
         </Text>
       </View>

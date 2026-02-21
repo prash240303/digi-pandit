@@ -61,6 +61,7 @@ module.exports = {
 
       colors: {
         primary: {
+          DEFAULT: '#DE6A4D',
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
           50: 'rgb(var(--color-primary-50)/<alpha-value>)',
           100: 'rgb(var(--color-primary-100)/<alpha-value>)',

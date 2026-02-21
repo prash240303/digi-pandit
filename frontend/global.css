@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+:root {
+  /* Primary color scale based on #DE6A4D */
+  --color-primary-0:   255 255 255;
+  --color-primary-50:  252 240 236;
+  --color-primary-100: 249 224 216;
+  --color-primary-200: 243 192 179;
+  --color-primary-300: 236 158 139;
+  --color-primary-400: 229 122 98;
+  --color-primary-500: 222 106 77;   /* #DE6A4D — your base */
+  --color-primary-600: 196 82 54;
+  --color-primary-700: 158 62 38;
+  --color-primary-800: 118 45 26;
+  --color-primary-900: 77 28 15;
+  --color-primary-950: 40 13 6;
+}
+
+

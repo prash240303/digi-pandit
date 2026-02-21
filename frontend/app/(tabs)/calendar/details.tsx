@@ -9,6 +9,8 @@ import SunriseSunsetCard from "@/components/sun-moon-timings";
 import PanchangamDetails from "@/components/core-panchang-details";
 import MoonDetails from "@/components/moon-details";
 import MuhurataDetails from "@/components/muhurata-details";
+import CalendarDateSelector from "@/components/calendar-date-selector";
+
 
 /* -------------------- Helper Functions -------------------- */
 export default function DetailsPage() {
@@ -51,20 +53,15 @@ export default function DetailsPage() {
   return (
     <ScrollView className="flex-1 bg-[#FFFAF0]">
       {/* Header */}
-      <View className="w-full bg-white py-4 border-b border-neutral-200 flex flex-col items-center justify-center shadow-sm">
-        <Text className="text-xl font-bold text-neutral-900 mb-1">
-          {format(selectedDate, "MMMM dd, yyyy")}
-        </Text>
-        <Text className="text-sm uppercase tracking-wider text-neutral-500 font-medium">
-          {panchangam.masa.name} {panchangam.paksha} Paksha
-        </Text>
+      <View>
+        <CalendarDateSelector />
       </View>
 
       <View className="px-4 py-6 flex flex-col gap-8">
         {/* Sun/Moon Timings - UPDATED */}
-        <View>
+        <View> 
           <SunriseSunsetCard
-            duration={formattedDuration}
+            duration={ formattedDuration}
             sunriseTime={sunriseTime}
             sunrisePeriod={sunrisePeriod}
             sunsetTime={sunsetTime}

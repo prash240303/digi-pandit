@@ -9,7 +9,7 @@ export default function CalendarLayout() {
       />
       <Stack.Screen
         name="details"
-        options={{ title: "Details" }}
+        options={{ title: "Details", headerShown: false }}
       />
     </Stack>
   );

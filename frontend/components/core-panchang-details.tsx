@@ -4,6 +4,7 @@ import { Text } from "./ui/text";
 import { AiContentGenerator01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { format } from "date-fns";
+const PRIMARY = "#DE6A4D";
 
 function Panchangalgetails({ panchangam }: any) {
   // Helper to safely format time
@@ -44,7 +45,7 @@ function Panchangalgetails({ panchangam }: any) {
   };
 
   const getCurrentKarana = (panchangam: any) => {
-    const karans = panchangam.karanas;
+    const karans = panchangam?.karanas;
     if (!panchangam?.karanas || panchangam.karanas.length === 0) return null;
     return {
       name: panchangam.karanas[karans.length - 1]?.name || "N/A",
@@ -62,11 +63,11 @@ function Panchangalgetails({ panchangam }: any) {
     <View className="flex flex-col font-inter gap-4">
       <View className="flex flex-row items-center w-full gap-2 mb-1">
         <HugeiconsIcon
-          color="#b45309"
+          color={PRIMARY}
           size={32}
           icon={AiContentGenerator01Icon}
         />
-        <Text className="text-neutral-700 text-2xl font-merriweather-bold">
+        <Text className="text-primary text-2xl font-merriweather-bold">
           Core Panchang
         </Text>
       </View>

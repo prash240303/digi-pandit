@@ -8,6 +8,7 @@ import {
   ClockIcon,
   StarsIcon,
 } from "@hugeicons/core-free-icons";
+const PRIMARY = "#DE6A4D";
 
 const formatTime = (date: any) => {
   if (!date || isNaN(new Date(date).getTime())) return null;
@@ -34,8 +35,8 @@ function MuhurataDetails({ panchangam }: any) {
     <View className="flex  flex-col gap-4">
       {/* Section Header */}
       <View className="flex-row gap-2 items-center mb-1">
-        <HugeiconsIcon icon={ClockIcon} color="#D97757" size={32} />
-        <Text className="text-2xl font-merriweather-semibold text-neutral-800">
+        <HugeiconsIcon icon={ClockIcon} color={PRIMARY} size={32} />
+        <Text className="text-2xl font-merriweather-semibold text-primary">
           Muhurta & Timings
         </Text>
       </View>
