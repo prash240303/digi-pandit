@@ -19,6 +19,46 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // The key 'playfair-regular' becomes the class 'font-playfair-regular'
+        // The value must match the name used in your useFonts hook
+        // This maps the base 'font-playfair' class
+        'playfair': ["PlayfairDisplay_400Regular"],
+        'playfair-medium': ["PlayfairDisplay_500Medium"],
+        'playfair-bold': ["PlayfairDisplay_700Bold"],
+
+        // Merriweather
+        'merriweather-light': ["Merriweather_300Light"],
+        'merriweather-light-italic': ["Merriweather_300Light_Italic"],
+        'merriweather-regular': ["Merriweather_400Regular"],
+        'merriweather-italic': ["Merriweather_400Regular_Italic"],
+        'merriweather-medium': ["Merriweather_500Medium"],
+        'merriweather-semibold': ["Merriweather_600SemiBold"],
+        'merriweather-bold': ["Merriweather_700Bold"],
+
+        // Inter (Sans-Serif - UI/Modern)
+        'inter-extralight': ["Inter_200ExtraLight"],
+        'inter-light': ["Inter_300Light"],
+        'inter-regular': ["Inter_400Regular"],
+        'inter-medium': ["Inter_500Medium"],
+        'inter-semibold': ["Inter_600SemiBold"],
+        'inter-bold': ["Inter_700Bold"],
+        'inter-extrabold': ["Inter_800ExtraBold"],
+        'inter-black': ["Inter_900Black"],
+
+        // IBM mono (mono - UI/Modern)
+        'ibm-mono-light': ["IBMPlexMono_300Light"],
+
+        heading: undefined,
+        body: undefined,
+        mono: undefined,
+        jakarta: ['var(--font-plus-jakarta-sans)'],
+        roboto: ['var(--font-roboto)'],
+        code: ['var(--font-source-code-pro)'],
+        inter: ['var(--font-inter)'],
+        'space-mono': ['var(--font-space-mono)'],
+      },
+
       colors: {
         primary: {
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
@@ -175,16 +215,7 @@ module.exports = {
           error: 'rgb(var(--color-indicator-error)/<alpha-value>)',
         },
       },
-      fontFamily: {
-        heading: undefined,
-        body: undefined,
-        mono: undefined,
-        jakarta: ['var(--font-plus-jakarta-sans)'],
-        roboto: ['var(--font-roboto)'],
-        code: ['var(--font-source-code-pro)'],
-        inter: ['var(--font-inter)'],
-        'space-mono': ['var(--font-space-mono)'],
-      },
+
       fontWeight: {
         extrablack: '950',
       },

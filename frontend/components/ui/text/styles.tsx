@@ -9,6 +9,13 @@ export const textStyle = tva({
   base: `text-typography-700 font-body ${baseStyle}`,
 
   variants: {
+    family: {
+      playfair: 'font-playfair',
+      'playfair-medium': 'font-playfair-medium',
+      'playfair-bold': 'font-playfair-bold',
+      jakarta: 'font-jakarta',
+      roboto: 'font-roboto',
+    },
     isTruncated: {
       true: 'web:truncate',
     },

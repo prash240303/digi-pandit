@@ -24,45 +24,39 @@ export default function PeriodCard({
 
   // Tailwind Class Mappings
   const containerBg = isAvoid ? "bg-red-50" : "bg-emerald-50";
-  const textColor = isAvoid ? "text-red-700" : "text-emerald-700/60";
+  const textColor = isAvoid ? "text-red-600" : "text-emerald-600";
   const iconColor = isAvoid ? "#c2410c" : "#047857"; // tailwind amber-700 : emerald-700
 
   return (
-    <View className="flex-row items-center justify-between px-3 py-2 bg-white rounded-xl shadow-sm shadow-slate-900/5">
+    <View className="flex-row items-center justify-between p-3 border border-neutral-200/70 bg-white rounded-xl shadow-sm shadow-slate-900/5">
       <View className="flex-row items-center flex-1">
         {/* Icon Container */}
         <View
-          className={`w-10 h-10 rounded-lg items-center justify-center mr-3 ${containerBg}`}
+          className={`w-12 h-12 rounded-lg items-center justify-center mr-3 ${containerBg}`}
         >
-          {typeof icon === "string" ? (
-            <Text className="text-lg">{icon}</Text>
-          ) : (
-            icon || <Text className="text-lg">✨</Text>
-          )}
+          {icon}
         </View>
 
         {/* Labels */}
         <View className="flex-1">
-          <Text className="text-sm font-bold text-slate-900">{title}</Text>
-          <Text className="text-xs text-slate-500">{subtitle}</Text>
+          <Text className="text-sm font-merriweather-regular text-slate-900">
+            {title}
+          </Text>
+          <Text className="text-xs font-inter-light text-slate-500">
+            {subtitle}
+          </Text>
         </View>
       </View>
 
       {/* Time Range */}
-      <View className="items-center">
-        <Text className={`text-xs font-bold ${textColor}`}>
+      <View className="items-end">
+        <Text className={`text-xs font-ibm-mono-light ${textColor}`}>
           {start}
         </Text>
-        
-        <View className="py-0.5">
-          <HugeiconsIcon
-            icon={ArrowDown}
-            color={iconColor}
-            size={14}
-          />
-        </View>
-        
-        <Text className={`text-xs font-bold ${textColor}`}>
+
+        <View className="text-xs text-neutral-600 font-ibm-mono-light">to</View>
+
+        <Text className={`text-xs font-ibm-mono-light ${textColor}`}>
           {end}
         </Text>
       </View>

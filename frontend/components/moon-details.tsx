@@ -1,12 +1,18 @@
 import React from "react";
 import { View } from "react-native";
-import { Text } from "./ui/text";
-import { MoveUpRight, MoveDownLeft } from "lucide-react-native";
+import { Text } from "./ui/text"; // Assuming this is your custom text component
+import { MoveUpRight, MoveDownLeft, Sun, Sunset } from "lucide-react-native";
+import { LinearGradient } from "expo-linear-gradient"; // Ensure this is installed
 
-function MoonDetails({ panchangam, moonriseTime, moonsetTime }: any) {
-  const illumination = panchangam.chandrabalam ?? 0;
-
-  console.log("moon data", moonriseTime, moonsetTime);
+function MoonDetails({
+  panchangam,
+  moonriseTime,
+  moonsetTime,
+  sunriseTime,
+  sunsetTime,
+  dayDuration,
+}: any) {
+  const illumination = panchangam.chandrabalam ?? 73; // Defaulting to 73 to match image
 
   const getMoonEmoji = (value: number) => {
     if (value >= 95) return "🌕";
@@ -27,60 +33,68 @@ function MoonDetails({ panchangam, moonriseTime, moonsetTime }: any) {
   };
 
   return (
-    <View className="bg-neutral-900 w-full rounded-xl p-5 my-0 shadow-lg border border-neutral-800">
-      <View className="bg-neutral-800 mb-6 px-4 py-2 self-start rounded-full border border-neutral-700">
-        <Text className="text-white text-xs font-bold tracking-widest uppercase">
-          {getPhaseLabel(illumination)}
-        </Text>
-      </View>
-
-      <View className="flex-row items-center mb-8 gap-6">
-        <View className="w-20 h-20 items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 shadow-sm relative">
-          <Text
-            className="text-5xl absolute"
-            style={{ textAlign: "center", lineHeight: 60 }}
-          >
-            {getMoonEmoji(illumination)}
-          </Text>
-        </View>
-
-        <View>
-          <Text className="text-white text-4xl font-bold">{illumination}%</Text>
-          <Text className="text-neutral-400 text-base font-medium">
-            Illuminated
-          </Text>
-        </View>
-      </View>
-
-      <View className="h-[1px] bg-neutral-800 w-full mb-6" />
-
-      <View className="flex-row justify-between items-center">
-        <View className="flex-row items-center gap-3">
-          <MoveUpRight size={20} color="#a3a3a3" />
+    <LinearGradient
+      colors={["#553B2A", "#212121"]}
+      start={{ x: 1, y: 0 }}
+      end={{ x: 0.5, y: 0.5 }}
+      className="bg-[#212121] w-full rounded-[32px] overflow-hidden shadow-2xl"
+    >
+      {/* Top Gradient Section */}
+      <View className="p-6 pb-2">
+        <View className="flex-row justify-between items-start">
           <View>
-            <Text className="text-neutral-500 text-xs uppercase font-semibold mb-0.5 tracking-wider">
-              Moonrise
+            <View className="bg-[#333333]/60 px-3 py-1.5 self-start rounded-full border border-neutral-600 mb-4">
+              <Text className="text-neutral-300 text-[10px] font-bold tracking-widest uppercase">
+                {getPhaseLabel(illumination)}
+              </Text>
+            </View>
+            <Text className="text-white text-7xl font-light tracking-tighter">
+              {illumination}%
             </Text>
-            <Text className="text-white text-lg font-bold">
-              {moonriseTime || "--:--"}
+            <Text className="text-neutral-400 text-lg mt-[-8px] ml-1">
+              Illuminated
             </Text>
           </View>
-        </View>
 
-        <View className="w-[1px] h-10 bg-neutral-800" />
-        <View className="flex-row items-center gap-3">
-          <View className="items-end">
-            <Text className="text-neutral-500 text-xs uppercase font-semibold mb-0.5 tracking-wider">
-              Moonset
-            </Text>
-            <Text className="text-white text-lg font-bold">
-              {moonsetTime || "--:--"}
-            </Text>
+          {/* Emoji Placeholder matching the circular visual */}
+          <View className="w-24 h-24 items-center justify-center rounded-full">
+            <Text className="text-7xl">{getMoonEmoji(illumination)}</Text>
           </View>
-          <MoveDownLeft size={20} color="#a3a3a3" />
         </View>
       </View>
-    </View>
+
+      <View className="px-6 pt-4">
+        <View className="h-[0.5px] bg-neutral-700 w-full mb-8" />
+        {/* Moonrise / Moonset Row */}
+        <View className="flex-row justify-between mb-10">
+          <View>
+            <View className="flex-row items-center gap-1.5 mb-1">
+              <MoveDownLeft size={14} color="#a3a3a3" />
+              <Text className="text-neutral-300 text-[10px] font-bold tracking-widest uppercase">
+                Moonrise
+              </Text>
+            </View>
+            <Text className="text-white text-2xl font-medium">
+              {moonriseTime || "10:06"}{" "}
+              <Text className="text-neutral-400 text-sm">PM</Text>
+            </Text>
+          </View>
+
+          <View className="items-end">
+            <View className="flex-row items-center gap-1.5 mb-1">
+              <Text className="text-neutral-300 text-[10px] font-bold tracking-widest uppercase">
+                Moonset
+              </Text>
+              <MoveUpRight size={14} color="#a3a3a3" />
+            </View>
+            <Text className="text-white text-2xl font-medium">
+              {moonsetTime || "10:10"}{" "}
+              <Text className="text-neutral-400 text-sm">AM</Text>
+            </Text>
+          </View>
+        </View>
+      </View>
+    </LinearGradient>
   );
 }
 

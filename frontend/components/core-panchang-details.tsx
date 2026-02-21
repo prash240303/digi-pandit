@@ -35,51 +35,53 @@ function Panchangalgetails({ panchangam }: any) {
   };
 
   return (
-    <View className="flex flex-col gap-4">
+    <View className="flex flex-col font-inter gap-4">
       <View className="flex flex-row items-center w-full gap-2 mb-1">
         <HugeiconsIcon
           color="#b45309"
-          className="w-6 h-6"
+          size={32}
           icon={AiContentGenerator01Icon}
         />
-        <Text className="text-amber-700 text-lg font-bold">Core Panchang</Text>
+        <Text className="text-neutral-700 text-2xl font-merriweather-bold">
+          Core Panchang
+        </Text>
       </View>
       <View className="flex-row flex-wrap gap-3">
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
           <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Tithi
           </Text>
-          <Text className="text-neutral-900 text-lg font-bold mt-1">
+          <Text className="text-orange-600 text-lg font-bold font-merriweather-semibold mt-1">
             {getCurrentTithi(panchangam)?.tithi || "N/A"}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>
         </View>
 
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
           <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Nakshatra
           </Text>
-          <Text className="text-neutral-900 text-lg font-bold mt-1">
+          <Text className="text-orange-600 font-merriweather-semibold text-lg mt-1">
             {getCurrentNakshatra(panchangam)}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>
         </View>
 
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
           <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Karana
           </Text>
-          <Text className="text-neutral-900 text-lg font-bold mt-1">
+          <Text className="text-orange-600 text-lg font-merriweather-semibold mt-1">
             {getCurrentKarana(panchangam)}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>
         </View>
 
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-100 p-4 shadow-sm">
+        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
           <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
             Yoga
           </Text>
-          <Text className="text-neutral-900 text-lg font-bold mt-1">
+          <Text className="text-orange-600 text-lg font-merriweather-semibold mt-1">
             {getCurrentYoga(panchangam)}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">Ends : --:--</Text>

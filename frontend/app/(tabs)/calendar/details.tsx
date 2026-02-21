@@ -49,7 +49,7 @@ export default function DetailsPage() {
   // --------------------------------------------------------------
 
   return (
-    <ScrollView className="flex-1 bg-neutral-100">
+    <ScrollView className="flex-1 bg-[#FFFAF0]">
       {/* Header */}
       <View className="w-full bg-white py-4 border-b border-neutral-200 flex flex-col items-center justify-center shadow-sm">
         <Text className="text-xl font-bold text-neutral-900 mb-1">
@@ -60,7 +60,7 @@ export default function DetailsPage() {
         </Text>
       </View>
 
-      <View className="px-4 py-6 flex flex-col gap-6">
+      <View className="px-4 py-6 flex flex-col gap-8">
         {/* Sun/Moon Timings - UPDATED */}
         <View>
           <SunriseSunsetCard
@@ -74,6 +74,7 @@ export default function DetailsPage() {
 
         {/* Panchang Details */}
         <PanchangamDetails panchangam={panchangam} />
+        <MuhurataDetails panchangam={panchangam} />
 
         {/* Chandrabalam */}
         <MoonDetails
@@ -81,8 +82,6 @@ export default function DetailsPage() {
           moonsetTime={`${moonsetTime} ${moonsetPeriod}`}
           panchangam={panchangam}
         />
-
-        <MuhurataDetails panchangam={panchangam} />
 
         {/* Planetary Positions */}
         <PlanetaryPositions

@@ -1,5 +1,11 @@
 "use client";
-import { SolarSystem01Icon } from "@hugeicons/core-free-icons";
+import {
+  Male02Icon,
+  MaleSymbolFreeIcons,
+  Moon02Icon,
+  SolarSystem01Icon,
+  Sun03Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { View, Text } from "react-native";
@@ -29,191 +35,123 @@ interface PanchangamData {
   };
 }
 
-// Icons remain SVG-based as Tailwind doesn't replace path logic
+// Helper to keep code clean
+const IconProps = {
+  width: 40,
+  height: 40,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  strokeWidth: "2",
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
 
-// / Custom SVG Icons inspired by astronomical symbols
-const SunIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48">
-    <Defs>
-      <LinearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <Stop offset="0%" stopColor="#FFD93D" />
-        <Stop offset="100%" stopColor="#FF9A3D" />
-      </LinearGradient>
-    </Defs>
-    <Circle cx="24" cy="24" r="10" fill="url(#sunGrad)" />
-    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
-      const rad = (angle * Math.PI) / 180;
-      const x1 = 24 + Math.cos(rad) * 14;
-      const y1 = 24 + Math.sin(rad) * 14;
-      const x2 = 24 + Math.cos(rad) * 19;
-      const y2 = 24 + Math.sin(rad) * 19;
-      return (
-        <Path
-          key={i}
-          d={`M ${x1} ${y1} L ${x2} ${y2}`}
-          stroke="url(#sunGrad)"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-      );
-    })}
-  </Svg>
-);
-export const MoonIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+export const SunIcon = ({ color }: { color: string }) => {
+  return (
+    <View>
+      <HugeiconsIcon icon={Sun03Icon} size={32} color={color} />
+    </View>
+  );
+};
+
+export const MoonIcon = ({ color }: { color: string }) => {
+  return (
+    <View>
+      <HugeiconsIcon icon={Moon02Icon} size={32} color={color} />
+    </View>
+  );
+};
+
+// --- Fixed Planetary Icons ---
+
+export const MarsIcon = ({ color }: { color: string }) => (
+  <Svg width="32" height="32" viewBox="0 0 32 32" fill="none">
     <Path
-      d="M28 12C23.5817 12 20 15.5817 20 20C20 24.4183 23.5817 28 28 28C28.7956 28 29.5587 27.8834 30.2761 27.6685C28.2794 29.6174 25.5294 30.8 22.5 30.8C17.0294 30.8 12.5 26.2706 12.5 20.8C12.5 15.3294 17.0294 10.8 22.5 10.8C24.2891 10.8 25.9578 11.2873 27.3985 12.1315C27.7326 12.0447 28.0805 12 28.4375 12H28Z"
-      fill="#D4B5E8"
-      opacity="1"
-    />
-  </Svg>
-);
-
-export const MarsIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-    <Circle
-      cx="20"
-      cy="28"
-      r="8"
-      stroke="#FF7B9C"
-      strokeWidth="2.5"
-      fill="none"
+      d="M4.99958 19.1429C4.99958 14.8035 8.51736 11.2857 12.8567 11.2857C17.1961 11.2857 20.7139 14.8035 20.7139 19.1429C20.7139 23.4822 17.1961 27 12.8567 27C8.51736 27 4.99958 23.4822 4.99958 19.1429Z"
+      stroke={color}
+      strokeWidth="1.83337"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <Path
-      d="M26 22L34 14M34 14H28M34 14V20"
-      stroke="#FF7B9C"
-      strokeWidth="2.5"
+      d="M27 11.286V9.19076C27 7.21536 27 6.22767 26.3863 5.61397C25.7726 5.00028 24.7849 5.00028 22.8095 5.00028H20.7143M25.9524 6.0479L19.1429 12.8574"
+      stroke={color}
+      strokeWidth="1.83337"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
   </Svg>
 );
 
-export const MercuryIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-    {/* Centered Circle */}
+export const MercuryIcon = ({ color }: { color: string }) => (
+  <Svg width="32" height="32" viewBox="0 0 32 32" fill="none">
     <Circle
-      cx="24"
-      cy="23"
-      r="6"
-      stroke="#A8DADC"
-      strokeWidth="2.5"
-      fill="none"
-    />
-
-    {/* Top Crescent / Horns */}
-    <Path
-      d="M18.5 19.5 C18.5 12 29.5 12 29.5 19.5"
-      stroke="#A8DADC"
-      strokeWidth="2.5"
+      cx="16.2363"
+      cy="14.7363"
+      r="5.48633"
+      stroke={color}
+      strokeWidth="1.5"
       strokeLinecap="round"
     />
-
-    {/* Bottom Cross */}
     <Path
-      d="M24 29 V39 M19 34 H29"
-      stroke="#A8DADC"
-      strokeWidth="2.5"
+      d="M20.6667 4C20.6667 4.63472 20.5416 5.26323 20.2988 5.84964C20.0559 6.43604 19.6998 6.96887 19.251 7.41768C18.8022 7.8665 18.2694 8.22252 17.683 8.46542C17.0966 8.70832 16.4681 8.83333 15.8333 8.83333C15.1986 8.83333 14.5701 8.70832 13.9837 8.46542C13.3973 8.22252 12.8645 7.8665 12.4157 7.41768C11.9668 6.96887 11.6108 6.43604 11.3679 5.84964C11.125 5.26323 11 4.63472 11 4"
+      stroke={color}
+      strokeWidth="1.5"
       strokeLinecap="round"
-      strokeLinejoin="round"
     />
-  </Svg>
-);
-export const JupiterIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-    {/* The sweeping "2" shape */}
     <Path
-      d="M17 20 C17 12 29 12 29 20 C29 26 17 32 17 32 H35"
-      stroke="#B4A7D6"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-
-    {/* The intersecting vertical stroke */}
-    <Path
-      d="M29 14 V40"
-      stroke="#B4A7D6"
-      strokeWidth="2.5"
+      d="M15.9407 20.5V23.9308M15.9407 27.3615V23.9308M15.9407 23.9308H18.8813M15.9407 23.9308H13"
+      stroke={color}
+      strokeWidth="1.5"
       strokeLinecap="round"
     />
   </Svg>
 );
 
-export const VenusIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-    <Circle
-      cx="24"
-      cy="18"
-      r="8"
-      stroke="#FFB4D1"
-      strokeWidth="2.5"
-      fill="none"
-    />
+export const JupiterIcon = ({ color }: { color: string }) => (
+  <Svg width="32" height="32" viewBox="0 0 32 32" fill="none">
     <Path
-      d="M24 26V38M18 32H30"
-      stroke="#FFB4D1"
-      strokeWidth="2.5"
+      d="M22.4872 4V22M22.4872 28V22M22.4872 22H27H7.71588C7.49628 22 7.43449 21.6905 7.63576 21.6026C11.375 19.971 14.6769 17.8461 15.718 16C16.8461 14 17.9742 10 15.718 7C13.4619 4 7.17475 3.78821 5.56429 7C4.84853 8.42746 4.77614 9.60282 5.56429 11C6.1216 11.988 7.82068 13 7.82068 13"
+      stroke={color}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </Svg>
+);
+
+export const VenusIcon = ({ color }: { color: string }) => (
+  <Svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+    <Path
+      d="M16 18.7C19.866 18.7 23 15.4093 23 11.35C23 7.29071 19.866 4 16 4C12.134 4 9 7.29071 9 11.35C9 15.4093 12.134 18.7 16 18.7ZM16 18.7V28.5M12.5 24.825H19.5"
+      stroke={color}
+      strokeWidth="1.75"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
   </Svg>
 );
 
-export const RahuIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+export const RahuIcon = ({ color }: { color: string }) => (
+  <Svg width="32" height="32" viewBox="0 0 32 32" fill="none">
     <Path
-      d="M16 30V24C16 18 20 16 24 16C28 16 32 18 32 24V30"
-      stroke="#9D8CA1"
-      strokeWidth="2.5"
+      d="M21.2787 19.1423C19.6819 19.6728 18.5278 21.2039 18.5278 23.0101C18.5278 25.2562 20.3124 27.0769 22.5139 27.0769C24.7154 27.0769 26.5 25.2562 26.5 23.0101C26.5 20.7641 24.7154 18.9433 22.5139 18.9433C22.0828 18.9433 21.6676 19.0131 21.2787 19.1423ZM21.2787 19.1423C25.4701 10.1167 21.5323 5 16.1385 5C10.5557 5 5.72483 10.7216 12.2639 19.6723M13.9722 23.0101C13.9722 25.2562 12.1876 27.0769 9.98611 27.0769C7.78464 27.0769 6 25.2562 6 23.0101C6 20.7641 7.78464 18.9433 9.98611 18.9433C12.1876 18.9433 13.9722 20.7641 13.9722 23.0101Z"
+      stroke={color}
+      strokeWidth="1.57692"
       strokeLinecap="round"
-    />
-    <Circle
-      cx="13"
-      cy="30"
-      r="3"
-      stroke="#9D8CA1"
-      strokeWidth="2.5"
-      fill="none"
-    />
-    <Circle
-      cx="35"
-      cy="30"
-      r="3"
-      stroke="#9D8CA1"
-      strokeWidth="2.5"
-      fill="none"
     />
   </Svg>
 );
 
-export const KetuIcon = () => (
-  <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+export const KetuIcon = ({ color }: { color: string }) => (
+  <Svg width="32" height="32" viewBox="0 0 32 32" fill="none">
     <Path
-      d="M16 18V24C16 30 20 32 24 32C28 32 32 30 32 24V18"
-      stroke="#C9ADA7"
-      strokeWidth="2.5"
+      d="M10.476 12.3221C12.1507 11.7658 13.3611 10.1599 13.3611 8.26563C13.3611 5.91004 11.4894 4.00045 9.18056 4.00045C6.8717 4.00045 5 5.91004 5 8.26563C5 10.6212 6.8717 12.5308 9.18056 12.5308C9.63271 12.5308 10.0681 12.4576 10.476 12.3221ZM10.476 12.3221C6.08009 21.788 10.21 27.1543 15.8669 27.1543C21.7221 27.1543 26.7886 21.1536 19.9306 11.7663M18.1389 8.26563C18.1389 5.91004 20.0106 4.00045 22.3194 4.00045C24.6283 4.00045 26.5 5.91004 26.5 8.26563C26.5 10.6212 24.6283 12.5308 22.3194 12.5308C20.0106 12.5308 18.1389 10.6212 18.1389 8.26563Z"
+      stroke={color}
+      strokeWidth="1.65385"
       strokeLinecap="round"
-    />
-    <Circle
-      cx="13"
-      cy="18"
-      r="3"
-      stroke="#C9ADA7"
-      strokeWidth="2.5"
-      fill="none"
-    />
-    <Circle
-      cx="35"
-      cy="18"
-      r="3"
-      stroke="#C9ADA7"
-      strokeWidth="2.5"
-      fill="none"
     />
   </Svg>
 );
-
 // --- Metadata with Tailwind Classes ---
 const PLANET_METADATA = [
   {
@@ -222,8 +160,9 @@ const PLANET_METADATA = [
     sanskrit: "Surya",
     icon: SunIcon,
     bgColor: "bg-orange-50",
-    borderColor: "border-orange-100",
+    borderColor: "border-orange-200",
     textColor: "text-orange-700",
+    hex: "#C2410C", // orange-700
   },
   {
     key: "moon",
@@ -231,8 +170,9 @@ const PLANET_METADATA = [
     sanskrit: "Chandra",
     icon: MoonIcon,
     bgColor: "bg-purple-50",
-    borderColor: "border-purple-100",
+    borderColor: "border-purple-200",
     textColor: "text-purple-700",
+    hex: "#7E22CE", // purple-700
   },
   {
     key: "mars",
@@ -240,8 +180,9 @@ const PLANET_METADATA = [
     sanskrit: "Mangal",
     icon: MarsIcon,
     bgColor: "bg-rose-50",
-    borderColor: "border-rose-100",
+    borderColor: "border-rose-200",
     textColor: "text-rose-700",
+    hex: "#BE123C", // rose-700
   },
   {
     key: "mercury",
@@ -249,8 +190,9 @@ const PLANET_METADATA = [
     sanskrit: "Budha",
     icon: MercuryIcon,
     bgColor: "bg-sky-50",
-    borderColor: "border-sky-100",
+    borderColor: "border-sky-200",
     textColor: "text-sky-700",
+    hex: "#0369A1", // sky-700
   },
   {
     key: "jupiter",
@@ -258,8 +200,9 @@ const PLANET_METADATA = [
     sanskrit: "Guru",
     icon: JupiterIcon,
     bgColor: "bg-indigo-50",
-    borderColor: "border-indigo-100",
+    borderColor: "border-indigo-200",
     textColor: "text-indigo-700",
+    hex: "#4338CA", // indigo-700
   },
   {
     key: "venus",
@@ -267,8 +210,9 @@ const PLANET_METADATA = [
     sanskrit: "Shukra",
     icon: VenusIcon,
     bgColor: "bg-pink-50",
-    borderColor: "border-pink-100",
+    borderColor: "border-pink-200",
     textColor: "text-pink-700",
+    hex: "#BE185D", // pink-700
   },
   {
     key: "rahu",
@@ -276,8 +220,9 @@ const PLANET_METADATA = [
     sanskrit: "Rāhu",
     icon: RahuIcon,
     bgColor: "bg-slate-100",
-    borderColor: "border-slate-200",
+    borderColor: "border-slate-300",
     textColor: "text-slate-700",
+    hex: "#334155", // slate-700
   },
   {
     key: "ketu",
@@ -285,8 +230,9 @@ const PLANET_METADATA = [
     sanskrit: "Kētu",
     icon: KetuIcon,
     bgColor: "bg-zinc-100",
-    borderColor: "border-zinc-200",
+    borderColor: "border-zinc-300",
     textColor: "text-zinc-700",
+    hex: "#3F3F46", // zinc-700
   },
 ] as const;
 
@@ -300,54 +246,48 @@ export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
       {/* Header Section */}
       <View className="flex-row items-center gap-2 mb-1">
         {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
-        <HugeiconsIcon size={24} color="#92400e" icon={SolarSystem01Icon} />
-        <Text className="text-lg font-bold text-amber-800">Graha Sthiti</Text>
+        <HugeiconsIcon size={32} color="#D97757" icon={SolarSystem01Icon} />
+        <Text className="text-2xl font-merriweather-semibold text-neutral-800">
+          Graha Sthiti
+        </Text>
       </View>
 
       {/* Grid of Planet Cards */}
       <View className="flex-row flex-wrap gap-3">
         {PLANET_METADATA.map((planet) => {
           const planetData = data.planetaryPositions[planet.key];
-          const IconComponent = planet.icon;
-
+          const IconComp = planet.icon;
           return (
             <View
               key={planet.key}
-              className={`flex-1 min-w-[45%] rounded-xl p-3 border shadow-sm ${planet.bgColor} ${planet.borderColor}`}
+              className={`flex-1 min-w-[45%] rounded-xl p-3 border bg-white ${planet.borderColor}`}
             >
               <View className="mb-3">
-                <IconComponent />
+                <IconComp color={planet.hex} />
               </View>
 
               <View className="mb-3">
-                <Text className={`text-base font-bold ${planet.textColor}`}>
+                <Text
+                  className={`text-base font-merriweather-semibold text-neutral-700`}
+                >
                   {planet.name}
                 </Text>
-                <Text className="text-xs text-neutral-500 italic font-medium">
+                <Text className="text-xs text-neutral-500 italic font-inter-light">
                   {planet.sanskrit}
                 </Text>
               </View>
 
-              <View className="bg-white/60 rounded-lg p-2.5">
-                <View className="flex-row justify-between items-center mb-1.5">
-                  <Text className="text-[10px] uppercase font-bold text-neutral-400">
-                    Rashi
-                  </Text>
-                  <Text className={`text-xs font-bold ${planet.textColor}`}>
-                    {planetData.rashiName}
-                  </Text>
-                </View>
-
-                <View className="h-[1px] bg-neutral-200/50 my-1.5" />
-
-                <View className="flex-row justify-between items-center">
-                  <Text className="text-[10px] uppercase font-bold text-neutral-400">
-                    Deg
-                  </Text>
-                  <Text className={`text-xs font-bold ${planet.textColor}`}>
-                    {planetData.degree.toFixed(2)}°
-                  </Text>
-                </View>
+              <View className="flex flex-row w-full justify-between items-center">
+                <Text
+                  className={`text-base font-inter-regular ${planet.textColor}`}
+                >
+                  {planetData.rashiName}
+                </Text>
+                <Text
+                  className={`text-sm font-ibm-mono-light font-bold text-neutral-600`}
+                >
+                  {planetData.degree.toFixed(2)}°
+                </Text>
               </View>
             </View>
           );
