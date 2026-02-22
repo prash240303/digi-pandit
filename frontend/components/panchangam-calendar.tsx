@@ -30,7 +30,8 @@ const getCurrentTithi = (
 };
 
 const getCurrentNakshatra = (panchangam: any) => {
-  if (!panchangam.nakshatras || panchangam.nakshatras.length === 0) return "N/A";
+  if (!panchangam.nakshatras || panchangam.nakshatras.length === 0)
+    return "N/A";
   return panchangam?.nakshatras[1]?.name;
 };
 
@@ -83,14 +84,23 @@ const getRahuKalam = (panchangam: any) => {
 const getChandrabalam = (panchangam: any) => {
   const value = panchangam.chandrabalam ?? 0;
   let moon = "";
-  if (value >= 95) { moon = "🌕 "; }
-  else if (value >= 80) { moon = "🌔 "; }
-  else if (value >= 65) { moon = "🌓 "; }
-  else if (value >= 50) { moon = "🌒 "; }
-  else if (value >= 35) { moon = "🌑 "; }
-  else if (value >= 25) { moon = "🌘 "; }
-  else if (value >= 15) { moon = "🌗 "; }
-  else { moon = "🌖 "; }
+  if (value >= 95) {
+    moon = "🌕 ";
+  } else if (value >= 80) {
+    moon = "🌔 ";
+  } else if (value >= 65) {
+    moon = "🌓 ";
+  } else if (value >= 50) {
+    moon = "🌒 ";
+  } else if (value >= 35) {
+    moon = "🌑 ";
+  } else if (value >= 25) {
+    moon = "🌘 ";
+  } else if (value >= 15) {
+    moon = "🌗 ";
+  } else {
+    moon = "🌖 ";
+  }
   return <Text>{moon}</Text>;
 };
 
@@ -135,7 +145,9 @@ const PanchangamCalendar: React.FC = () => {
   const brahma = selectedDay ? getBrahmaMuhurta(selectedDay.panchangam) : null;
   const gulika = selectedDay ? getGulikaKalam(selectedDay.panchangam) : null;
   const rahu = selectedDay ? getRahuKalam(selectedDay.panchangam) : null;
-  const yamaganda = selectedDay ? getYamagandaKalam(selectedDay.panchangam) : null;
+  const yamaganda = selectedDay
+    ? getYamagandaKalam(selectedDay.panchangam)
+    : null;
 
   const router = useRouter();
   const handlePress = (selectedDay: Date) => {
@@ -163,7 +175,7 @@ const PanchangamCalendar: React.FC = () => {
       />
 
       {/* --- GRID HEADER (Weekdays) --- */}
-      <View className="flex-row w-full mb-2">
+      <View className="flex-row w-full">
         {WEEKDAY_NAMES.map((d) => (
           <View
             key={d}
@@ -178,7 +190,7 @@ const PanchangamCalendar: React.FC = () => {
       </View>
 
       {/* --- GRID BODY (Days) --- */}
-      <View className="flex-row  flex-wrap w-full">
+      <View className="flex-row flex-wrap w-full">
         {weeks.flat().map((day, i) => {
           if (!day) {
             return <View key={`empty-${i}`} style={{ width: "14.28%" }} />;
@@ -203,7 +215,7 @@ const PanchangamCalendar: React.FC = () => {
                   >
                     {day.date.getDate()}
                   </Text>
-                  <Text className="text-xs mt-1">
+                  <Text className="text-lg mt-1">
                     {getChandrabalam(day.panchangam)}
                   </Text>
                 </View>

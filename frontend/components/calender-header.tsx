@@ -68,18 +68,13 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   const years = Array.from({ length: 100 }, (_, i) => 1980 + i);
   const nepaliYear = parseInt(yearValue || String(year)) + NEPALI_YEAR_OFFSET;
   const nepaliMonthLabel = `${NEPALI_MONTHS[month]} ${nepaliYear}`;
-  const [pressed, setPressed] = useState(false);
 
   return (
-    <View className="bg-white rounded-2xl flex-row items-center justify-between px-3 py-7 shadow-black/10  shadow-md">
+    <View className=" rounded-2xl flex-row items-center justify-between px-3 py-2">
       {/* Left Arrow */}
       <TouchableOpacity
         onPress={onPrevMonth}
-        onPressIn={() => setPressed(true)}
-        onPressOut={() => setPressed(false)}
-        className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center ${
-          pressed ? "border-slate-500" : "border-slate-100"
-        }`}
+        className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center border-slate-300`}
       >
         <HugeiconsIcon icon={ArrowLeft01Icon} color={"#334155"} />
       </TouchableOpacity>
@@ -100,7 +95,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           value={yearValue ? { value: yearValue, label: yearValue } : undefined}
           onValueChange={(option) => onYearChange(option?.value ?? "")}
         >
-          <SelectTrigger className="bg-slate-50  text-slate-800 border-slate-200 border rounded-full px-5 py-2.5 flex-row items-center justify-center">
+          <SelectTrigger className="bg-white  text-slate-800 border-slate-200 border rounded-lg px-3 py-2 flex-row items-center justify-center">
             <SelectValue
               placeholder="Year"
               className="text-sm font-medium text-slate-800 text-center"
@@ -119,11 +114,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
       {/* Right Arrow */}
       <TouchableOpacity
         onPress={onNextMonth}
-        onPressIn={() => setPressed(true)}
-        onPressOut={() => setPressed(false)}
-        className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center ${
-          pressed ? "border-slate-500" : "border-slate-100"
-        }`}
+        className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center border-slate-200`}
       >
         <HugeiconsIcon icon={ArrowRight01FreeIcons} color={"#334155"} />
       </TouchableOpacity>
