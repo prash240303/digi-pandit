@@ -41,36 +41,18 @@ function TopBar({
       <View>
         <Text
           variant="small"
-          className="uppercase font-inter-medium tracking-widest"
-          style={{ color: COLOR.inkLight }}
+          className="uppercase font-inter-medium text-ink-light tracking-widest"
         >
           Good {salutation}
         </Text>
-        <Text
-          variant="h3"
-          className="font-playfair-medium"
-          style={{
-            color: COLOR.ink,
-          }}
-        >
+        <Text variant="h3" className="font-playfair-medium text-ink">
           {displayName}
         </Text>
       </View>
 
       <TouchableOpacity>
-        <View
-          className="w-10 h-10 rounded-full items-center justify-center"
-          style={{
-            backgroundColor: COLOR.terracotta + "18",
-            borderWidth: 2,
-            borderColor: COLOR.terracotta + "40",
-          }}
-        >
-          <Text
-            variant="small"
-            className="font-bold"
-            style={{ color: COLOR.terracotta }}
-          >
+        <View className="w-10 h-10 rounded-full  items-center bg-terracotta/18 border-terracotta/40 border justify-center">
+          <Text variant="small" className="font-bold text-terracotta">
             {name ? name.charAt(0).toUpperCase() : "M"}
           </Text>
         </View>
@@ -194,44 +176,28 @@ function ZodiacCard({
   if (!isSet) {
     return (
       <TouchableOpacity activeOpacity={0.9}>
-        <View
-          className="rounded-2xl px-4 py-3.5"
-          style={{
-            backgroundColor: COLOR.cardBg,
-            borderWidth: 1.5,
-            borderColor: COLOR.creamDark,
-            borderStyle: "dashed",
-          }}
-        >
+        <View className="rounded-2xl border-[1.5px] border-dashed border-cream-dark bg-card-bg px-4 py-3.5">
           <View className="flex-row items-center gap-3">
             <View
               className="w-10 h-10 rounded-full items-center justify-center"
               style={{ backgroundColor: COLOR.gold + "15" }}
             >
-              <Text variant="large" style={{ color: COLOR.gold }}>
+              <Text variant="large" className="text-gold">
                 ✦
               </Text>
             </View>
             <View className="flex-1">
-              <Text
-                variant="small"
-                className="font-semibold"
-                style={{ color: COLOR.ink }}
-              >
+              <Text variant="small" className="font-semibold text-ink">
                 Discover your zodiac predictions
               </Text>
-              <Text
-                variant="muted"
-                className="mt-0.5"
-                style={{ color: COLOR.inkLight }}
-              >
+              <Text variant="muted" className="mt-0.5 text-ink-light">
                 Set your date of birth to get personalized insights
               </Text>
             </View>
             <Ionicons
               name="chevron-forward-outline"
+              className="text-ink-light"
               size={18}
-              color={COLOR.inkLight}
             />
           </View>
         </View>
@@ -241,47 +207,23 @@ function ZodiacCard({
 
   return (
     <TouchableOpacity activeOpacity={0.9}>
-      <View
-        className="rounded-2xl px-4 py-3.5"
-        style={{
-          backgroundColor: COLOR.cardBg,
-          borderWidth: 1,
-          borderColor: COLOR.creamDark,
-        }}
-      >
+      <View className="rounded-2xl px-4 py-3.5 border border-cream-dark bg-card-bg">
         <View className="flex-row items-center gap-3">
           {/* Zodiac glyph */}
-          <View
-            className="w-11 h-11 rounded-full items-center justify-center"
-            style={{
-              backgroundColor: COLOR.gold + "12",
-              borderWidth: 1.5,
-              borderColor: COLOR.gold + "30",
-            }}
-          >
-            <Text variant="large" style={{ color: COLOR.gold }}>
-              {zodiac.icon}
-            </Text>
+          <View className="w-11 h-11 rounded-full items-center bg-gold/10 border border-gold justify-center">
+            <Text variant="large">{zodiac.icon}</Text>
           </View>
 
           <View className="flex-1">
             <View className="flex-row items-center gap-2">
-              <Text
-                variant="small"
-                className="font-bold"
-                style={{ color: COLOR.ink }}
-              >
+              <Text variant="small" className="font-bold text-ink">
                 {zodiac.sign}
               </Text>
-              <Text variant="muted" style={{ color: COLOR.inkLight }}>
+              <Text variant="muted" className="text-ink-light">
                 — Monthly
               </Text>
             </View>
-            <Text
-              variant="muted"
-              className="mt-0.5 leading-4"
-              style={{ color: COLOR.inkMuted }}
-            >
+            <Text variant="muted" className="mt-0.5 leading-4 text-ink-muted">
               {zodiac.prediction}
             </Text>
           </View>
@@ -289,16 +231,12 @@ function ZodiacCard({
           <Ionicons
             name="chevron-forward-outline"
             size={18}
-            color={COLOR.inkLight}
+            className="text-ink-light"
           />
         </View>
 
         <TouchableOpacity className="mt-2 ml-14">
-          <Text
-            variant="small"
-            className="font-semibold"
-            style={{ color: COLOR.terracotta }}
-          >
+          <Text variant="small" className="font-semibold text-terracotta">
             Read full prediction →
           </Text>
         </TouchableOpacity>
@@ -313,20 +251,12 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
   return (
     <View className="gap-2">
       <View className="flex-row items-center justify-between">
-        <Text
-          variant="small"
-          className="font-bold tracking-wide"
-          style={{ color: COLOR.ink }}
-        >
+        <Text variant="small" className="font-bold tracking-wide text-ink">
           My Favorites
         </Text>
         {!isEmpty && (
           <TouchableOpacity>
-            <Text
-              variant="small"
-              className="font-semibold"
-              style={{ color: COLOR.terracotta }}
-            >
+            <Text variant="small" className="font-semibold text-terracotta">
               See all
             </Text>
           </TouchableOpacity>
@@ -334,21 +264,9 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
       </View>
 
       {isEmpty ? (
-        <View
-          className="rounded-xl items-center justify-center py-4"
-          style={{
-            backgroundColor: COLOR.cardBg,
-            borderWidth: 1.5,
-            borderColor: COLOR.creamDark,
-            borderStyle: "dashed",
-          }}
-        >
-          <Ionicons name="heart-outline" size={22} color={COLOR.inkLight} />
-          <Text
-            variant="muted"
-            className="mt-1"
-            style={{ color: COLOR.inkLight }}
-          >
+        <View className="rounded-xl items-center bg-card-bg border border-cream-dark border-dashed justify-center py-4">
+          <Ionicons name="heart-outline" className="text-ink-light" size={22} />
+          <Text variant="muted" className="mt-1 text-ink-light ">
             Start saving your favorites here
           </Text>
         </View>
@@ -360,15 +278,7 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
               activeOpacity={0.85}
               className="mr-2.5"
             >
-              <View
-                className="flex-row items-center rounded-xl px-1 py-1 gap-2"
-                style={{
-                  backgroundColor: COLOR.cardBg,
-                  borderWidth: 1,
-                  borderColor: COLOR.creamDark,
-                  minWidth: 120,
-                }}
-              >
+              <View className="flex-row items-center bg-card-bg border border-cream-dark rounded-xl pl-1 pr-2 py-1 gap-2">
                 <View
                   className="w-8 h-8 rounded-lg items-center justify-center"
                   style={{
@@ -392,8 +302,7 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
                 </View>
                 <Text
                   variant="small"
-                  className="font-semibold flex-1"
-                  style={{ color: COLOR.ink }}
+                  className="font-semibold text-ink flex-1"
                   numberOfLines={1}
                 >
                   {item.label}
@@ -412,11 +321,7 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
 
   return (
     <View className="gap-2">
-      <Text
-        variant="small"
-        className="font-bold tracking-wide"
-        style={{ color: COLOR.ink }}
-      >
+      <Text variant="small" className="font-bold tracking-wide text-ink">
         Explore
       </Text>
       <View className="flex-row flex-wrap gap-2.5">
@@ -427,16 +332,7 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
             activeOpacity={0.88}
             style={{ width: "48.5%" }}
           >
-            <View
-              className="rounded-2xl p-4"
-              style={{
-                backgroundColor: COLOR.cardBg,
-                borderWidth: 1,
-                borderColor: COLOR.creamDark,
-                minHeight: 130,
-                justifyContent: "space-between",
-              }}
-            >
+            <View className="rounded-2xl bg-card-bg border border-cream-dark min-h-28 justify-between p-4">
               <View className="flex-row items-start justify-between">
                 <View
                   className="w-10 h-10 rounded-xl items-center justify-center"
@@ -451,22 +347,21 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
                 <Ionicons
                   name="chevron-forward-outline"
                   size={16}
-                  color={COLOR.inkLight}
+                  className="text-ink-light"
                 />
               </View>
 
               <View className="gap-1">
                 <Text
                   variant="small"
-                  className="font-bold"
+                  className="font-bold text-ink"
                   style={{ color: COLOR.ink }}
                 >
                   {card.label}
                 </Text>
                 <Text
                   variant="muted"
-                  className="leading-4"
-                  style={{ color: COLOR.inkLight }}
+                  className="leading-4  text-ink-light"
                   numberOfLines={1}
                 >
                   {card.badge}

@@ -24,6 +24,11 @@ module.exports = {
       pattern:
         /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
     },
+    // Safelist brand palette utilities
+    {
+      pattern:
+        /(bg|border|text|stroke|fill)-(cream|terracotta|gold|sage|ink)(Dark|Light|Muted)?/,
+    },
   ],
   theme: {
     extend: {
@@ -66,7 +71,31 @@ module.exports = {
       },
 
       colors: {
-        // --- shadcn/rn-primitives tokens (from second config) ---
+        // ─── Brand Palette ──────────────────────────────────────────────
+        cream: {
+          DEFAULT: '#FDF6EC',
+          dark: '#F0E6D4',
+        },
+        terracotta: {
+          DEFAULT: '#C2562D',
+          light: '#D97A4F',
+        },
+        gold: {
+          DEFAULT: '#D4A843',
+          light: '#E8C96D',
+        },
+        sage: {
+          DEFAULT: '#7A8C6E',
+          dark: '#5E6F52',
+        },
+        ink: {
+          DEFAULT: '#2C2420',
+          muted: '#6B5B50',
+          light: '#9C8E82',
+        },
+        'card-bg': '#FFFAF3',
+
+        // ─── shadcn/rn-primitives tokens ────────────────────────────────
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -92,7 +121,7 @@ module.exports = {
           foreground: 'hsl(var(--card-foreground))',
         },
 
-        // --- Gluestack/design system tokens (from first config) ---
+        // ─── Gluestack / design system tokens ───────────────────────────
         primary: {
           DEFAULT: '#DE6A4D',
           foreground: 'hsl(var(--primary-foreground))',
