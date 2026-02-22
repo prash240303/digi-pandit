@@ -1,6 +1,11 @@
+const { hairlineWidth } = require('nativewind/theme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  plugins: [require('tailwind-corner-smoothing')],
+  plugins: [
+    require('tailwind-corner-smoothing'),
+    require('tailwindcss-animate'),
+  ],
   darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : 'class',
   content: [
     './app/**/*.{html,js,jsx,ts,tsx,mdx}',
@@ -11,6 +16,9 @@ module.exports = {
   ],
   presets: [require('nativewind/preset')],
   important: 'html',
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   safelist: [
     {
       pattern:
@@ -20,14 +28,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        // The key 'playfair-regular' becomes the class 'font-playfair-regular'
-        // The value must match the name used in your useFonts hook
-        // This maps the base 'font-playfair' class
         'playfair': ["PlayfairDisplay_400Regular"],
         'playfair-medium': ["PlayfairDisplay_500Medium"],
         'playfair-bold': ["PlayfairDisplay_700Bold"],
 
-        // Merriweather
         'merriweather-light': ["Merriweather_300Light"],
         'merriweather-light-italic': ["Merriweather_300Light_Italic"],
         'merriweather-regular': ["Merriweather_400Regular"],
@@ -36,7 +40,6 @@ module.exports = {
         'merriweather-semibold': ["Merriweather_600SemiBold"],
         'merriweather-bold': ["Merriweather_700Bold"],
 
-        // Inter (Sans-Serif - UI/Modern)
         'inter-extralight': ["Inter_200ExtraLight"],
         'inter-light': ["Inter_300Light"],
         'inter-regular': ["Inter_400Regular"],
@@ -46,8 +49,11 @@ module.exports = {
         'inter-extrabold': ["Inter_800ExtraBold"],
         'inter-black': ["Inter_900Black"],
 
-        // IBM mono (mono - UI/Modern)
         'ibm-mono-light': ["IBMPlexMono_300Light"],
+
+        'playfair-display-bold': ["PlayfairDisplay_700Bold"],
+        'playfair-display-regular': ["PlayfairDisplay_400Regular"],
+        'playfair-display-medium': ["PlayfairDisplay_400Medium"],
 
         heading: undefined,
         body: undefined,
@@ -60,8 +66,36 @@ module.exports = {
       },
 
       colors: {
+        // --- shadcn/rn-primitives tokens (from second config) ---
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        foreground: 'hsl(var(--foreground))',
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+
+        // --- Gluestack/design system tokens (from first config) ---
         primary: {
           DEFAULT: '#DE6A4D',
+          foreground: 'hsl(var(--primary-foreground))',
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
           50: 'rgb(var(--color-primary-50)/<alpha-value>)',
           100: 'rgb(var(--color-primary-100)/<alpha-value>)',
@@ -76,6 +110,8 @@ module.exports = {
           950: 'rgb(var(--color-primary-950)/<alpha-value>)',
         },
         secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
           0: 'rgb(var(--color-secondary-0)/<alpha-value>)',
           50: 'rgb(var(--color-secondary-50)/<alpha-value>)',
           100: 'rgb(var(--color-secondary-100)/<alpha-value>)',
@@ -88,6 +124,28 @@ module.exports = {
           800: 'rgb(var(--color-secondary-800)/<alpha-value>)',
           900: 'rgb(var(--color-secondary-900)/<alpha-value>)',
           950: 'rgb(var(--color-secondary-950)/<alpha-value>)',
+        },
+        background: {
+          DEFAULT: 'hsl(var(--background))',
+          0: 'rgb(var(--color-background-0)/<alpha-value>)',
+          50: 'rgb(var(--color-background-50)/<alpha-value>)',
+          100: 'rgb(var(--color-background-100)/<alpha-value>)',
+          200: 'rgb(var(--color-background-200)/<alpha-value>)',
+          300: 'rgb(var(--color-background-300)/<alpha-value>)',
+          400: 'rgb(var(--color-background-400)/<alpha-value>)',
+          500: 'rgb(var(--color-background-500)/<alpha-value>)',
+          600: 'rgb(var(--color-background-600)/<alpha-value>)',
+          700: 'rgb(var(--color-background-700)/<alpha-value>)',
+          800: 'rgb(var(--color-background-800)/<alpha-value>)',
+          900: 'rgb(var(--color-background-900)/<alpha-value>)',
+          950: 'rgb(var(--color-background-950)/<alpha-value>)',
+          error: 'rgb(var(--color-background-error)/<alpha-value>)',
+          warning: 'rgb(var(--color-background-warning)/<alpha-value>)',
+          muted: 'rgb(var(--color-background-muted)/<alpha-value>)',
+          success: 'rgb(var(--color-background-success)/<alpha-value>)',
+          info: 'rgb(var(--color-background-info)/<alpha-value>)',
+          light: '#FBFBFB',
+          dark: '#181719',
         },
         tertiary: {
           50: 'rgb(var(--color-tertiary-50)/<alpha-value>)',
@@ -189,27 +247,6 @@ module.exports = {
           900: 'rgb(var(--color-outline-900)/<alpha-value>)',
           950: 'rgb(var(--color-outline-950)/<alpha-value>)',
         },
-        background: {
-          0: 'rgb(var(--color-background-0)/<alpha-value>)',
-          50: 'rgb(var(--color-background-50)/<alpha-value>)',
-          100: 'rgb(var(--color-background-100)/<alpha-value>)',
-          200: 'rgb(var(--color-background-200)/<alpha-value>)',
-          300: 'rgb(var(--color-background-300)/<alpha-value>)',
-          400: 'rgb(var(--color-background-400)/<alpha-value>)',
-          500: 'rgb(var(--color-background-500)/<alpha-value>)',
-          600: 'rgb(var(--color-background-600)/<alpha-value>)',
-          700: 'rgb(var(--color-background-700)/<alpha-value>)',
-          800: 'rgb(var(--color-background-800)/<alpha-value>)',
-          900: 'rgb(var(--color-background-900)/<alpha-value>)',
-          950: 'rgb(var(--color-background-950)/<alpha-value>)',
-          error: 'rgb(var(--color-background-error)/<alpha-value>)',
-          warning: 'rgb(var(--color-background-warning)/<alpha-value>)',
-          muted: 'rgb(var(--color-background-muted)/<alpha-value>)',
-          success: 'rgb(var(--color-background-success)/<alpha-value>)',
-          info: 'rgb(var(--color-background-info)/<alpha-value>)',
-          light: '#FBFBFB',
-          dark: '#181719',
-        },
         indicator: {
           primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',
           info: 'rgb(var(--color-indicator-info)/<alpha-value>)',
@@ -217,6 +254,14 @@ module.exports = {
         },
       },
 
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      borderWidth: {
+        hairline: hairlineWidth(),
+      },
       fontWeight: {
         extrablack: '950',
       },
@@ -233,6 +278,20 @@ module.exports = {
         'soft-2': '0px 0px 20px rgba(38, 38, 38, 0.2)',
         'soft-3': '0px 0px 30px rgba(38, 38, 38, 0.1)',
         'soft-4': '0px 0px 40px rgba(38, 38, 38, 0.1)',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },

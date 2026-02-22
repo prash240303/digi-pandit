@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  View,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -16,17 +17,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/contexts";
 import { API_BASE_URL } from "@/services/api";
 import { authService } from "@/services/auth";
-import { Box } from "@/components/ui/box";
-import { Text as GText } from "@/components/ui/text";
-import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
-import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
 import { COLOR } from "@/constants/colors";
 
-// Required for OAuth to work properly
 WebBrowser.maybeCompleteAuthSession();
 
-// Shared input style for consistency
 const inputStyle = {
   backgroundColor: COLOR.cream,
   color: COLOR.ink,
@@ -36,7 +31,7 @@ const inputStyle = {
   borderWidth: 1.5,
   borderColor: COLOR.creamDark,
   fontSize: 16,
-  outlineWidth: 0, // Remove focus outline on web
+  outlineWidth: 0,
 } as const;
 
 export default function LoginScreen() {
@@ -48,18 +43,9 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     setError("");
-
-    if (!email.trim()) {
-      setError("Please enter your email");
-      return;
-    }
-    if (!password) {
-      setError("Please enter your password");
-      return;
-    }
-
+    if (!email.trim()) { setError("Please enter your email"); return; }
+    if (!password) { setError("Please enter your password"); return; }
     const result = await signIn({ email: email.trim(), password });
-
     if (result.success) {
       router.replace("/(tabs)");
     } else {
@@ -72,76 +58,45 @@ export default function LoginScreen() {
       setOauthLoading(true);
       setError("");
 
-      // Create a redirect URL that Expo can handle
       const redirectUrl = AuthSession.makeRedirectUri({
         scheme: "digipandit",
         path: "(auth)/callback",
       });
 
-      console.log("OAuth redirect URL:", redirectUrl);
-
-      // Get OAuth URL from backend
       const response = await authService.getOAuthUrl(provider, redirectUrl);
-
-      console.log("OAuth response:", JSON.stringify(response, null, 2));
 
       if (response.success && response.data?.url) {
         const oauthUrl = response.data.url;
-        console.log("Opening OAuth URL:", oauthUrl);
-
-        // Validate URL before opening
-        if (
-          !oauthUrl ||
-          typeof oauthUrl !== "string" ||
-          !oauthUrl.startsWith("http")
-        ) {
+        if (!oauthUrl || typeof oauthUrl !== "string" || !oauthUrl.startsWith("http")) {
           setError("Invalid OAuth URL received from server");
           return;
         }
 
-        // Open the OAuth URL in a browser
-        const result = await WebBrowser.openAuthSessionAsync(
-          oauthUrl,
-          redirectUrl,
-        );
-
-        console.log("OAuth result:", result);
+        const result = await WebBrowser.openAuthSessionAsync(oauthUrl, redirectUrl);
 
         if (result.type === "success" && result.url) {
-          // Parse the callback URL for tokens
           const url = new URL(result.url);
           const accessToken =
             url.searchParams.get("access_token") ||
             url.hash?.match(/access_token=([^&]+)/)?.[1];
 
           if (accessToken) {
-            // Verify the token with our backend
-            const verifyResponse = await fetch(
-              `${API_BASE_URL}/api/v1/auth/oauth/verify`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ access_token: accessToken }),
-              },
-            );
+            const verifyResponse = await fetch(`${API_BASE_URL}/api/v1/auth/oauth/verify`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ access_token: accessToken }),
+            });
             const verifyData = await verifyResponse.json();
-
             if (verifyData.success) {
-              // Login successful, navigate to main app
               router.replace("/(tabs)");
               return;
             }
           }
-
           setError("Failed to complete authentication");
-        } else if (result.type === "cancel") {
-          // User cancelled, no error needed
-          console.log("OAuth cancelled by user");
-        } else {
+        } else if (result.type !== "cancel") {
           setError("Authentication was cancelled or failed");
         }
       } else {
-        // Show setup required message if backend doesn't have OAuth configured
         Alert.alert(
           "OAuth Setup Required",
           `To use ${provider === "google" ? "Google" : "Apple"} login:\n\n` +
@@ -149,7 +104,7 @@ export default function LoginScreen() {
             `2. Enable ${provider === "google" ? "Google" : "Apple"} provider\n` +
             "3. Configure OAuth credentials\n\n" +
             "Once configured, OAuth will work automatically.",
-          [{ text: "OK" }],
+          [{ text: "OK" }]
         );
       }
     } catch (err) {
@@ -160,15 +115,11 @@ export default function LoginScreen() {
     }
   };
 
-  const testing = async () => {
-    router.replace("/(tabs)");
-  };
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLOR.cream }}>
+    <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
+        className="flex-1"
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -182,9 +133,8 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
         >
           {/* Header */}
-          <VStack className="items-center gap-3" style={{ marginBottom: 40 }}>
-            {/* Logo circle */}
-            <Box
+          <View className="items-center gap-3" style={{ marginBottom: 40 }}>
+            <View
               className="rounded-full items-center justify-center"
               style={{
                 width: 80,
@@ -194,10 +144,11 @@ export default function LoginScreen() {
                 borderColor: COLOR.terracotta + "30",
               }}
             >
-              <GText style={{ fontSize: 40 }}>🙏</GText>
-            </Box>
-            <Heading
-              size="2xl"
+              <Text style={{ fontSize: 40 }}>🙏</Text>
+            </View>
+            <Text
+              variant="h2"
+              className="border-0"
               style={{
                 color: COLOR.terracotta,
                 fontFamily: Platform.select({
@@ -209,34 +160,27 @@ export default function LoginScreen() {
               }}
             >
               DigiPandit
-            </Heading>
-            <GText
-              size="sm"
-              style={{ color: COLOR.inkMuted, textAlign: "center" }}
-            >
+            </Text>
+            <Text variant="muted" className="text-center" style={{ color: COLOR.inkMuted }}>
               Your spiritual companion for Hindu practices
-            </GText>
-          </VStack>
+            </Text>
+          </View>
 
           {/* Login Card */}
-          <Box
-            className="rounded-3xl"
+          <View
+            className="rounded-3xl p-6"
             style={{
               backgroundColor: COLOR.cardBg,
               borderWidth: 1,
               borderColor: COLOR.creamDark,
-              padding: 24,
             }}
           >
-            <VStack style={{ gap: 16 }}>
+            <View className="gap-4">
               {/* Email Field */}
-              <VStack style={{ gap: 6 }}>
-                <GText
-                  size="sm"
-                  style={{ color: COLOR.ink, fontWeight: "600" }}
-                >
+              <View className="gap-1.5">
+                <Text variant="small" className="font-semibold" style={{ color: COLOR.ink }}>
                   Email
-                </GText>
+                </Text>
                 <TextInput
                   value={email}
                   onChangeText={setEmail}
@@ -247,16 +191,13 @@ export default function LoginScreen() {
                   autoCorrect={false}
                   style={inputStyle}
                 />
-              </VStack>
+              </View>
 
               {/* Password Field */}
-              <VStack style={{ gap: 6 }}>
-                <GText
-                  size="sm"
-                  style={{ color: COLOR.ink, fontWeight: "600" }}
-                >
+              <View className="gap-1.5">
+                <Text variant="small" className="font-semibold" style={{ color: COLOR.ink }}>
                   Password
-                </GText>
+                </Text>
                 <TextInput
                   value={password}
                   onChangeText={setPassword}
@@ -265,40 +206,38 @@ export default function LoginScreen() {
                   secureTextEntry
                   style={inputStyle}
                 />
-              </VStack>
+              </View>
 
               {/* Error Message */}
               {error ? (
-                <Box
-                  className="rounded-xl"
+                <View
+                  className="rounded-xl p-3"
                   style={{
                     backgroundColor: "#FEE2E2",
                     borderWidth: 1,
                     borderColor: "#FECACA",
-                    padding: 12,
                   }}
                 >
-                  <GText
-                    size="sm"
-                    style={{ color: "#DC2626", textAlign: "center" }}
-                  >
+                  <Text variant="small" className="text-center" style={{ color: "#DC2626" }}>
                     {error}
-                  </GText>
-                </Box>
+                  </Text>
+                </View>
               ) : null}
 
+              {/* Bypass Button */}
               <TouchableOpacity
+                onPress={() => router.replace("/(tabs)")}
+                className="items-center justify-center"
                 style={{
-                  backgroundColor: isLoading
-                    ? COLOR.terracottaLight
-                    : COLOR.terracotta,
+                  backgroundColor: COLOR.terracottaLight,
                   paddingVertical: 16,
                   borderRadius: 14,
                   marginTop: 8,
                 }}
-                onPress={testing}
               >
-                bypass
+                <Text variant="small" className="font-semibold" style={{ color: COLOR.white }}>
+                  Bypass
+                </Text>
               </TouchableOpacity>
 
               {/* Login Button */}
@@ -306,72 +245,44 @@ export default function LoginScreen() {
                 onPress={handleLogin}
                 disabled={isLoading}
                 activeOpacity={0.85}
+                className="items-center justify-center"
                 style={{
-                  backgroundColor: isLoading
-                    ? COLOR.terracottaLight
-                    : COLOR.terracotta,
+                  backgroundColor: isLoading ? COLOR.terracottaLight : COLOR.terracotta,
                   paddingVertical: 16,
                   borderRadius: 14,
-                  marginTop: 8,
                 }}
               >
                 {isLoading ? (
                   <ActivityIndicator color={COLOR.white} />
                 ) : (
-                  <GText
-                    size="md"
-                    style={{
-                      color: COLOR.white,
-                      textAlign: "center",
-                      fontWeight: "700",
-                    }}
-                  >
+                  <Text variant="small" className="font-bold" style={{ color: COLOR.white }}>
                     Sign In
-                  </GText>
+                  </Text>
                 )}
               </TouchableOpacity>
 
               {/* Divider */}
-              <HStack className="items-center" style={{ marginVertical: 8 }}>
-                <Box
-                  style={{
-                    flex: 1,
-                    height: 1,
-                    backgroundColor: COLOR.creamDark,
-                  }}
-                />
-                <GText
-                  size="xs"
-                  style={{ color: COLOR.inkLight, marginHorizontal: 16 }}
-                >
+              <View className="flex-row items-center my-2">
+                <View className="flex-1 h-px" style={{ backgroundColor: COLOR.creamDark }} />
+                <Text variant="muted" className="mx-4" style={{ color: COLOR.inkLight }}>
                   or continue with
-                </GText>
-                <Box
-                  style={{
-                    flex: 1,
-                    height: 1,
-                    backgroundColor: COLOR.creamDark,
-                  }}
-                />
-              </HStack>
+                </Text>
+                <View className="flex-1 h-px" style={{ backgroundColor: COLOR.creamDark }} />
+              </View>
 
               {/* OAuth Buttons */}
-              <HStack style={{ gap: 12 }}>
+              <View className="flex-row gap-3">
                 <TouchableOpacity
                   onPress={() => handleOAuth("google")}
                   disabled={oauthLoading}
                   activeOpacity={0.85}
+                  className="flex-1 flex-row items-center justify-center gap-2"
                   style={{
-                    flex: 1,
                     backgroundColor: COLOR.cream,
                     paddingVertical: 14,
                     borderRadius: 12,
                     borderWidth: 1.5,
                     borderColor: COLOR.creamDark,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 8,
                   }}
                 >
                   {oauthLoading ? (
@@ -379,30 +290,24 @@ export default function LoginScreen() {
                   ) : (
                     <>
                       <Ionicons name="logo-google" size={18} color="#DB4437" />
-                      <GText
-                        size="sm"
-                        style={{ color: COLOR.ink, fontWeight: "600" }}
-                      >
+                      <Text variant="small" className="font-semibold" style={{ color: COLOR.ink }}>
                         Google
-                      </GText>
+                      </Text>
                     </>
                   )}
                 </TouchableOpacity>
+
                 <TouchableOpacity
                   onPress={() => handleOAuth("apple")}
                   disabled={oauthLoading}
                   activeOpacity={0.85}
+                  className="flex-1 flex-row items-center justify-center gap-2"
                   style={{
-                    flex: 1,
                     backgroundColor: COLOR.cream,
                     paddingVertical: 14,
                     borderRadius: 12,
                     borderWidth: 1.5,
                     borderColor: COLOR.creamDark,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 8,
                   }}
                 >
                   {oauthLoading ? (
@@ -410,38 +315,29 @@ export default function LoginScreen() {
                   ) : (
                     <>
                       <Ionicons name="logo-apple" size={18} color={COLOR.ink} />
-                      <GText
-                        size="sm"
-                        style={{ color: COLOR.ink, fontWeight: "600" }}
-                      >
+                      <Text variant="small" className="font-semibold" style={{ color: COLOR.ink }}>
                         Apple
-                      </GText>
+                      </Text>
                     </>
                   )}
                 </TouchableOpacity>
-              </HStack>
-            </VStack>
-          </Box>
+              </View>
+            </View>
+          </View>
 
           {/* Sign Up Link */}
-          <HStack
-            className="items-center justify-center"
-            style={{ marginTop: 24 }}
-          >
-            <GText size="sm" style={{ color: COLOR.inkMuted }}>
+          <View className="flex-row items-center justify-center mt-6">
+            <Text variant="muted" style={{ color: COLOR.inkMuted }}>
               Don't have an account?{" "}
-            </GText>
+            </Text>
             <Link href="/(auth)/signup" asChild>
               <TouchableOpacity>
-                <GText
-                  size="sm"
-                  style={{ color: COLOR.terracotta, fontWeight: "700" }}
-                >
+                <Text variant="small" className="font-bold" style={{ color: COLOR.terracotta }}>
                   Sign Up
-                </GText>
+                </Text>
               </TouchableOpacity>
             </Link>
-          </HStack>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

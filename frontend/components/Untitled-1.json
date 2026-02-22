@@ -1,0 +1,619 @@
+{
+  "date": "2026-01-02T18:30:00.000Z",
+  "panchangam": {
+    "tithi": 13,
+    "nakshatra": 4,
+    "yoga": 23,
+    "karana": "Gara",
+    "vara": 5,
+    "ayanamsa": 24.220366527482607,
+    "sunrise": "2026-01-02T01:39:41.345Z",
+    "sunset": "2026-01-02T12:24:34.957Z",
+    "moonrise": "2026-01-02T11:12:12.819Z",
+    "moonset": "2026-01-02T00:27:16.227Z",
+    "nakshatraStartTime": "2026-01-01T17:18:20.228Z",
+    "nakshatraEndTime": "2026-01-02T14:33:54.560Z",
+    "tithiStartTime": "2026-01-01T16:52:39.451Z",
+    "tithiEndTime": "2026-01-02T13:23:53.608Z",
+    "yogaEndTime": "2026-01-02T07:36:43.036Z",
+    "rahuKalamStart": "2026-01-02T05:41:31.449Z",
+    "rahuKalamEnd": "2026-01-02T07:02:08.151Z",
+    "karanaTransitions": [
+      {
+        "name": "Gara",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T03:07:59.665Z"
+      },
+      {
+        "name": "Vanija",
+        "startTime": "2026-01-02T03:08:59.665Z",
+        "endTime": "2026-01-02T13:23:53.621Z"
+      },
+      {
+        "name": "Vishti",
+        "startTime": "2026-01-02T13:24:53.621Z",
+        "endTime": "2026-01-02T23:41:42.934Z"
+      },
+      {
+        "name": "Bava",
+        "startTime": "2026-01-02T23:42:42.934Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "tithiTransitions": [
+      {
+        "index": 13,
+        "name": "Chaturdashi",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T13:23:53.608Z"
+      },
+      {
+        "index": 14,
+        "name": "Purnima",
+        "startTime": "2026-01-02T13:24:53.608Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "nakshatraTransitions": [
+      {
+        "index": 4,
+        "name": "Mrigashira",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T14:33:54.560Z"
+      },
+      {
+        "index": 5,
+        "name": "Ardra",
+        "startTime": "2026-01-02T14:34:54.560Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "yogaTransitions": [
+      {
+        "index": 23,
+        "name": "Shukla",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T07:36:43.036Z"
+      },
+      {
+        "index": 24,
+        "name": "Brahma",
+        "startTime": "2026-01-02T07:37:43.036Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "moonRashiTransitions": [
+      {
+        "rashi": 1,
+        "name": "Taurus",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T03:55:47.262Z"
+      },
+      {
+        "rashi": 2,
+        "name": "Gemini",
+        "startTime": "2026-01-02T03:56:47.262Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "tithis": [
+      {
+        "index": 13,
+        "name": "Chaturdashi",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T13:23:53.608Z"
+      },
+      {
+        "index": 14,
+        "name": "Purnima",
+        "startTime": "2026-01-02T13:24:53.608Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "nakshatras": [
+      {
+        "index": 4,
+        "name": "Mrigashira",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T14:33:54.560Z"
+      },
+      {
+        "index": 5,
+        "name": "Ardra",
+        "startTime": "2026-01-02T14:34:54.560Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "yogas": [
+      {
+        "index": 23,
+        "name": "Shukla",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T07:36:43.036Z"
+      },
+      {
+        "index": 24,
+        "name": "Brahma",
+        "startTime": "2026-01-02T07:37:43.036Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "karanas": [
+      {
+        "name": "Gara",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T03:07:59.665Z"
+      },
+      {
+        "name": "Vanija",
+        "startTime": "2026-01-02T03:08:59.665Z",
+        "endTime": "2026-01-02T13:23:53.621Z"
+      },
+      {
+        "name": "Vishti",
+        "startTime": "2026-01-02T13:24:53.621Z",
+        "endTime": "2026-01-02T23:41:42.934Z"
+      },
+      {
+        "name": "Bava",
+        "startTime": "2026-01-02T23:42:42.934Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "rashis": [
+      {
+        "rashi": 1,
+        "name": "Taurus",
+        "startTime": "2026-01-02T01:39:41.345Z",
+        "endTime": "2026-01-02T03:55:47.262Z"
+      },
+      {
+        "rashi": 2,
+        "name": "Gemini",
+        "startTime": "2026-01-02T03:56:47.262Z",
+        "endTime": "2026-01-03T01:39:57.920Z"
+      }
+    ],
+    "amritKalam": [
+      {
+        "start": "2026-01-01T14:27:53.082Z",
+        "end": "2026-01-01T15:53:06.654Z"
+      },
+      {
+        "start": "2026-01-02T06:46:11.971Z",
+        "end": "2026-01-02T08:11:14.259Z"
+      },
+      {
+        "start": "2026-01-03T03:02:50.613Z",
+        "end": "2026-01-03T04:28:26.161Z"
+      }
+    ],
+    "varjyam": [
+      {
+        "start": "2026-01-01T10:12:12.364Z",
+        "end": "2026-01-01T11:37:25.936Z"
+      },
+      {
+        "start": "2026-01-01T22:15:58.238Z",
+        "end": "2026-01-01T23:41:00.526Z"
+      },
+      {
+        "start": "2026-01-02T22:03:16.191Z",
+        "end": "2026-01-02T23:28:51.739Z"
+      }
+    ],
+    "specialYogas": [],
+    "vimshottariDasha": {
+      "birthNakshatra": "Mrigashira",
+      "nakshatraPada": 2,
+      "dashaBalance": "Mars: 4y 2m 29 d",
+      "currentMahadasha": {
+        "planet": "Mars",
+        "endTime": "2030-04-02T08:52:22.033Z"
+      },
+      "currentAntardasha": {
+        "planet": "Saturn",
+        "endTime": "2026-10-01T23:52:22.033Z"
+      },
+      "fullCycle": [
+        {
+          "planet": "Mars",
+          "startTime": "2026-01-02T01:39:41.345Z",
+          "endTime": "2030-04-02T08:52:22.033Z"
+        },
+        {
+          "planet": "Rahu",
+          "startTime": "2030-04-02T08:52:22.033Z",
+          "endTime": "2048-04-01T20:52:22.033Z"
+        },
+        {
+          "planet": "Jupiter",
+          "startTime": "2048-04-01T20:52:22.033Z",
+          "endTime": "2064-04-01T20:52:22.033Z"
+        },
+        {
+          "planet": "Saturn",
+          "startTime": "2064-04-01T20:52:22.033Z",
+          "endTime": "2083-04-02T14:52:22.033Z"
+        },
+        {
+          "planet": "Mercury",
+          "startTime": "2083-04-02T14:52:22.033Z",
+          "endTime": "2100-04-02T20:52:22.033Z"
+        },
+        {
+          "planet": "Ketu",
+          "startTime": "2100-04-02T20:52:22.033Z",
+          "endTime": "2107-04-03T14:52:22.033Z"
+        },
+        {
+          "planet": "Venus",
+          "startTime": "2107-04-03T14:52:22.033Z",
+          "endTime": "2127-04-03T14:52:22.033Z"
+        },
+        {
+          "planet": "Sun",
+          "startTime": "2127-04-03T14:52:22.033Z",
+          "endTime": "2133-04-03T02:52:22.033Z"
+        },
+        {
+          "planet": "Moon",
+          "startTime": "2133-04-03T02:52:22.033Z",
+          "endTime": "2143-04-03T14:52:22.033Z"
+        }
+      ]
+    },
+    "festivals": [],
+    "choghadiya": {
+      "day": [
+        {
+          "name": "Chal",
+          "startTime": "2026-01-02T01:39:41.345Z",
+          "endTime": "2026-01-02T03:00:18.046Z",
+          "rating": "neutral"
+        },
+        {
+          "name": "Labh",
+          "startTime": "2026-01-02T03:00:18.046Z",
+          "endTime": "2026-01-02T04:20:54.748Z",
+          "rating": "good"
+        },
+        {
+          "name": "Amrit",
+          "startTime": "2026-01-02T04:20:54.748Z",
+          "endTime": "2026-01-02T05:41:31.449Z",
+          "rating": "good"
+        },
+        {
+          "name": "Kaal",
+          "startTime": "2026-01-02T05:41:31.449Z",
+          "endTime": "2026-01-02T07:02:08.151Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Rog",
+          "startTime": "2026-01-02T07:02:08.151Z",
+          "endTime": "2026-01-02T08:22:44.852Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Shubh",
+          "startTime": "2026-01-02T08:22:44.852Z",
+          "endTime": "2026-01-02T09:43:21.554Z",
+          "rating": "good"
+        },
+        {
+          "name": "Udveg",
+          "startTime": "2026-01-02T09:43:21.554Z",
+          "endTime": "2026-01-02T11:03:58.255Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Chal",
+          "startTime": "2026-01-02T11:03:58.255Z",
+          "endTime": "2026-01-02T12:24:34.957Z",
+          "rating": "neutral"
+        }
+      ],
+      "night": [
+        {
+          "name": "Rog",
+          "startTime": "2026-01-02T12:24:34.957Z",
+          "endTime": "2026-01-02T14:04:00.327Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Kaal",
+          "startTime": "2026-01-02T14:04:00.327Z",
+          "endTime": "2026-01-02T15:43:25.697Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Labh",
+          "startTime": "2026-01-02T15:43:25.697Z",
+          "endTime": "2026-01-02T17:22:51.068Z",
+          "rating": "good"
+        },
+        {
+          "name": "Udveg",
+          "startTime": "2026-01-02T17:22:51.068Z",
+          "endTime": "2026-01-02T19:02:16.438Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Shubh",
+          "startTime": "2026-01-02T19:02:16.438Z",
+          "endTime": "2026-01-02T20:41:41.808Z",
+          "rating": "good"
+        },
+        {
+          "name": "Amrit",
+          "startTime": "2026-01-02T20:41:41.808Z",
+          "endTime": "2026-01-02T22:21:07.179Z",
+          "rating": "good"
+        },
+        {
+          "name": "Chal",
+          "startTime": "2026-01-02T22:21:07.179Z",
+          "endTime": "2026-01-03T00:00:32.549Z",
+          "rating": "neutral"
+        },
+        {
+          "name": "Rog",
+          "startTime": "2026-01-03T00:00:32.549Z",
+          "endTime": "2026-01-03T01:39:57.920Z",
+          "rating": "bad"
+        }
+      ]
+    },
+    "gowri": {
+      "day": [
+        {
+          "name": "Visha",
+          "startTime": "2026-01-02T01:39:41.345Z",
+          "endTime": "2026-01-02T03:00:18.046Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Amrita",
+          "startTime": "2026-01-02T03:00:18.046Z",
+          "endTime": "2026-01-02T04:20:54.748Z",
+          "rating": "good"
+        },
+        {
+          "name": "Shunya",
+          "startTime": "2026-01-02T04:20:54.748Z",
+          "endTime": "2026-01-02T05:41:31.449Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Udyoga",
+          "startTime": "2026-01-02T05:41:31.449Z",
+          "endTime": "2026-01-02T07:02:08.151Z",
+          "rating": "good"
+        },
+        {
+          "name": "Shubha",
+          "startTime": "2026-01-02T07:02:08.151Z",
+          "endTime": "2026-01-02T08:22:44.852Z",
+          "rating": "good"
+        },
+        {
+          "name": "Roga",
+          "startTime": "2026-01-02T08:22:44.852Z",
+          "endTime": "2026-01-02T09:43:21.554Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Laabha",
+          "startTime": "2026-01-02T09:43:21.554Z",
+          "endTime": "2026-01-02T11:03:58.255Z",
+          "rating": "good"
+        },
+        {
+          "name": "Dhana",
+          "startTime": "2026-01-02T11:03:58.255Z",
+          "endTime": "2026-01-02T12:24:34.957Z",
+          "rating": "good"
+        }
+      ],
+      "night": [
+        {
+          "name": "Shunya",
+          "startTime": "2026-01-02T12:24:34.957Z",
+          "endTime": "2026-01-02T14:04:00.327Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Roga",
+          "startTime": "2026-01-02T14:04:00.327Z",
+          "endTime": "2026-01-02T15:43:25.697Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Visha",
+          "startTime": "2026-01-02T15:43:25.697Z",
+          "endTime": "2026-01-02T17:22:51.068Z",
+          "rating": "bad"
+        },
+        {
+          "name": "Dhana",
+          "startTime": "2026-01-02T17:22:51.068Z",
+          "endTime": "2026-01-02T19:02:16.438Z",
+          "rating": "good"
+        },
+        {
+          "name": "Udyoga",
+          "startTime": "2026-01-02T19:02:16.438Z",
+          "endTime": "2026-01-02T20:41:41.808Z",
+          "rating": "good"
+        },
+        {
+          "name": "Laabha",
+          "startTime": "2026-01-02T20:41:41.808Z",
+          "endTime": "2026-01-02T22:21:07.179Z",
+          "rating": "good"
+        },
+        {
+          "name": "Shubha",
+          "startTime": "2026-01-02T22:21:07.179Z",
+          "endTime": "2026-01-03T00:00:32.549Z",
+          "rating": "good"
+        },
+        {
+          "name": "Amrita",
+          "startTime": "2026-01-03T00:00:32.549Z",
+          "endTime": "2026-01-03T01:39:57.920Z",
+          "rating": "good"
+        }
+      ]
+    },
+    "abhijitMuhurta": {
+      "start": "2026-01-02T06:40:38.363Z",
+      "end": "2026-01-02T07:23:37.938Z"
+    },
+    "brahmaMuhurta": {
+      "start": "2026-01-01T23:53:35.341Z",
+      "end": "2026-01-02T00:46:38.343Z"
+    },
+    "govardhanMuhurta": {
+      "start": "2026-01-02T08:22:44.852Z",
+      "end": "2026-01-02T09:43:21.554Z"
+    },
+    "yamagandaKalam": {
+      "start": "2026-01-02T09:43:21.554Z",
+      "end": "2026-01-02T11:03:58.255Z"
+    },
+    "gulikaKalam": {
+      "start": "2026-01-02T03:00:18.046Z",
+      "end": "2026-01-02T04:20:54.748Z"
+    },
+    "durMuhurta": [
+      {
+        "start": "2026-01-02T03:48:40.067Z",
+        "end": "2026-01-02T04:31:39.641Z"
+      },
+      {
+        "start": "2026-01-02T05:14:39.215Z",
+        "end": "2026-01-02T05:57:38.789Z"
+      },
+      {
+        "start": "2026-01-02T10:58:35.808Z",
+        "end": "2026-01-02T11:41:35.382Z"
+      }
+    ],
+    "planetaryPositions": {
+      "sun": {
+        "longitude": 258.1525771694095,
+        "rashi": 8,
+        "rashiName": "Sagittarius",
+        "degree": 18.152577169409483,
+        "isRetrograde": false,
+        "speed": 1.0188729189649166,
+        "dignity": "neutral"
+      },
+      "moon": {
+        "longitude": 69.1284803000068,
+        "rashi": 2,
+        "rashiName": "Gemini",
+        "degree": 9.1284803000068,
+        "isRetrograde": false,
+        "speed": 15.0049910452816,
+        "dignity": "neutral"
+      },
+      "mars": {
+        "longitude": 259.82608238712555,
+        "rashi": 8,
+        "rashiName": "Sagittarius",
+        "degree": 19.826082387125552,
+        "isRetrograde": false,
+        "speed": 0.7675312854858021,
+        "dignity": "neutral"
+      },
+      "mercury": {
+        "longitude": 247.141178767062,
+        "rashi": 8,
+        "rashiName": "Sagittarius",
+        "degree": 7.1411787670620015,
+        "isRetrograde": false,
+        "speed": 1.5357566688044244,
+        "dignity": "neutral"
+      },
+      "jupiter": {
+        "longitude": 86.9038146407583,
+        "rashi": 2,
+        "rashiName": "Gemini",
+        "degree": 26.9038146407583,
+        "isRetrograde": true,
+        "speed": -0.13204084687902196,
+        "dignity": "neutral"
+      },
+      "venus": {
+        "longitude": 257.2149408574571,
+        "rashi": 8,
+        "rashiName": "Sagittarius",
+        "degree": 17.214940857457123,
+        "isRetrograde": false,
+        "speed": 1.2582203984643456,
+        "dignity": "neutral"
+      },
+      "saturn": {
+        "longitude": 332.05040440935477,
+        "rashi": 11,
+        "rashiName": "Pisces",
+        "degree": 2.050404409354769,
+        "isRetrograde": false,
+        "speed": 0.061033905795738974,
+        "dignity": "neutral"
+      },
+      "rahu": {
+        "longitude": 317.8550933979659,
+        "rashi": 10,
+        "rashiName": "Aquarius",
+        "degree": 17.855093397965902,
+        "isRetrograde": true,
+        "speed": -0.05295,
+        "dignity": "neutral"
+      },
+      "ketu": {
+        "longitude": 137.8550933979659,
+        "rashi": 4,
+        "rashiName": "Leo",
+        "degree": 17.855093397965902,
+        "isRetrograde": true,
+        "speed": -0.05295,
+        "dignity": "neutral"
+      }
+    },
+    "chandrabalam": 90,
+    "currentHora": "Mars",
+    "nakshatraPada": 2,
+    "moonRashi": {
+      "index": 1,
+      "name": "Taurus"
+    },
+    "sunRashi": {
+      "index": 8,
+      "name": "Sagittarius"
+    },
+    "sunNakshatra": {
+      "index": 19,
+      "name": "Purva Ashadha",
+      "pada": 2
+    },
+    "udayaLagna": 256.50523992955846,
+    "masa": {
+      "index": 9,
+      "name": "Pausha",
+      "isAdhika": false
+    },
+    "paksha": "Shukla",
+    "ritu": "Shishir",
+    "ayana": "Uttarayana",
+    "samvat": {
+      "vikram": 2082,
+      "shaka": 1947,
+      "samvatsara": "Vishvavasu"
+    }
+  }
+}

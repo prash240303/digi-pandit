@@ -1,19 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
-  Text,
+  View,
   ScrollView,
   TouchableOpacity,
-  Animated,
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getHours } from "date-fns";
 import { Ionicons } from "@expo/vector-icons";
-import { Box } from "@/components/ui/box";
-import { Text as GText } from "@/components/ui/text";
-import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
-import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
 import { COLOR } from "@/constants/colors";
 import OmBookIcon from "@/components/icons/om-book";
 import { useNavigation } from "expo-router";
@@ -24,46 +19,39 @@ import {
   USER_NAME,
   USER_ZODIAC,
   USER_ZODIAC_SET,
-  TODAY_OBSERVANCE
+  TODAY_OBSERVANCE,
 } from "@/constants/user-mock-data";
 
 type DayPeriod = "Morning" | "Afternoon" | "Evening";
 
-const GREETING_CONFIG: Record<DayPeriod, { icon: string; salutation: string }> =
-  {
-    Morning: { icon: "sunny-outline", salutation: "morning" },
-    Afternoon: { icon: "partly-sunny", salutation: "afternoon" },
-    Evening: { icon: "moon", salutation: "evening" },
-  };
+const GREETING_CONFIG: Record<DayPeriod, { icon: string; salutation: string }> = {
+  Morning: { icon: "sunny-outline", salutation: "morning" },
+  Afternoon: { icon: "partly-sunny", salutation: "afternoon" },
+  Evening: { icon: "moon", salutation: "evening" },
+};
 
 function TopBar({
   salutation,
   name,
-  icon,
 }: {
   salutation: string;
   name: string | null;
   icon: string;
 }) {
-  const displayGreeting = name ? `${salutation}, ${name}` : "Namaste";
+  const displayName = name ?? "Namaste";
 
   return (
-    <HStack className="items-center justify-between">
-      {/* Left: greeting */}
-      <VStack className="gap-0">
-        <GText
-          size="xs"
-          style={{
-            color: COLOR.inkLight,
-            letterSpacing: 1.2,
-            textTransform: "uppercase",
-            fontWeight: "600",
-          }}
+    <View className="flex-row items-center justify-between">
+      <View>
+        <Text
+          variant="small"
+          className="uppercase tracking-widest"
+          style={{ color: COLOR.inkLight }}
         >
           Good {salutation}
-        </GText>
-        <Heading
-          size="lg"
+        </Text>
+        <Text
+          variant="h3"
           style={{
             color: COLOR.ink,
             fontFamily: Platform.select({
@@ -73,33 +61,25 @@ function TopBar({
             }),
           }}
         >
-          {displayGreeting.includes(",")
-            ? displayGreeting.split(", ")[1]
-            : displayGreeting}
-        </Heading>
-      </VStack>
+          {displayName}
+        </Text>
+      </View>
 
-      {/* Right: avatar circle */}
       <TouchableOpacity>
-        <Box
-          className="rounded-full items-center justify-center"
+        <View
+          className="w-10 h-10 rounded-full items-center justify-center"
           style={{
-            width: 40,
-            height: 40,
             backgroundColor: COLOR.terracotta + "18",
             borderWidth: 2,
             borderColor: COLOR.terracotta + "40",
           }}
         >
-          <GText
-            size="sm"
-            style={{ color: COLOR.terracotta, fontWeight: "700" }}
-          >
+          <Text variant="small" className="font-bold" style={{ color: COLOR.terracotta }}>
             {name ? name.charAt(0).toUpperCase() : "M"}
-          </GText>
-        </Box>
+          </Text>
+        </View>
       </TouchableOpacity>
-    </HStack>
+    </View>
   );
 }
 
@@ -108,114 +88,84 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
 
   return (
     <TouchableOpacity activeOpacity={0.88}>
-      <Box
+      <View
         className="rounded-3xl overflow-hidden"
-        style={{
-          backgroundColor: observance.color,
-          minHeight: 160,
-        }}
+        style={{ backgroundColor: observance.color, minHeight: 160 }}
       >
-        <Box
+        {/* Decorative circles */}
+        <View
+          className="absolute"
           style={{
-            position: "absolute",
-            top: -30,
-            right: -30,
-            width: 140,
-            height: 140,
-            borderRadius: 70,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.06,
+            top: -30, right: -30, width: 140, height: 140,
+            borderRadius: 70, backgroundColor: "#FFFFFF", opacity: 0.06,
           }}
         />
-        <Box
+        <View
+          className="absolute"
           style={{
-            position: "absolute",
-            bottom: -40,
-            left: -20,
-            width: 160,
-            height: 160,
-            borderRadius: 80,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.04,
+            bottom: -40, left: -20, width: 160, height: 160,
+            borderRadius: 80, backgroundColor: "#FFFFFF", opacity: 0.04,
           }}
         />
-        <Box
+        <View
+          className="absolute"
           style={{
-            position: "absolute",
-            top: 20,
-            right: 40,
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.08,
+            top: 20, right: 40, width: 60, height: 60,
+            borderRadius: 30, backgroundColor: "#FFFFFF", opacity: 0.08,
           }}
         />
 
-        <Box className="p-5" style={{ position: "relative", zIndex: 1 }}>
-          <Box
-            className="rounded-full self-start"
-            style={{
-              backgroundColor: "#FFFFFF22",
-              paddingHorizontal: 12,
-              paddingVertical: 4,
-            }}
+        <View className="p-5 z-10">
+          {/* Label pill */}
+          <View
+            className="self-start rounded-full px-3 py-1"
+            style={{ backgroundColor: "#FFFFFF22" }}
           >
-            <GText
-              size="xs"
-              style={{
-                color: "#FFFFFFCC",
-                fontWeight: "600",
-                letterSpacing: 0.8,
-              }}
+            <Text
+              variant="small"
+              className="font-semibold tracking-wide"
+              style={{ color: "#FFFFFFCC" }}
             >
               {label.toUpperCase()}
-            </GText>
-          </Box>
+            </Text>
+          </View>
 
-          {/* Spacer */}
-          <Box style={{ height: 12 }} />
+          <View className="h-3" />
 
-          {/* Icon + Title row */}
-          <HStack className="items-center gap-3">
+          {/* Icon + Title */}
+          <View className="flex-row items-center gap-3">
             <Ionicons name={observance.iconName} size={28} color="#FFFFFFCC" />
-            <Heading
-              size="xl"
+            <Text
+              variant="h3"
+              className="text-left"
               style={{
                 color: COLOR.white,
+                letterSpacing: -0.5,
                 fontFamily: Platform.select({
                   ios: "Georgia",
                   android: "serif",
                   web: "Georgia, serif",
                 }),
-                letterSpacing: -0.5,
               }}
             >
               {observance.name}
-            </Heading>
-          </HStack>
+            </Text>
+          </View>
 
           {/* Description */}
-          <GText
-            size="sm"
-            style={{ color: "#FFFFFFAA", marginTop: 6, lineHeight: 20 }}
-          >
+          <Text variant="muted" className="mt-1.5 leading-5" style={{ color: "#FFFFFFAA" }}>
             {observance.description}
-          </GText>
+          </Text>
 
           {/* Tap hint */}
-          <HStack className="items-center gap-1 mt-3">
-            <GText size="xs" style={{ color: "#FFFFFFBB", fontWeight: "600" }}>
+          <View className="flex-row items-center gap-1 mt-3">
+            <Text variant="small" className="font-semibold" style={{ color: "#FFFFFFBB" }}>
               Learn more
-            </GText>
-            <Ionicons
-              name="chevron-forward-outline"
-              size={13}
-              color="#FFFFFFBB"
-            />
-          </HStack>
-        </Box>
-      </Box>
+            </Text>
+            <Ionicons name="chevron-forward-outline" size={13} color="#FFFFFFBB" />
+          </View>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -228,118 +178,83 @@ function ZodiacCard({
   zodiac: typeof USER_ZODIAC;
 }) {
   if (!isSet) {
-    // Gentle prompt state
     return (
       <TouchableOpacity activeOpacity={0.9}>
-        <Box
-          className="rounded-2xl"
+        <View
+          className="rounded-2xl px-4 py-3.5"
           style={{
             backgroundColor: COLOR.cardBg,
             borderWidth: 1.5,
             borderColor: COLOR.creamDark,
             borderStyle: "dashed",
-            paddingHorizontal: 16,
-            paddingVertical: 14,
           }}
         >
-          <HStack className="items-center gap-3">
-            <Box
-              className="rounded-full items-center justify-center"
-              style={{
-                width: 38,
-                height: 38,
-                backgroundColor: COLOR.gold + "15",
-              }}
+          <View className="flex-row items-center gap-3">
+            <View
+              className="w-10 h-10 rounded-full items-center justify-center"
+              style={{ backgroundColor: COLOR.gold + "15" }}
             >
-              <GText size="lg" style={{ color: COLOR.gold }}>
-                ✦
-              </GText>
-            </Box>
-            <VStack className="gap-0 flex-1">
-              <GText size="sm" style={{ color: COLOR.ink, fontWeight: "600" }}>
+              <Text variant="large" style={{ color: COLOR.gold }}>✦</Text>
+            </View>
+            <View className="flex-1">
+              <Text variant="small" className="font-semibold" style={{ color: COLOR.ink }}>
                 Discover your zodiac predictions
-              </GText>
-              <GText size="xs" style={{ color: COLOR.inkLight, marginTop: 2 }}>
+              </Text>
+              <Text variant="muted" className="mt-0.5" style={{ color: COLOR.inkLight }}>
                 Set your date of birth to get personalized insights
-              </GText>
-            </VStack>
-            <Ionicons
-              name="chevron-forward-outline"
-              size={18}
-              color={COLOR.inkLight}
-            />
-          </HStack>
-        </Box>
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward-outline" size={18} color={COLOR.inkLight} />
+          </View>
+        </View>
       </TouchableOpacity>
     );
   }
 
-  // Set state — compact summary
   return (
     <TouchableOpacity activeOpacity={0.9}>
-      <Box
-        className="rounded-2xl"
+      <View
+        className="rounded-2xl px-4 py-3.5"
         style={{
           backgroundColor: COLOR.cardBg,
           borderWidth: 1,
           borderColor: COLOR.creamDark,
-          paddingHorizontal: 16,
-          paddingVertical: 14,
         }}
       >
-        <HStack className="items-center gap-3">
+        <View className="flex-row items-center gap-3">
           {/* Zodiac glyph */}
-          <Box
-            className="rounded-full items-center justify-center"
+          <View
+            className="w-11 h-11 rounded-full items-center justify-center"
             style={{
-              width: 42,
-              height: 42,
               backgroundColor: COLOR.gold + "12",
               borderWidth: 1.5,
               borderColor: COLOR.gold + "30",
             }}
           >
-            <GText size="xl" style={{ color: COLOR.gold }}>
-              {zodiac.icon}
-            </GText>
-          </Box>
+            <Text variant="large" style={{ color: COLOR.gold }}>{zodiac.icon}</Text>
+          </View>
 
-          {/* Text */}
-          <VStack className="gap-0 flex-1">
-            <HStack className="items-center gap-2">
-              <GText size="sm" style={{ color: COLOR.ink, fontWeight: "700" }}>
+          <View className="flex-1">
+            <View className="flex-row items-center gap-2">
+              <Text variant="small" className="font-bold" style={{ color: COLOR.ink }}>
                 {zodiac.sign}
-              </GText>
-              <GText size="xs" style={{ color: COLOR.inkLight }}>
-                — Monthly
-              </GText>
-            </HStack>
-            <GText
-              size="xs"
-              style={{ color: COLOR.inkMuted, marginTop: 2, lineHeight: 16 }}
-            >
+              </Text>
+              <Text variant="muted" style={{ color: COLOR.inkLight }}>— Monthly</Text>
+            </View>
+            <Text variant="muted" className="mt-0.5 leading-4" style={{ color: COLOR.inkMuted }}>
               {zodiac.prediction}
-            </GText>
-          </VStack>
+            </Text>
+          </View>
 
-          {/* Read more arrow */}
-          <Ionicons
-            name="chevron-forward-outline"
-            size={18}
-            color={COLOR.inkLight}
-          />
-        </HStack>
+          <Ionicons name="chevron-forward-outline" size={18} color={COLOR.inkLight} />
+        </View>
 
-        {/* Read full link */}
-        <TouchableOpacity style={{ marginTop: 8, marginLeft: 60 }}>
-          <GText
-            size="xs"
-            style={{ color: COLOR.terracotta, fontWeight: "600" }}
-          >
+        <TouchableOpacity className="mt-2 ml-14">
+          <Text variant="small" className="font-semibold" style={{ color: COLOR.terracotta }}>
             Read full prediction →
-          </GText>
+          </Text>
         </TouchableOpacity>
-      </Box>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -348,86 +263,57 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
   const isEmpty = items.length === 0;
 
   return (
-    <VStack className="gap-2">
-      {/* Section label */}
-      <HStack className="items-center justify-between">
-        <GText
-          size="sm"
-          style={{ color: COLOR.ink, fontWeight: "700", letterSpacing: 0.4 }}
-        >
+    <View className="gap-2">
+      <View className="flex-row items-center justify-between">
+        <Text variant="small" className="font-bold tracking-wide" style={{ color: COLOR.ink }}>
           My Favorites
-        </GText>
+        </Text>
         {!isEmpty && (
           <TouchableOpacity>
-            <GText
-              size="xs"
-              style={{ color: COLOR.terracotta, fontWeight: "600" }}
-            >
+            <Text variant="small" className="font-semibold" style={{ color: COLOR.terracotta }}>
               See all
-            </GText>
+            </Text>
           </TouchableOpacity>
         )}
-      </HStack>
+      </View>
 
       {isEmpty ? (
-        // Empty prompt
-        <Box
-          className="rounded-xl items-center justify-center"
+        <View
+          className="rounded-xl items-center justify-center py-4"
           style={{
             backgroundColor: COLOR.cardBg,
             borderWidth: 1.5,
             borderColor: COLOR.creamDark,
             borderStyle: "dashed",
-            paddingVertical: 16,
           }}
         >
           <Ionicons name="heart-outline" size={22} color={COLOR.inkLight} />
-          <GText size="xs" style={{ color: COLOR.inkLight, marginTop: 4 }}>
+          <Text variant="muted" className="mt-1" style={{ color: COLOR.inkLight }}>
             Start saving your favorites here
-          </GText>
-        </Box>
+          </Text>
+        </View>
       ) : (
-        // Horizontal scroll chips
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{ flexDirection: "row" }}
-        >
-          {items.map((item, i) => (
-            <TouchableOpacity
-              key={item.id}
-              activeOpacity={0.85}
-              style={{ marginRight: 10 }}
-            >
-              <Box
-                className="rounded-xl items-center"
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {items.map((item) => (
+            <TouchableOpacity key={item.id} activeOpacity={0.85} className="mr-2.5">
+              <View
+                className="flex-row items-center rounded-xl px-1 py-1 gap-2"
                 style={{
                   backgroundColor: COLOR.cardBg,
                   borderWidth: 1,
                   borderColor: COLOR.creamDark,
-                  paddingHorizontal: 4,
-                  paddingVertical: 4,
                   minWidth: 120,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
                 }}
               >
-                <Box
-                  className="rounded-lg items-center justify-center"
+                <View
+                  className="w-8 h-8 rounded-lg items-center justify-center"
                   style={{
-                    width: 30,
-                    height: 30,
                     backgroundColor:
-                      item.type === "mantra"
-                        ? COLOR.gold + "15"
-                        : COLOR.sage + "15",
+                      item.type === "mantra" ? COLOR.gold + "15" : COLOR.sage + "15",
                   }}
                 >
                   {item.icon === "book-outline" ? (
-                    <OmBookIcon
-                      color={item.type === "mantra" ? COLOR.gold : COLOR.sage}
-                    />
+                    <OmBookIcon color={item.type === "mantra" ? COLOR.gold : COLOR.sage} />
                   ) : (
                     <Ionicons
                       name={item.icon as any}
@@ -435,34 +321,33 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
                       color={item.type === "mantra" ? COLOR.gold : COLOR.sage}
                     />
                   )}
-                </Box>
-                <GText
-                  size="xs"
-                  style={{ color: COLOR.ink, fontWeight: "600", flex: 1 }}
+                </View>
+                <Text
+                  variant="small"
+                  className="font-semibold flex-1"
+                  style={{ color: COLOR.ink }}
                   numberOfLines={1}
                 >
                   {item.label}
-                </GText>
-              </Box>
+                </Text>
+              </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
       )}
-    </VStack>
+    </View>
   );
 }
 
 function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
   const navigation = useNavigation();
+
   return (
-    <VStack className="gap-2">
-      <GText
-        size="sm"
-        style={{ color: COLOR.ink, fontWeight: "700", letterSpacing: 0.4 }}
-      >
+    <View className="gap-2">
+      <Text variant="small" className="font-bold tracking-wide" style={{ color: COLOR.ink }}>
         Explore
-      </GText>
-      <Box style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+      </Text>
+      <View className="flex-row flex-wrap gap-2.5">
         {cards.map((card) => (
           <TouchableOpacity
             key={card.id}
@@ -470,62 +355,44 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
             activeOpacity={0.88}
             style={{ width: "48.5%" }}
           >
-            <Box
-              className="rounded-2xl"
+            <View
+              className="rounded-2xl p-4"
               style={{
                 backgroundColor: COLOR.cardBg,
                 borderWidth: 1,
                 borderColor: COLOR.creamDark,
-                padding: 16,
                 minHeight: 130,
                 justifyContent: "space-between",
               }}
             >
-              {/* Icon row */}
-              <HStack className="items-start justify-between">
-                <Box
-                  className="rounded-xl items-center justify-center"
-                  style={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: card.color + "14",
-                  }}
+              <View className="flex-row items-start justify-between">
+                <View
+                  className="w-10 h-10 rounded-xl items-center justify-center"
+                  style={{ backgroundColor: card.color + "14" }}
                 >
-                  <Ionicons
-                    name={card.icon as any}
-                    size={20}
-                    color={card.color}
-                  />
-                </Box>
-                {/* Subtle arrow */}
-                <Ionicons
-                  name="chevron-forward-outline"
-                  size={16}
-                  color={COLOR.inkLight}
-                />
-              </HStack>
+                  <Ionicons name={card.icon as any} size={20} color={card.color} />
+                </View>
+                <Ionicons name="chevron-forward-outline" size={16} color={COLOR.inkLight} />
+              </View>
 
-              {/* Label + badge */}
-              <VStack className="gap-1">
-                <GText
-                  size="sm"
-                  style={{ color: COLOR.ink, fontWeight: "700" }}
-                >
+              <View className="gap-1">
+                <Text variant="small" className="font-bold" style={{ color: COLOR.ink }}>
                   {card.label}
-                </GText>
-                <GText
-                  size="xs"
-                  style={{ color: COLOR.inkLight, lineHeight: 15 }}
+                </Text>
+                <Text
+                  variant="muted"
+                  className="leading-4"
+                  style={{ color: COLOR.inkLight }}
                   numberOfLines={1}
                 >
                   {card.badge}
-                </GText>
-              </VStack>
-            </Box>
+                </Text>
+              </View>
+            </View>
           </TouchableOpacity>
         ))}
-      </Box>
-    </VStack>
+      </View>
+    </View>
   );
 }
 
@@ -545,7 +412,7 @@ export default function HomeScreen() {
     <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}
+        className="flex-1"
         contentContainerStyle={{
           paddingHorizontal: 18,
           paddingTop: 14,

@@ -2,25 +2,10 @@
 import React, { useState, useMemo } from "react";
 import { useRouter } from "expo-router";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectInput,
-  SelectIcon,
-  SelectPortal,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectItem,
-  SelectScrollView,
-} from "@/components/ui/select";
-import { HugeiconsIcon } from "@hugeicons/react-native";
-import { ChevronFirst, ChevronLast, ChevronsDown } from "@hugeicons/core-free-icons";
 import { TouchableOpacity, View, Text } from "react-native";
 import { getPanchangam, Observer } from "@ishubhamx/panchangam-js";
 import { format } from "date-fns";
-import { ArrowDownIcon, ChevronDownIcon, ChevronLeftIcon, ChevronsUpDownIcon } from "./ui/icon";
+import CalendarHeader from "./calender-header";
 
 /* -------------------- Types -------------------- */
 interface CalendarDayData {
@@ -31,23 +16,7 @@ interface CalendarDayData {
 /* -------------------- Mock Data -------------------- */
 const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
 /* -------------------- Helper Functions -------------------- */
-
 const getCurrentTithi = (
   panchangam: any,
 ): { tithi: string; vara: string } | null => {
@@ -61,20 +30,16 @@ const getCurrentTithi = (
 };
 
 const getCurrentNakshatra = (panchangam: any) => {
-  if (!panchangam.nakshatras || panchangam.nakshatras.length === 0)
-    return "N/A";
+  if (!panchangam.nakshatras || panchangam.nakshatras.length === 0) return "N/A";
   return panchangam?.nakshatras[1]?.name;
 };
 
 const getBrahmaMuhurta = (panchangam: any) => {
   const bm = panchangam?.brahmaMuhurta;
   if (!bm?.start || !bm?.end) return null;
-
-  const start = new Date(bm.start); // ISO UTC -> local Date
+  const start = new Date(bm.start);
   const end = new Date(bm.end);
-
   if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-
   return {
     start: format(start, "dd MMM yyyy hh:mm a"),
     end: format(end, "dd MMM yyyy hh:mm a"),
@@ -84,12 +49,9 @@ const getBrahmaMuhurta = (panchangam: any) => {
 const getYamagandaKalam = (panchangam: any) => {
   const bm = panchangam?.yamagandaKalam;
   if (!bm?.start || !bm?.end) return null;
-
-  const start = new Date(bm.start); // ISO UTC -> local Date
+  const start = new Date(bm.start);
   const end = new Date(bm.end);
-
   if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-
   return {
     start: format(start, "dd MMM yyyy hh:mm a"),
     end: format(end, "dd MMM yyyy hh:mm a"),
@@ -99,12 +61,9 @@ const getYamagandaKalam = (panchangam: any) => {
 const getGulikaKalam = (panchangam: any) => {
   const bm = panchangam?.gulikaKalam;
   if (!bm?.start || !bm?.end) return null;
-
-  const start = new Date(bm.start); // ISO UTC -> local Date
+  const start = new Date(bm.start);
   const end = new Date(bm.end);
-
   if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-
   return {
     start: format(start, "dd MMM yyyy hh:mm a"),
     end: format(end, "dd MMM yyyy hh:mm a"),
@@ -114,9 +73,7 @@ const getGulikaKalam = (panchangam: any) => {
 const getRahuKalam = (panchangam: any) => {
   const start = panchangam.rahuKalamStart;
   const end = panchangam.rahuKalamEnd;
-
   if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-
   return {
     start: format(start, "dd MMM yyyy hh:mm a"),
     end: format(end, "dd MMM yyyy hh:mm a"),
@@ -126,32 +83,21 @@ const getRahuKalam = (panchangam: any) => {
 const getChandrabalam = (panchangam: any) => {
   const value = panchangam.chandrabalam ?? 0;
   let moon = "";
-
-  if (value >= 95) {
-    moon = "🌕 ";
-  } else if (value >= 80) {
-    moon = "🌔 ";
-  } else if (value >= 65) {
-    moon = "🌓 ";
-  } else if (value >= 50) {
-    moon = "🌒 ";
-  } else if (value >= 35) {
-    moon = "🌑 ";
-  } else if (value >= 25) {
-    moon = "🌘 ";
-  } else if (value >= 15) {
-    moon = "🌗 ";
-  } else {
-    moon = "🌖 ";
-  }
-
+  if (value >= 95) { moon = "🌕 "; }
+  else if (value >= 80) { moon = "🌔 "; }
+  else if (value >= 65) { moon = "🌓 "; }
+  else if (value >= 50) { moon = "🌒 "; }
+  else if (value >= 35) { moon = "🌑 "; }
+  else if (value >= 25) { moon = "🌘 "; }
+  else if (value >= 15) { moon = "🌗 "; }
+  else { moon = "🌖 "; }
   return <Text>{moon}</Text>;
 };
 
 /* -------------------- Component -------------------- */
 const PanchangamCalendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date(2026, 0, 1));
-  const [selectedDay, setSelectedDay] = useState<CalendarDayData | null>(null);
+  const [selectedDay, setSelectedDay] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const month = currentDate.getMonth();
@@ -163,14 +109,11 @@ const PanchangamCalendar: React.FC = () => {
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
     const startDay = firstDay.getDay();
-
     const days: (CalendarDayData | null)[] = [];
     const CalObserver = new Observer(23.1, 75.46, 494);
 
     for (let i = 0; i < startDay; i++) days.push(null);
-
     for (let d = 1; d <= daysInMonth; d++) {
-      // FIX
       const date = new Date(year, month, d);
       const dayData = {
         date,
@@ -181,7 +124,6 @@ const PanchangamCalendar: React.FC = () => {
       }
       days.push(dayData);
     }
-
     return days;
   }, [month, year]);
 
@@ -190,78 +132,12 @@ const PanchangamCalendar: React.FC = () => {
     weeks.push(calendarDays.slice(i, i + 7));
   }
 
-  function parseTime12h(timeStr) {
-    // "07:09 AM" -> { hour: 7, minute: 9 }
-    const [time, modifier] = timeStr.split(" ");
-    let [hours, minutes] = time.split(":").map(Number);
-
-    if (modifier === "PM" && hours !== 12) {
-      hours += 12;
-    }
-    if (modifier === "AM" && hours === 12) {
-      hours = 0;
-    }
-
-    return { hour: hours, minute: minutes };
-  }
-
-  const years = Array.from({ length: 100 }, (_, i) => 1980 + i);
   const brahma = selectedDay ? getBrahmaMuhurta(selectedDay.panchangam) : null;
   const gulika = selectedDay ? getGulikaKalam(selectedDay.panchangam) : null;
   const rahu = selectedDay ? getRahuKalam(selectedDay.panchangam) : null;
-  const yamaganda = selectedDay
-    ? getYamagandaKalam(selectedDay.panchangam)
-    : null;
-
-  const planetaryData = (selectedDay: any) => {
-    const sunData = {
-      degree: selectedDay.panchangam.planetaryPositions.sun.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.sun.rashiName,
-    };
-    const moonData = {
-      degree: selectedDay.panchangam.planetaryPositions.moon.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.moon.rashiName,
-    };
-    const marsData = {
-      degree: selectedDay.panchangam.planetaryPositions.mars.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.mars.rashiName,
-    };
-    const mercuryData = {
-      degree: selectedDay.panchangam.planetaryPositions.mercury.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.mercury.rashiName,
-    };
-    const jupiterData = {
-      degree: selectedDay.panchangam.planetaryPositions.jupiter.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.jupiter.rashiName,
-    };
-    const venusData = {
-      degree: selectedDay.panchangam.planetaryPositions.venus.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.venus.rashiName,
-    };
-    const rahuData = {
-      degree: selectedDay.panchangam.planetaryPositions.venus.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.venus.rashiName,
-    };
-    const ketusData = {
-      degree: selectedDay.panchangam.planetaryPositions.venus.degree,
-      rashiName: selectedDay.panchangam.planetaryPositions.venus.rashiName,
-    };
-    return {
-      planetaryPositions: {
-        sun: sunData,
-        moon: moonData,
-        mars: marsData,
-        mercury: mercuryData,
-        jupiter: jupiterData,
-        venus: venusData,
-        rahu: rahuData,
-        ketu: ketusData,
-      },
-    };
-  };
+  const yamaganda = selectedDay ? getYamagandaKalam(selectedDay.panchangam) : null;
 
   const router = useRouter();
-
   const handlePress = (selectedDay: Date) => {
     router.push({
       pathname: "/calendar/details",
@@ -272,58 +148,19 @@ const PanchangamCalendar: React.FC = () => {
   };
 
   return (
-    <View className="flex-1 pt-10">
-      {/* Header Controls */}
-      <View className="flex-row justify-between items-center mb-6 px-2">
-        <TouchableOpacity
-          className="p-2 bg-gray-200 rounded-lg"
-          onPress={() => setCurrentDate(new Date(year, month - 1, 1))}
-        >
-          <HugeiconsIcon icon={ChevronFirst} />
-        </TouchableOpacity>
-
-        <View className="flex-row items-center gap-2">
-          <Text className="text-2xl font-bold text-amber-900">
-            {MONTH_NAMES[month]}
-          </Text>
-
-          <Select
-            onValueChange={(value) => {
-              setYearValue(value);
-              setCurrentDate(new Date(Number(value), month, 1));
-            }}
-          >
-            <SelectTrigger className="w-24 border-neutral-400">
-              <SelectInput placeholder={yearValue} className="text-neutral-900" />
-              <SelectIcon className="mr-3" as={ChevronDownIcon}/>
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectBackdrop />
-              <SelectContent>
-                <SelectDragIndicatorWrapper>
-                  <SelectDragIndicator />
-                </SelectDragIndicatorWrapper>
-                <SelectScrollView>
-                  {years.map((y) => (
-                    <SelectItem
-                      key={y}
-                      label={y.toString()}
-                      value={y.toString()}
-                    />
-                  ))}
-                </SelectScrollView>
-              </SelectContent>
-            </SelectPortal>
-          </Select>
-        </View>
-
-        <TouchableOpacity
-          className="p-2 bg-gray-200 rounded-lg"
-          onPress={() => setCurrentDate(new Date(year, month + 1, 1))}
-        >
-          <HugeiconsIcon icon={ChevronLast} />
-        </TouchableOpacity>
-      </View>
+    <View className="p-4 gap-4 flex-1">
+      {/* Header Controls — now a separate component */}
+      <CalendarHeader
+        month={month}
+        year={year}
+        yearValue={yearValue}
+        onPrevMonth={() => setCurrentDate(new Date(year, month - 1, 1))}
+        onNextMonth={() => setCurrentDate(new Date(year, month + 1, 1))}
+        onYearChange={(value) => {
+          setYearValue(value);
+          setCurrentDate(new Date(Number(value), month, 1));
+        }}
+      />
 
       {/* --- GRID HEADER (Weekdays) --- */}
       <View className="flex-row w-full mb-2">
@@ -343,12 +180,10 @@ const PanchangamCalendar: React.FC = () => {
       {/* --- GRID BODY (Days) --- */}
       <View className="flex-row  flex-wrap w-full">
         {weeks.flat().map((day, i) => {
-          // 1. Handle Empty Placeholder Days
           if (!day) {
             return <View key={`empty-${i}`} style={{ width: "14.28%" }} />;
           }
 
-          // 2. Handle Actual Days
           const isFestival = day.panchangam.festivals.length > 0;
 
           return (

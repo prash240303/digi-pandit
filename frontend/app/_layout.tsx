@@ -5,15 +5,10 @@ import {
 } from "@react-navigation/native";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import "react-native-reanimated";
 import * as SplashScreen from "expo-splash-screen";
-import {
-  useFonts,
-  PlayfairDisplay_400Regular,
-  PlayfairDisplay_500Medium,
-  PlayfairDisplay_700Bold,
-} from "@expo-google-fonts/playfair-display";
+import { PortalHost } from "@rn-primitives/portal";
 
 import {
   Merriweather_300Light,
@@ -36,10 +31,16 @@ import {
   Inter_900Black,
 } from "@expo-google-fonts/inter";
 
+import {
+  PlayfairDisplay_400Regular,
+  PlayfairDisplay_500Medium,
+  PlayfairDisplay_700Bold,
+  useFonts,
+} from "@expo-google-fonts/playfair-display";
+
 import { IBMPlexMono_300Light } from "@expo-google-fonts/ibm-plex-mono";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { AuthProvider, useAuth } from "@/contexts";
 import "@/global.css";
 
@@ -79,21 +80,20 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <GluestackUIProvider mode="dark">
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        {/* <AuthGate> */}
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="modal"
-            options={{ presentation: "modal", title: "Modal" }}
-          />
-        </Stack>
-        {/* </AuthGate>  */}
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </GluestackUIProvider>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      {/* <AuthGate> */}
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="modal"
+          options={{ presentation: "modal", title: "Modal" }}
+        />
+      </Stack>
+      {/* </AuthGate>  */}
+      <StatusBar style="auto" />
+      <PortalHost />
+    </ThemeProvider>
   );
 }
 
@@ -117,7 +117,7 @@ export default function RootLayout() {
     Inter_700Bold,
     Inter_800ExtraBold,
     Inter_900Black,
-    IBMPlexMono_300Light
+    IBMPlexMono_300Light,
   });
 
   useEffect(() => {
