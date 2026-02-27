@@ -5,7 +5,7 @@ import { useLocalSearchParams } from "expo-router";
 import { Observer, getPanchangam } from "@ishubhamx/panchangam-js";
 import { format } from "date-fns";
 import { PlanetaryPositions } from "@/components/planetary-positions";
-import SunriseSunsetCard from "@/components/sun-moon-timings";
+import SunriseSunsetCard from "@/components/sun-timings";
 import PanchangamDetails from "@/components/core-panchang-details";
 import MoonDetails from "@/components/moon-details";
 import MuhurataDetails from "@/components/muhurata-details";

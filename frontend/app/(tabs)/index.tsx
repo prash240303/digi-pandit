@@ -51,7 +51,7 @@ function TopBar({
       </View>
 
       <TouchableOpacity>
-        <View className="w-10 h-10 rounded-full  items-center bg-terracotta/18 border-terracotta/40 border justify-center">
+        <View className="w-10 h-10 rounded-full  items-center bg-white border-terracotta/40 border justify-center">
           <Text variant="small" className="font-bold text-terracotta">
             {name ? name.charAt(0).toUpperCase() : "M"}
           </Text>
@@ -176,7 +176,7 @@ function ZodiacCard({
   if (!isSet) {
     return (
       <TouchableOpacity activeOpacity={0.9}>
-        <View className="rounded-2xl border-[1.5px] border-dashed border-cream-dark bg-card-bg px-4 py-3.5">
+        <View className="rounded-2xl border-[1.5px] border-dashed border-cream-dark bg-white px-4 py-3.5">
           <View className="flex-row items-center gap-3">
             <View
               className="w-10 h-10 rounded-full items-center justify-center"
@@ -207,7 +207,7 @@ function ZodiacCard({
 
   return (
     <TouchableOpacity activeOpacity={0.9}>
-      <View className="rounded-2xl px-4 py-3.5 border border-cream-dark bg-card-bg">
+      <View className="rounded-2xl px-4 py-3.5 border border-cream-dark bg-white">
         <View className="flex-row items-center gap-3">
           {/* Zodiac glyph */}
           <View className="w-11 h-11 rounded-full items-center bg-gold/10 border border-gold justify-center">
@@ -278,14 +278,19 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
               activeOpacity={0.85}
               className="mr-2.5"
             >
-              <View className="flex-row items-center bg-card-bg border border-cream-dark rounded-xl pl-1 pr-2 py-1 gap-2">
+              <View className="flex-row items-center bg-white border border-cream-dark rounded-xl pl-1 pr-2 py-1 gap-2">
                 <View
-                  className="w-8 h-8 rounded-lg items-center justify-center"
+                  className="w-8 h-8  rounded-md items-center justify-center"
                   style={{
                     backgroundColor:
                       item.type === "mantra"
                         ? COLOR.gold + "15"
                         : COLOR.sage + "15",
+                    borderColor:
+                      item.type === "mantra"
+                        ? COLOR.gold + "15"
+                        : COLOR.sage + "15",
+                    borderWidth: 1,
                   }}
                 >
                   {item.icon === "book-outline" ? (
@@ -302,7 +307,7 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
                 </View>
                 <Text
                   variant="small"
-                  className="font-semibold text-ink flex-1"
+                  className=" leading-relaxed text-ink flex-1"
                   numberOfLines={1}
                 >
                   {item.label}
@@ -332,11 +337,15 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
             activeOpacity={0.88}
             style={{ width: "48.5%" }}
           >
-            <View className="rounded-2xl bg-card-bg border border-cream-dark min-h-28 justify-between p-4">
+            <View className="rounded-2xl bg-white border border-cream-dark min-h-28 justify-between p-4">
               <View className="flex-row items-start justify-between">
                 <View
-                  className="w-10 h-10 rounded-xl items-center justify-center"
-                  style={{ backgroundColor: card.color + "14" }}
+                  className="w-10 h-10 rounded-xl items-center  justify-center"
+                  style={{
+                    backgroundColor: card.color + "14",
+                    borderColor: card.color + 20,
+                    borderWidth: 1,
+                  }}
                 >
                   <Ionicons
                     name={card.icon as any}

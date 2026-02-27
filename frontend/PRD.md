@@ -318,3 +318,6 @@ As Meera settles into bed that night, she reflects on how much simpler her spiri
 
 **Team & Resources**: Small, lean team structure recommended – 2 React Native developers, 1 UI/UX designer, 1 content writer/curator, 1 product manager/founder. Outsource audio recording to professional voice artists; leverage open-source mapping solutions to minimize costs. Keep monthly burn rate low (~$8-10K) until product-market fit is validated.
 
+
+
+
