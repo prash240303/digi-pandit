@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { getAlbumById, Track } from "./data/albumData";
+import { getAlbumById, Track } from "../../../data/albumData";
 import { useAudio } from "../../../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";

@@ -21,6 +21,7 @@
     "@hugeicons/react-native": "^1.0.11",
     "@ishubhamx/panchangam-js": "^2.1.2",
     "@legendapp/motion": "^2.4.0",
+    "@maplibre/maplibre-react-native": "^10.4.2",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.28",
@@ -43,6 +44,7 @@
     "expo-image": "~3.0.11",
     "expo-linear-gradient": "^15.0.8",
     "expo-linking": "~8.0.11",
+    "expo-location": "~19.0.8",
     "expo-router": "~6.0.23",
     "expo-splash-screen": "~31.0.13",
     "expo-status-bar": "~3.0.9",
@@ -69,6 +71,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.16",
     "@types/react": "~19.1.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^9.25.0",

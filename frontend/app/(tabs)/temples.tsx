@@ -1,10 +1,14 @@
+// Cleaned up imports
 import { COLOR } from "@/constants/colors";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native";
+import { View } from "react-native";
+import { Map, MapControls } from "@/components/ui/map";
+
 export default function TabTwoScreen() {
   return (
-    <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
-      <ScrollView className="px-1 pb-2 text-black">templees</ScrollView>
-    </SafeAreaView>
+    <View className="flex-1" style={{ backgroundColor: COLOR.cream }}>
+      <Map>
+        <MapControls />
+      </Map>
+    </View>
   );
 }

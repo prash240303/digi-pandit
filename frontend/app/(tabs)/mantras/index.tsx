@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { ALBUMS, Album } from "./data/albumData";
+import { ALBUMS, Album } from "../../../data/albumData";
 import { useAudio } from "../../../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";
@@ -62,7 +62,10 @@ const AlbumCard: React.FC<{ album: Album; onPress: () => void }> = ({
         />
       </View>
     </View>
-    <Text className="text-gray-900 font-inter-bold text-sm mt-2" numberOfLines={1}>
+    <Text
+      className="text-gray-900 font-inter-bold text-sm mt-2"
+      numberOfLines={1}
+    >
       {album.title}
     </Text>
     <Text className="text-gray-500 font-inter-regular text-xs mt-0.5">

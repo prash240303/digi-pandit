@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import { Audio, AVPlaybackStatus } from "expo-av";
-import { Track, Album } from "../app/(tabs)/mantras/data/albumData";
+import { Track, Album } from "../data/albumData";
 
 interface PlayerState {
   currentTrack: Track | null;
