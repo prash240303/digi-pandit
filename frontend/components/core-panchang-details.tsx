@@ -67,7 +67,7 @@ function Panchangalgetails({ panchangam }: any) {
           size={32}
           icon={AiContentGenerator01Icon}
         />
-        <Text className="text-primary text-2xl font-merriweather-semibold">
+        <Text className="text-primary text-2xl font-playfair-medium">
           Core Panchang
         </Text>
       </View>

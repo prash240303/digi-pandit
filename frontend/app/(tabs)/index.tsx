@@ -67,7 +67,7 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
   return (
     <TouchableOpacity activeOpacity={0.88}>
       <View
-        className="rounded-3xl overflow-hidden"
+        className="rounded-3xl overflow-hidden shadow-md shadow-primary"
         style={{ backgroundColor: observance.color, minHeight: 160 }}
       >
         {/* Decorative circles */}
@@ -116,8 +116,7 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
           >
             <Text
               variant="small"
-              className="font-semibold tracking-wide"
-              style={{ color: "#FFFFFFCC" }}
+              className="font-semibold text-neutral-200 tracking-wide"
             >
               {label.toUpperCase()}
             </Text>
@@ -130,7 +129,7 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
             <Ionicons name={observance.iconName} size={28} color="#FFFFFFCC" />
             <Text
               variant="h3"
-              className="text-left text-white font-playfair-bold"
+              className="text-left text-white font-playfair-medium"
             >
               {observance.name}
             </Text>
@@ -139,8 +138,8 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
           {/* Description */}
           <Text
             variant="muted"
-            className="mt-1.5 leading-5"
-            style={{ color: "#FFFFFFAA" }}
+            className="mt-1.5 text-neutral-300 leading-5"
+  
           >
             {observance.description}
           </Text>
@@ -149,8 +148,7 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
           <View className="flex-row items-center gap-1 mt-3">
             <Text
               variant="small"
-              className="font-semibold"
-              style={{ color: "#FFFFFFBB" }}
+              className="font-semibold text-white"
             >
               Learn more
             </Text>
@@ -251,7 +249,7 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
   return (
     <View className="gap-2">
       <View className="flex-row items-center justify-between">
-        <Text variant="small" className="font-bold tracking-wide text-ink">
+        <Text className="text-xl font-playfair-medium text-primary">
           My Favorites
         </Text>
         {!isEmpty && (
@@ -326,7 +324,7 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
 
   return (
     <View className="gap-2">
-      <Text variant="small" className="font-bold tracking-wide text-ink">
+      <Text className="text-xl font-playfair-medium text-primary">
         Explore
       </Text>
       <View className="flex-row flex-wrap gap-2.5">

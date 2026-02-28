@@ -121,7 +121,7 @@ export default function MantrasIndex() {
         <View className="px-5 pt-4 pb-3 flex-row items-center justify-between">
           <View>
             <Text
-              className="text-2xl font-merriweather-bold text-gray-900"
+              className="text-2xl font-playfair-bold text-gray-900"
               style={{ letterSpacing: -0.5 }}
             >
               Mantras & Aarti

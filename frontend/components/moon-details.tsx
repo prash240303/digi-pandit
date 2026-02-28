@@ -1,8 +1,9 @@
 import React from "react";
 import { View } from "react-native";
-import { Text } from "./ui/text"; // Assuming this is your custom text component
-import { MoveUpRight, MoveDownLeft, Sun, Sunset } from "lucide-react-native";
-import { LinearGradient } from "expo-linear-gradient"; // Ensure this is installed
+import { Text } from "./ui/text";
+import { LinearGradient } from "expo-linear-gradient"; 
+import { HugeiconsIcon } from "@hugeicons/react-native";
+import { ArrowDownRight01Icon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 
 function MoonDetails({
   panchangam,
@@ -48,7 +49,7 @@ function MoonDetails({
                 {getPhaseLabel(illumination)}
               </Text>
             </View>
-            <Text className="text-white text-7xl font-light tracking-tighter">
+            <Text className="text-white text-7xl  font-merriweather-bold font-light tracking-tighter">
               {illumination}%
             </Text>
             <Text className="text-neutral-400 text-lg mt-[-8px] ml-1">
@@ -69,12 +70,16 @@ function MoonDetails({
         <View className="flex-row justify-between mb-10">
           <View>
             <View className="flex-row items-center gap-1.5 mb-1">
-              <MoveDownLeft size={14} color="#a3a3a3" />
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                size={14}
+                color="#a3a3a3"
+              />
               <Text className="text-neutral-300 text-[10px] font-bold tracking-widest uppercase">
                 Moonrise
               </Text>
             </View>
-            <Text className="text-white text-2xl font-medium">
+            <Text className="text-white text-2xl font-merriweather-medium">
               {moonriseTime || "10:06"}{" "}
               <Text className="text-neutral-400 text-sm">PM</Text>
             </Text>
@@ -85,9 +90,13 @@ function MoonDetails({
               <Text className="text-neutral-300 text-[10px] font-bold tracking-widest uppercase">
                 Moonset
               </Text>
-              <MoveUpRight size={14} color="#a3a3a3" />
+              <HugeiconsIcon
+                icon={ArrowDownRight01Icon}
+                size={14}
+                color="#a3a3a3"
+              />
             </View>
-            <Text className="text-white text-2xl font-medium">
+            <Text className="text-white text-2xl  font-merriweather-medium">
               {moonsetTime || "10:10"}{" "}
               <Text className="text-neutral-400 text-sm">AM</Text>
             </Text>

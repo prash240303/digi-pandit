@@ -36,7 +36,7 @@ function MuhurataDetails({ panchangam }: any) {
       {/* Section Header */}
       <View className="flex-row gap-2 items-center mb-1">
         <HugeiconsIcon icon={ClockIcon} color={PRIMARY} size={32} />
-        <Text className="text-2xl font-merriweather-semibold text-primary">
+        <Text className="text-2xl font-playfair-medium text-primary">
           Muhurta & Timings
         </Text>
       </View>

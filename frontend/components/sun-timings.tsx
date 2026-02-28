@@ -1,3 +1,8 @@
+import {
+  ArrowDownRight01Icon,
+  ArrowUpRight01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { View, Text, Dimensions } from "react-native";
 import Svg, { Circle, Line, G } from "react-native-svg";
@@ -54,7 +59,11 @@ export default function SunriseSunsetCard({
           {/* Sunrise */}
           <View className="flex-1">
             <View className="flex-row items-center gap-1.5 mb-1.5">
-              <SunriseIcon />
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                size={14}
+                color="#a3a3a3"
+              />
               <Text className="text-ink-light text-[11px] text-lg font-inter-medium tracking-[1.5px] uppercase">
                 SUNRISE
               </Text>
@@ -78,7 +87,11 @@ export default function SunriseSunsetCard({
               <Text className="text-ink-light text-[11px] text-lg font-inter-medium tracking-[1.5px] uppercase">
                 SUNSET
               </Text>
-              <SunsetIcon />
+              <HugeiconsIcon
+                icon={ArrowDownRight01Icon}
+                size={14}
+                color="#a3a3a3"
+              />
             </View>
             <View className="flex-row items-end justify-end gap-1">
               <Text className="text-ink text-3xl  font-merriweather-medium tracking-tight leading-[34px]">

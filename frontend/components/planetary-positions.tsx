@@ -240,7 +240,7 @@ export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
       <View className="flex-row items-center gap-2 mb-1">
         {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
         <HugeiconsIcon size={32} color={PRIMARY} icon={SolarSystem01Icon} />
-        <Text className="text-2xl font-merriweather-semibold text-primary">
+        <Text className="text-2xl font-playfair-medium text-primary">
           Graha Sthiti
         </Text>
       </View>
