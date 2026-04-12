@@ -1,299 +1,431 @@
+// data/albumData.ts
+
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+/** A require()-based local asset (number) or a remote/file URI */
+export type TrackSource = number | { uri: string };
+
 export interface Track {
   id: string;
-  title: string;
-  subtitle: string;
-  duration: string;
-  durationSecs: number;
-  // Replace these with your actual local asset paths: require('../../assets/audio/filename.mp3')
-  audioUrl: string;
+  title: string; // human-readable display name
+  subtitle: string; // artist / album line shown in UI
+  duration: string; // display string e.g. "4:32"  (populate once known)
+  source: TrackSource; // passed directly to expo-av loadAsync()
 }
 
 export interface Album {
   id: string;
   title: string;
-  type: string;
-  category: 'Deity' | 'Festival' | 'Popular';
-  image: string;
-  accentColor: string;
   description: string;
+  image: string; // remote URI used for artwork
+  type: string; // "Bhajan" | "Mantra" | "Aarti" …
+  category: "Deity" | "Festival" | "General";
   tracks: Track[];
 }
 
-export const ALBUMS: Album[] = [
+// ─── Helper ─────────────────────────────────────────────────────────────────
+
+/** Convert a CamelCase filename stem to a spaced readable title */
+function toTitle(stem: string): string {
+  return stem
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    .replace(/-(\d)/g, " $1") // "Amrutwani-1" → "Amrutwani 1"
+    .replace(/-/g, " ")
+    .trim();
+}
+
+// ─── Hindi Bhajans Collection ────────────────────────────────────────────────
+//
+// 50 tracks successfully downloaded from:
+//   https://archive.org/details/HindiBhajans-collection
+//
+// 3 tracks (BhaiReMatDeejo, DOHAWALI, MannNaRangay) returned 401 and are omitted.
+
+const BHAJAN_SUBTITLE = "Hindi Bhajans Collection · Archive.org";
+const BHAJAN_IMAGE = "https://archive.org/services/img/HindiBhajans-collection";
+
+const hindiBhajanstracks: Track[] = [
   {
-    id: '1',
-    title: 'Lord Shiva',
-    type: 'Mantras',
-    category: 'Deity',
-    image: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=400&q=80',
-    accentColor: '#1E3A5F',
-    description: 'Sacred chants for peace and power',
-    tracks: [
-      {
-        id: 't1-1',
-        title: 'Om Namah Shivaya',
-        subtitle: 'Panchakshara Mantra',
-        duration: '05:20',
-        durationSecs: 320,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/om-namah-shivaya.mp3',
-      },
-      {
-        id: 't1-2',
-        title: 'Shiv Tandav Stotram',
-        subtitle: 'Ravana Krutham',
-        duration: '09:12',
-        durationSecs: 552,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/shiv-tandav.mp3',
-      },
-      {
-        id: 't1-3',
-        title: 'Maha Mrityunjaya Mantra',
-        subtitle: 'Healing Chant · 108 Repetitions',
-        duration: '18:30',
-        durationSecs: 1110,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/mahamrityunjaya.mp3',
-      },
-      {
-        id: 't1-4',
-        title: 'Lingashtakam',
-        subtitle: 'Eight stanzas on Shivalinga',
-        duration: '07:45',
-        durationSecs: 465,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/lingashtakam.mp3',
-      },
-      {
-        id: 't1-5',
-        title: 'Shiva Chalisa',
-        subtitle: 'Forty Verses',
-        duration: '12:30',
-        durationSecs: 750,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/shiva-chalisa.mp3',
-      },
-      {
-        id: 't1-6',
-        title: 'Rudrashtakam',
-        subtitle: 'Eight Verses to Rudra',
-        duration: '08:15',
-        durationSecs: 495,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/rudrashtakam.mp3',
-      },
-    ],
+    id: "hb-01",
+    title: toTitle("AaoJiGharmeinpadharogajanandji"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/AaoJiGharmeinpadharogajanandji.mp3"),
   },
   {
-    id: '2',
-    title: 'Laxmi Mata',
-    type: 'Aarti',
-    category: 'Deity',
-    image: 'https://images.unsplash.com/photo-1604328698692-f76ea9498e76?w=400&q=80',
-    accentColor: '#7B3F00',
-    description: 'Invocations for wealth and prosperity',
-    tracks: [
-      {
-        id: 't2-1',
-        title: 'Jai Laxmi Mata',
-        subtitle: 'Morning Aarti',
-        duration: '06:10',
-        durationSecs: 370,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/laxmi-aarti.mp3',
-      },
-      {
-        id: 't2-2',
-        title: 'Shri Sukta',
-        subtitle: 'Vedic Hymn · Rigveda',
-        duration: '11:20',
-        durationSecs: 680,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/shri-sukta.mp3',
-      },
-      {
-        id: 't2-3',
-        title: 'Laxmi Gayatri Mantra',
-        subtitle: '108 Repetitions',
-        duration: '14:00',
-        durationSecs: 840,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/laxmi-gayatri.mp3',
-      },
-      {
-        id: 't2-4',
-        title: 'Kanakdhara Stotram',
-        subtitle: 'By Adi Shankaracharya',
-        duration: '09:30',
-        durationSecs: 570,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/kanakdhara.mp3',
-      },
-      {
-        id: 't2-5',
-        title: 'Mahalaxmi Ashtakam',
-        subtitle: 'Eight Verses',
-        duration: '05:45',
-        durationSecs: 345,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/mahalaxmi-ashtakam.mp3',
-      },
-    ],
+    id: "hb-02",
+    title: toTitle("BajeChe"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/BajeChe.mp3"),
   },
   {
-    id: '3',
-    title: 'Hanuman Ji',
-    type: 'Chants',
-    category: 'Deity',
-    image: 'https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=400&q=80',
-    accentColor: '#8B0000',
-    description: 'Powerful chants for strength & devotion',
-    tracks: [
-      {
-        id: 't3-1',
-        title: 'Hanuman Chalisa',
-        subtitle: 'By Tulsidas',
-        duration: '13:45',
-        durationSecs: 825,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/hanuman-chalisa.mp3',
-      },
-      {
-        id: 't3-2',
-        title: 'Bajrang Baan',
-        subtitle: 'Protective Chant',
-        duration: '10:20',
-        durationSecs: 620,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/bajrang-baan.mp3',
-      },
-      {
-        id: 't3-3',
-        title: 'Sankat Mochan',
-        subtitle: 'Remover of Difficulties',
-        duration: '08:00',
-        durationSecs: 480,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/sankat-mochan.mp3',
-      },
-      {
-        id: 't3-4',
-        title: 'Jai Hanuman',
-        subtitle: 'Morning Aarti',
-        duration: '05:30',
-        durationSecs: 330,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/jai-hanuman.mp3',
-      },
-    ],
+    id: "hb-03",
+    title: toTitle("BhajManRamCharan"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/BhajManRamCharan.mp3"),
   },
   {
-    id: '4',
-    title: 'Navratri Special',
-    type: 'Garba',
-    category: 'Festival',
-    image: 'https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=400&q=80',
-    accentColor: '#6B21A8',
-    description: 'Nine nights of divine feminine energy',
-    tracks: [
-      {
-        id: 't4-1',
-        title: 'Jai Mata Di',
-        subtitle: 'Festival Chant',
-        duration: '07:15',
-        durationSecs: 435,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/jai-mata-di.mp3',
-      },
-      {
-        id: 't4-2',
-        title: 'Durga Chalisa',
-        subtitle: 'Forty Verses',
-        duration: '12:00',
-        durationSecs: 720,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/durga-chalisa.mp3',
-      },
-      {
-        id: 't4-3',
-        title: 'Mahishasura Mardini',
-        subtitle: 'Stotram',
-        duration: '15:30',
-        durationSecs: 930,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/mahishasura-mardini.mp3',
-      },
-      {
-        id: 't4-4',
-        title: 'Aigiri Nandini',
-        subtitle: 'Classical Rendition',
-        duration: '09:45',
-        durationSecs: 585,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/aigiri-nandini.mp3',
-      },
-    ],
+    id: "hb-04",
+    title: toTitle("BhalaKisiKaKarNaSakoTo"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/BhalaKisiKaKarNaSakoTo.mp3"),
   },
   {
-    id: '5',
-    title: 'Diwali Aarti',
-    type: 'Festival',
-    category: 'Festival',
-    image: 'https://images.unsplash.com/photo-1605870445919-838d190e8e1b?w=400&q=80',
-    accentColor: '#92400E',
-    description: 'Festival of lights and blessings',
-    tracks: [
-      {
-        id: 't5-1',
-        title: 'Om Jai Jagdish Hare',
-        subtitle: 'Universal Aarti',
-        duration: '08:30',
-        durationSecs: 510,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/om-jai-jagdish.mp3',
-      },
-      {
-        id: 't5-2',
-        title: 'Laxmi Puja Mantra',
-        subtitle: 'Diwali Special',
-        duration: '10:00',
-        durationSecs: 600,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/laxmi-puja.mp3',
-      },
-      {
-        id: 't5-3',
-        title: 'Ganesh Vandana',
-        subtitle: 'Opening Invocation',
-        duration: '06:20',
-        durationSecs: 380,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/ganesh-vandana.mp3',
-      },
-    ],
+    id: "hb-05",
+    title: toTitle("BhataktaDoleKaahePrani"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/BhataktaDoleKaahePrani.mp3"),
   },
   {
-    id: '6',
-    title: 'Ganesh Utsav',
-    type: 'Bhakti',
-    category: 'Festival',
-    image: 'https://images.unsplash.com/photo-1567591370429-c3b1ba5bab69?w=400&q=80',
-    accentColor: '#065F46',
-    description: 'Celebrations of the elephant god',
-    tracks: [
-      {
-        id: 't6-1',
-        title: 'Ganesh Chaturthi Aarti',
-        subtitle: 'Festival Special',
-        duration: '07:00',
-        durationSecs: 420,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/ganesh-chaturthi.mp3',
-      },
-      {
-        id: 't6-2',
-        title: 'Vakratunda Mahakaya',
-        subtitle: 'Classical Mantra',
-        duration: '05:10',
-        durationSecs: 310,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/vakratunda.mp3',
-      },
-      {
-        id: 't6-3',
-        title: 'Ganesh Chalisa',
-        subtitle: 'Forty Verses',
-        duration: '11:45',
-        durationSecs: 705,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/ganesh-chalisa.mp3',
-      },
-      {
-        id: 't6-4',
-        title: 'Sukhkarta Dukhaharta',
-        subtitle: 'Traditional Aarti',
-        duration: '06:55',
-        durationSecs: 415,
-        audioUrl: 'https://archive.org/download/MantrasAndChants/sukhkarta.mp3',
-      },
-    ],
+    id: "hb-06",
+    title: toTitle("ChaleChaleReUmra"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ChaleChaleReUmra.mp3"),
+  },
+  {
+    id: "hb-07",
+    title: toTitle("ChamreKiPutli"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ChamreKiPutli.mp3"),
+  },
+  {
+    id: "hb-08",
+    title: toTitle("ChetRe"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ChetRe.mp3"),
+  },
+  {
+    id: "hb-09",
+    title: toTitle("ChitrakootKeGhaatPer"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ChitrakootKeGhaatPer.mp3"),
+  },
+  {
+    id: "hb-10",
+    title: toTitle("DekhTamasaLakdiKa"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/DekhTamasaLakdiKa.mp3"),
+  },
+  {
+    id: "hb-11",
+    title: toTitle("DekoVrindavan"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/DekoVrindavan.mp3"),
+  },
+  {
+    id: "hb-12",
+    title: toTitle("DoDinKiHaiSagai"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/DoDinKiHaiSagai.mp3"),
+  },
+  {
+    id: "hb-13",
+    title: toTitle("GhanaDin"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/GhanaDin.mp3"),
+  },
+  {
+    id: "hb-14",
+    title: "Guruji Bhajans (Part 2)",
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/GurujiBhajansAvseq02.mp3"),
+  },
+  {
+    id: "hb-15",
+    title: "Joban",
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/JOBAN.mp3"),
+  },
+  {
+    id: "hb-16",
+    title: toTitle("JayRaghunandanJaySiyaram"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/JayRaghunandanJaySiyaram.mp3"),
+  },
+  {
+    id: "hb-17",
+    title: toTitle("JisBhajanMeinRamKaNaam"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/JisBhajanMeinRamKaNaam.mp3"),
+  },
+  {
+    id: "hb-18",
+    title: toTitle("KabhiRamBanke"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KabhiRamBanke.mp3"),
+  },
+  {
+    id: "hb-19",
+    title: "Kabir Amrutwani (Part 1)",
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KabirAmrutwani-1.mp3"),
+  },
+  {
+    id: "hb-20",
+    title: "Kabir Amrutwani (Part 2)",
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KabirAmrutwani-2.mp3"),
+  },
+  {
+    id: "hb-21",
+    title: toTitle("KadAabolaSanweriya"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KadAabolaSanweriya.mp3"),
+  },
+  {
+    id: "hb-22",
+    title: toTitle("KaloJiKalo"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KaloJiKalo.mp3"),
+  },
+  {
+    id: "hb-23",
+    title: toTitle("KamreMeinKhadaYu"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KamreMeinKhadaYu.mp3"),
+  },
+  {
+    id: "hb-24",
+    title: toTitle("KhilonaMatiKa"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KhilonaMatiKa.mp3"),
+  },
+  {
+    id: "hb-25",
+    title: toTitle("KoiMahaneKahiyoRe"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/KoiMahaneKahiyoRe.mp3"),
+  },
+  {
+    id: "hb-26",
+    title: toTitle("MaanLe"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/MaanLe.mp3"),
+  },
+  {
+    id: "hb-27",
+    title: toTitle("ManLago"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ManLago.mp3"),
+  },
+  {
+    id: "hb-28",
+    title: toTitle("MeraChhotaSaSansar"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/MeraChhotaSaSansar.mp3"),
+  },
+  {
+    id: "hb-29",
+    title: toTitle("MereBholeBabaKo"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/MereBholeBabaKo.mp3"),
+  },
+  {
+    id: "hb-30",
+    title: toTitle("MurliwaleNeGherLayee"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/MurliwaleNeGherLayee.mp3"),
+  },
+  {
+    id: "hb-31",
+    title: toTitle("NaJaneTeraSaheb"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/NaJaneTeraSaheb.mp3"),
+  },
+  {
+    id: "hb-32",
+    title: toTitle("NaamLeLoShivKa"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/NaamLeLoShivKa.mp3"),
+  },
+  {
+    id: "hb-33",
+    title: toTitle("NainaNeecharKarLe"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/NainaNeecharKarLe.mp3"),
+  },
+  {
+    id: "hb-34",
+    title: toTitle("NatwarNagarNanda"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/NatwarNagarNanda.mp3"),
+  },
+  {
+    id: "hb-35",
+    title: toTitle("RahenaNahiDesBirana"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/RahenaNahiDesBirana.mp3"),
+  },
+  {
+    id: "hb-36",
+    title: "Ram Dhun",
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/RamDhun.mp3"),
+  },
+  {
+    id: "hb-37",
+    title: toTitle("RasKunjanMain"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/RasKunjanMain.mp3"),
+  },
+  {
+    id: "hb-38",
+    title: "Sa Sa Ri",
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/SaSaRee.mp3"),
+  },
+  {
+    id: "hb-39",
+    title: toTitle("SabMitJasi"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/SabMitJasi.mp3"),
+  },
+  {
+    id: "hb-40",
+    title: toTitle("SamajhMan"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/SamajhMan.mp3"),
+  },
+  {
+    id: "hb-41",
+    title: "Shri Ram Chandra Kripalu",
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ShriRamChandraKripalu.mp3"),
+  },
+  {
+    id: "hb-42",
+    title: toTitle("ShyamAanBasoVrindavanMein"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ShyamAanBasoVrindavanMein.mp3"),
+  },
+  {
+    id: "hb-43",
+    title: toTitle("ShyamChudiBechneAaya"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ShyamChudiBechneAaya.mp3"),
+  },
+  {
+    id: "hb-44",
+    title: toTitle("SiddhChoupaiyan"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/SiddhChoupaiyan.mp3"),
+  },
+  {
+    id: "hb-45",
+    title: toTitle("SukritKarleRamSamar"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/SukritKarleRamSamar.mp3"),
+  },
+  {
+    id: "hb-46",
+    title: toTitle("TajDiyaPranKaya"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/TajDiyaPranKaya.mp3"),
+  },
+  {
+    id: "hb-47",
+    title: toTitle("TaraHaiSaraJamana"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/TaraHaiSaraJamana.mp3"),
+  },
+  {
+    id: "hb-48",
+    title: toTitle("TeriGathariMeinLagaChor"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/TeriGathariMeinLagaChor.mp3"),
+  },
+  {
+    id: "hb-49",
+    title: toTitle("ThaliBharKeLeyai"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/ThaliBharKeLeyai.mp3"),
+  },
+  {
+    id: "hb-50",
+    title: toTitle("TuneHeeroSoJanam"),
+    subtitle: BHAJAN_SUBTITLE,
+    duration: "0:00",
+    source: require("../music_data/hindi_bhajans/TuneHeeroSoJanam.mp3"),
   },
 ];
 
-export const getAlbumById = (id: string) => ALBUMS.find((a) => a.id === id);
+// ─── Album registry ──────────────────────────────────────────────────────────
+
+export const ALBUMS: Album[] = [
+  {
+    id: "1",
+    title: "Hindi Bhajans",
+    description:
+      "50 devotional bhajans — Ram, Shyam, Shiv, Kabir & more. Public domain collection from Archive.org.",
+    image: BHAJAN_IMAGE,
+    type: "Bhajan",
+    category: "General",
+    tracks: hindiBhajanstracks,
+  },
+
+  // ── Add more albums here as you download them ──
+  // {
+  //   id: "2",
+  //   title: "Gayatri Mantra",
+  //   description: "108 repetitions of the Gayatri Mantra",
+  //   image: "https://...",
+  //   type: "Mantra",
+  //   category: "Deity",
+  //   tracks: [ ... ],
+  // },
+];
+
+// ─── Helpers used by screens ─────────────────────────────────────────────────
+
+export function getAlbumById(id: string): Album | undefined {
+  return ALBUMS.find((a) => a.id === id);
+}

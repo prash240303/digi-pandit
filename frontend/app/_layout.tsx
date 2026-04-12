@@ -5,10 +5,11 @@ import {
 } from "@react-navigation/native";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import "react-native-reanimated";
 import * as SplashScreen from "expo-splash-screen";
 import { PortalHost } from "@rn-primitives/portal";
+import { AudioProvider } from "../contexts/AudioContext";
 
 import {
   Merriweather_300Light,
@@ -133,7 +134,9 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <AudioProvider>
+        <RootLayoutNav />
+      </AudioProvider>
     </AuthProvider>
   );
 }

@@ -1,3 +1,5 @@
+// album.tsx
+
 import React, { useState } from "react";
 import {
   View,
@@ -12,7 +14,7 @@ import {
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { getAlbumById, Track } from "../../../data/albumData";
-import { useAudio } from "../../../contexts/Audiocontext";
+import { useAudio } from "../../../contexts/AudioContext";
 
 const ORANGE = "#E8590C";
 const { width } = Dimensions.get("window");

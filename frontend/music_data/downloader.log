@@ -1,0 +1,72 @@
+2026-03-06 22:30:38 [INFO    ] ============================================================
+2026-03-06 22:30:38 [INFO    ] Devotional Music Downloader started
+2026-03-06 22:30:38 [INFO    ] Output folder : /Users/prashant/Downloads/bhajans/devotional_albums
+2026-03-06 22:30:38 [INFO    ] Log file      : /Users/prashant/Downloads/bhajans/devotional_albums/downloader.log
+2026-03-06 22:30:38 [INFO    ] Mode: direct URL → https://archive.org/details/HindiBhajans-collection
+2026-03-06 22:30:42 [DEBUG   ] GET https://archive.org/metadata/HindiBhajans-collection → 200
+2026-03-06 22:30:42 [INFO    ] Item 'HindiBhajans-collection' has 53 MP3 file(s)
+2026-03-06 22:30:42 [INFO    ] Downloading 'Hindi Bhajans-collection' (53 tracks) → /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection
+2026-03-06 22:33:00 [WARNING ] Interrupted by user (Ctrl+C). Partial downloads retained.
+2026-03-07 10:17:23 [INFO    ] ============================================================
+2026-03-07 10:17:23 [INFO    ] Devotional Music Downloader started
+2026-03-07 10:17:23 [INFO    ] Output folder : /Users/prashant/Downloads/bhajans/devotional_albums
+2026-03-07 10:17:23 [INFO    ] Log file      : /Users/prashant/Downloads/bhajans/devotional_albums/downloader.log
+2026-03-07 10:17:23 [INFO    ] Mode: direct URL → https://archive.org/details/HindiBhajans-collection
+2026-03-07 10:17:26 [DEBUG   ] GET https://archive.org/metadata/HindiBhajans-collection → 200
+2026-03-07 10:17:26 [INFO    ] Item 'HindiBhajans-collection' has 53 MP3 file(s)
+2026-03-07 10:17:26 [INFO    ] Downloading 'Hindi Bhajans-collection' (53 tracks) → /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection
+2026-03-07 10:17:32 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/AaoJiGharmeinpadharogajanandji.mp3
+2026-03-07 10:17:44 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/BajeChe.mp3
+2026-03-07 10:17:50 [ERROR   ] Download failed https://archive.org/download/HindiBhajans-collection/BhaiReMatDeejo.mp3: 401 Client Error: Unauthorized for url: https://dn721507.ca.archive.org/0/items/HindiBhajans-collection/BhaiReMatDeejo.mp3
+2026-03-07 10:18:06 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/BhajManRamCharan.mp3
+2026-03-07 10:18:15 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/BhalaKisiKaKarNaSakoTo.mp3
+2026-03-07 10:18:20 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/BhataktaDoleKaahePrani.mp3
+2026-03-07 10:18:27 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ChaleChaleReUmra.mp3
+2026-03-07 10:18:33 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ChamreKiPutli.mp3
+2026-03-07 10:18:40 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ChetRe.mp3
+2026-03-07 10:18:45 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ChitrakootKeGhaatPer.mp3
+2026-03-07 10:18:47 [ERROR   ] Download failed https://archive.org/download/HindiBhajans-collection/DOHAWALI.mp3: 401 Client Error: Unauthorized for url: https://dn721507.ca.archive.org/0/items/HindiBhajans-collection/DOHAWALI.mp3
+2026-03-07 10:19:05 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/DekhTamasaLakdiKa.mp3
+2026-03-07 10:19:16 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/DekoVrindavan.mp3
+2026-03-07 10:19:26 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/DoDinKiHaiSagai.mp3
+2026-03-07 10:19:31 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/GhanaDin.mp3
+2026-03-07 10:20:23 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/GurujiBhajansAvseq02.mp3
+2026-03-07 10:20:28 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/JOBAN.mp3
+2026-03-07 10:20:32 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/JayRaghunandanJaySiyaram.mp3
+2026-03-07 10:20:38 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/JisBhajanMeinRamKaNaam.mp3
+2026-03-07 10:20:43 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KabhiRamBanke.mp3
+2026-03-07 10:20:57 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KabirAmrutwani-1.mp3
+2026-03-07 10:21:06 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KabirAmrutwani-2.mp3
+2026-03-07 10:21:11 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KadAabolaSanweriya.mp3
+2026-03-07 10:21:31 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KaloJiKalo.mp3
+2026-03-07 10:21:39 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KamreMeinKhadaYu.mp3
+2026-03-07 10:21:48 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KhilonaMatiKa.mp3
+2026-03-07 10:21:54 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/KoiMahaneKahiyoRe.mp3
+2026-03-07 10:22:00 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/MaanLe.mp3
+2026-03-07 10:22:05 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ManLago.mp3
+2026-03-07 10:22:08 [ERROR   ] Download failed https://archive.org/download/HindiBhajans-collection/MannNaRangay.mp3: 401 Client Error: Unauthorized for url: https://dn721507.ca.archive.org/0/items/HindiBhajans-collection/MannNaRangay.mp3
+2026-03-07 10:22:23 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/MeraChhotaSaSansar.mp3
+2026-03-07 10:22:33 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/MereBholeBabaKo.mp3
+2026-03-07 10:22:47 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/MurliwaleNeGherLayee.mp3
+2026-03-07 10:23:00 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/NaJaneTeraSaheb.mp3
+2026-03-07 10:23:13 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/NaamLeLoShivKa.mp3
+2026-03-07 10:23:21 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/NainaNeecharKarLe.mp3
+2026-03-07 10:23:26 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/NatwarNagarNanda.mp3
+2026-03-07 10:23:33 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/RahenaNahiDesBirana.mp3
+2026-03-07 10:23:39 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/RamDhun.mp3
+2026-03-07 10:23:45 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/RasKunjanMain.mp3
+2026-03-07 10:23:56 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/SaSaRee.mp3
+2026-03-07 10:24:11 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/SabMitJasi.mp3
+2026-03-07 10:24:19 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/SamajhMan.mp3
+2026-03-07 10:24:24 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ShriRamChandraKripalu.mp3
+2026-03-07 10:24:30 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ShyamAanBasoVrindavanMein.mp3
+2026-03-07 10:24:37 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ShyamChudiBechneAaya.mp3
+2026-03-07 10:24:45 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/SiddhChoupaiyan.mp3
+2026-03-07 10:25:00 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/SukritKarleRamSamar.mp3
+2026-03-07 10:25:10 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/TajDiyaPranKaya.mp3
+2026-03-07 10:25:21 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/TaraHaiSaraJamana.mp3
+2026-03-07 10:25:26 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/TeriGathariMeinLagaChor.mp3
+2026-03-07 10:25:31 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/ThaliBharKeLeyai.mp3
+2026-03-07 10:25:45 [INFO    ] ✔ Saved: /Users/prashant/Downloads/bhajans/devotional_albums/Hindi Bhajans-collection - Hindi Bhajans-collection/TuneHeeroSoJanam.mp3
+2026-03-07 10:25:45 [INFO    ] Done. Files saved to: /Users/prashant/Downloads/bhajans/devotional_albums
+2026-03-07 10:25:45 [INFO    ] ============================================================

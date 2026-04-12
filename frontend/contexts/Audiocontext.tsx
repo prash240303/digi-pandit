@@ -1,157 +1,208 @@
+// contexts/AudioContext.tsx
+//
+// Full expo-audio context — replaces the deprecated expo-av version.
+// Handles both local require() assets (TrackSource = number)
+// and remote { uri: string } sources transparently.
+//
+// Install dependency if not present:
+//   npx expo install expo-audio
+
 import React, {
   createContext,
+  useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
-  useCallback,
-  useEffect,
 } from "react";
-import { Audio, AVPlaybackStatus } from "expo-av";
-import { Track, Album } from "../data/albumData";
+import {
+  AudioModule,
+  useAudioPlayer,
+  useAudioPlayerStatus,
+} from "expo-audio";
+import { Album, Track, TrackSource } from "../data/albumData";
 
-interface PlayerState {
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface AudioContextValue {
+  /** Currently loaded track, or null */
   currentTrack: Track | null;
+  /** Album the current track belongs to */
   currentAlbum: Album | null;
+  /** True while audio is playing */
   isPlaying: boolean;
-  positionSecs: number;
-  durationSecs: number;
+  /** True while audio is buffering / loading */
   isLoading: boolean;
-}
-
-interface AudioContextType extends PlayerState {
+  /** Playback position in seconds */
+  positionSecs: number;
+  /** Total duration in seconds (0 until loaded) */
+  durationSecs: number;
+  /** Play a specific track. Replaces any current playback. */
   playTrack: (track: Track, album: Album) => Promise<void>;
-  togglePlayPause: () => Promise<void>;
-  seekTo: (secs: number) => Promise<void>;
-  playNext: () => void;
-  playPrev: () => void;
+  /** Toggle play / pause on the current track */
+  togglePlayPause: () => void;
+  /** Seek to an absolute position (seconds) */
+  seekTo: (secs: number) => void;
+  /** Skip to the next track in the current album */
+  playNext: () => Promise<void>;
+  /** Skip to the previous track (or restart if < 3 s in) */
+  playPrev: () => Promise<void>;
 }
 
-const AudioContext = createContext<AudioContextType | null>(null);
+// ─── Context ──────────────────────────────────────────────────────────────────
 
-export const useAudio = () => {
-  const ctx = useContext(AudioContext);
-  if (!ctx) throw new Error("useAudio must be used within AudioProvider");
+const AudioCtx = createContext<AudioContextValue | null>(null);
+
+export function useAudio(): AudioContextValue {
+  const ctx = useContext(AudioCtx);
+  if (!ctx) throw new Error("useAudio must be used inside <AudioProvider>");
   return ctx;
-};
+}
 
-export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const soundRef = useRef<Audio.Sound | null>(null);
-  const [state, setState] = useState<PlayerState>({
-    currentTrack: null,
-    currentAlbum: null,
-    isPlaying: false,
-    positionSecs: 0,
-    durationSecs: 0,
-    isLoading: false,
-  });
+// ─── Provider ─────────────────────────────────────────────────────────────────
+
+export function AudioProvider({ children }: { children: React.ReactNode }) {
+  // Single stable player instance for the lifetime of the provider.
+  // Pass null so no audio is loaded until playTrack() is called.
+  const player = useAudioPlayer(null);
+
+  // Reactive status — replaces the old onPlaybackStatusUpdate callback.
+  // Fields used: playing, isBuffering, currentTime, duration, didJustFinish.
+  const status = useAudioPlayerStatus(player);
+
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [currentAlbum, setCurrentAlbum] = useState<Album | null>(null);
+
+  // Stable refs so callbacks that close over these never go stale
+  // without needing to be re-declared.
+  const currentTrackRef = useRef<Track | null>(null);
+  const currentAlbumRef = useRef<Album | null>(null);
 
   useEffect(() => {
-    Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      staysActiveInBackground: true,
-      playsInSilentModeIOS: true,
-      shouldDuckAndroid: true,
+    currentTrackRef.current = currentTrack;
+  }, [currentTrack]);
+
+  useEffect(() => {
+    currentAlbumRef.current = currentAlbum;
+  }, [currentAlbum]);
+
+  // Forward-declared ref so the auto-advance effect can always call the
+  // latest version of playNext without it being a dependency.
+  const playNextRef = useRef<() => Promise<void>>(async () => {});
+
+  // ── Configure audio session once on mount ─────────────────────────────────
+  useEffect(() => {
+    AudioModule.setAudioModeAsync({
+      allowsRecording: false,
+      shouldPlayInBackground: true, // keep playing when screen locks
+      playsInSilentMode: true,      // respect iOS silent switch
     });
+
+    // player.remove() releases native resources when the provider unmounts.
     return () => {
-      soundRef.current?.unloadAsync();
+      player.remove();
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const onPlaybackStatusUpdate = useCallback((status: AVPlaybackStatus) => {
-    if (!status.isLoaded) return;
-    setState((prev) => ({
-      ...prev,
-      isPlaying: status.isPlaying,
-      positionSecs: (status.positionMillis ?? 0) / 1000,
-      durationSecs: (status.durationMillis ?? 0) / 1000,
-      isLoading: status.isBuffering,
-    }));
-    if (status.didJustFinish) {
-      setState((prev) => ({ ...prev, isPlaying: false, positionSecs: 0 }));
+  // ── Auto-advance when a track finishes ────────────────────────────────────
+  // Guard with a ref to fire only on the leading edge of didJustFinish=true.
+  const didHandleFinishRef = useRef(false);
+
+  useEffect(() => {
+    if (status.didJustFinish && !didHandleFinishRef.current) {
+      didHandleFinishRef.current = true;
+      playNextRef.current();
     }
-  }, []);
+    if (!status.didJustFinish) {
+      didHandleFinishRef.current = false;
+    }
+  }, [status.didJustFinish]);
 
+  // ── Core: load and play a track ───────────────────────────────────────────
+  // player.replace() swaps the source without tearing down the native player,
+  // which is lighter-weight than the old unload → createAsync dance.
   const playTrack = useCallback(
     async (track: Track, album: Album) => {
       try {
-        setState((prev) => ({
-          ...prev,
-          isLoading: true,
-          currentTrack: track,
-          currentAlbum: album,
-        }));
+        setCurrentTrack(track);
+        setCurrentAlbum(album);
 
-        if (soundRef.current) {
-          await soundRef.current.unloadAsync();
-          soundRef.current = null;
-        }
-
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: track.audioUrl },
-          { shouldPlay: true, progressUpdateIntervalMillis: 500 },
-          onPlaybackStatusUpdate,
-        );
-        soundRef.current = sound;
-        setState((prev) => ({
-          ...prev,
-          isLoading: false,
-          isPlaying: true,
-          positionSecs: 0,
-          durationSecs: track.durationSecs,
-        }));
-      } catch (e) {
-        console.warn("Audio load error:", e);
-        setState((prev) => ({ ...prev, isLoading: false }));
+        // track.source is either a require() number or { uri: string }
+        player.replace(track.source as any);
+        player.play();
+      } catch (err) {
+        console.error("playTrack error:", err);
       }
     },
-    [onPlaybackStatusUpdate],
+    [player],
   );
 
-  const togglePlayPause = useCallback(async () => {
-    if (!soundRef.current) return;
-    if (state.isPlaying) {
-      await soundRef.current.pauseAsync();
+  // ── Toggle play / pause ───────────────────────────────────────────────────
+  const togglePlayPause = useCallback(() => {
+    if (status.playing) {
+      player.pause();
     } else {
-      await soundRef.current.playAsync();
+      player.play();
     }
-  }, [state.isPlaying]);
+  }, [player, status.playing]);
 
-  const seekTo = useCallback(async (secs: number) => {
-    if (!soundRef.current) return;
-    await soundRef.current.setPositionAsync(secs * 1000);
-    setState((prev) => ({ ...prev, positionSecs: secs }));
-  }, []);
-
-  const playNext = useCallback(() => {
-    if (!state.currentTrack || !state.currentAlbum) return;
-    const tracks = state.currentAlbum.tracks;
-    const idx = tracks.findIndex((t) => t.id === state.currentTrack!.id);
-    const next = tracks[(idx + 1) % tracks.length];
-    playTrack(next, state.currentAlbum);
-  }, [state.currentTrack, state.currentAlbum, playTrack]);
-
-  const playPrev = useCallback(() => {
-    if (!state.currentTrack || !state.currentAlbum) return;
-    const tracks = state.currentAlbum.tracks;
-    const idx = tracks.findIndex((t) => t.id === state.currentTrack!.id);
-    const prev = tracks[(idx - 1 + tracks.length) % tracks.length];
-    playTrack(prev, state.currentAlbum);
-  }, [state.currentTrack, state.currentAlbum, playTrack]);
-
-  return (
-    <AudioContext.Provider
-      value={{
-        ...state,
-        playTrack,
-        togglePlayPause,
-        seekTo,
-        playNext,
-        playPrev,
-      }}
-    >
-      {children}
-    </AudioContext.Provider>
+  // ── Seek ──────────────────────────────────────────────────────────────────
+  const seekTo = useCallback(
+    (secs: number) => {
+      player.seekTo(secs);
+    },
+    [player],
   );
-};
+
+  // ── Next track ────────────────────────────────────────────────────────────
+  const playNext = useCallback(async () => {
+    const track = currentTrackRef.current;
+    const album = currentAlbumRef.current;
+    if (!track || !album) return;
+
+    const tracks = album.tracks;
+    const idx = tracks.findIndex((t) => t.id === track.id);
+    const next = tracks[(idx + 1) % tracks.length];
+    await playTrack(next, album);
+  }, [playTrack]);
+
+  // Keep the forward ref in sync so auto-advance always uses the latest version.
+  useEffect(() => {
+    playNextRef.current = playNext;
+  }, [playNext]);
+
+  // ── Previous track ────────────────────────────────────────────────────────
+  const playPrev = useCallback(async () => {
+    const track = currentTrackRef.current;
+    const album = currentAlbumRef.current;
+    if (!track || !album) return;
+
+    // If more than 3 seconds in, restart the current track instead.
+    if (status.currentTime > 3) {
+      player.seekTo(0);
+      return;
+    }
+
+    const tracks = album.tracks;
+    const idx = tracks.findIndex((t) => t.id === track.id);
+    const prev = tracks[(idx - 1 + tracks.length) % tracks.length];
+    await playTrack(prev, album);
+  }, [player, status.currentTime, playTrack]);
+
+  // ── Context value ─────────────────────────────────────────────────────────
+  const value: AudioContextValue = {
+    currentTrack,
+    currentAlbum,
+    isPlaying: status.playing,
+    isLoading: status.isBuffering,
+    positionSecs: status.currentTime,      // expo-audio gives seconds directly
+    durationSecs: status.duration ?? 0,
+    playTrack,
+    togglePlayPause,
+    seekTo,
+    playNext,
+    playPrev,
+  };
+
+  return <AudioCtx.Provider value={value}>{children}</AudioCtx.Provider>;
+}

@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { View } from "react-native";
-import { AudioProvider } from "../../../contexts/Audiocontext";
+import { AudioProvider } from "../../../contexts/AudioContext";
 import { FloatingPlayer } from "../../../components/Floatingplayer";
 
 export default function MantrasLayout() {

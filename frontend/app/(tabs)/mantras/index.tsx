@@ -1,3 +1,4 @@
+//index.ts
 import React, { useState, useMemo } from "react";
 import {
   View,
@@ -13,7 +14,7 @@ import {
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { ALBUMS, Album } from "../../../data/albumData";
-import { useAudio } from "../../../contexts/Audiocontext";
+import { useAudio } from "../../../contexts/AudioContext";
 
 const ORANGE = "#E8590C";
 const { width } = Dimensions.get("window");
