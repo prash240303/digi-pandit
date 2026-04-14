@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { View } from "react-native";
 import { AudioProvider } from "../../../contexts/Audiocontext";
 import { FloatingPlayer } from "../../../components/Floatingplayer";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MantrasLayout() {
   return (
@@ -11,7 +12,7 @@ export default function MantrasLayout() {
         index → album navigation without unmounting.
         It is absolutely positioned at the bottom (see FloatingPlayer.tsx).
       */}
-      <View className="flex-1 bg-neutral-50">
+      <SafeAreaView className="flex-1 bg-neutral-50">
         <Stack
           screenOptions={{ headerShown: false, animation: "slide_from_right" }}
         >
@@ -34,7 +35,7 @@ export default function MantrasLayout() {
 
         {/* Render after Stack so it draws on top */}
         <FloatingPlayer />
-      </View>
+      </SafeAreaView>
     </AudioProvider>
   );
 }

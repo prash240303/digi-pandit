@@ -1,5 +1,3 @@
-import { ArrowDown } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { View, Text } from "react-native";
 
@@ -22,10 +20,9 @@ export default function PeriodCard({
 }: PeriodCardProps) {
   const isAvoid = status === "AVOID";
 
-  // Tailwind Class Mappings
   const containerBg = isAvoid ? "bg-red-50" : "bg-emerald-50";
   const textColor = isAvoid ? "text-red-600" : "text-emerald-600";
-  const iconColor = isAvoid ? "#c2410c" : "#047857"; // tailwind amber-700 : emerald-700
+  const iconColor = isAvoid ? "#c2410c" : "#047857";
 
   return (
     <View className="flex-row items-center justify-between p-3 border border-neutral-200/70 bg-white rounded-xl shadow-sm shadow-slate-900/5">
@@ -54,7 +51,7 @@ export default function PeriodCard({
           {start}
         </Text>
 
-        <View className="text-xs text-neutral-600 font-ibm-mono-light">to</View>
+        <Text className="text-xs text-neutral-600 font-ibm-mono-light">to</Text>
 
         <Text className={`text-xs font-ibm-mono-light ${textColor}`}>
           {end}

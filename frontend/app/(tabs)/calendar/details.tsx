@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { Observer, getPanchangam } from "@ishubhamx/panchangam-js";
 import { format } from "date-fns";
@@ -10,9 +10,9 @@ import PanchangamDetails from "@/components/core-panchang-details";
 import MoonDetails from "@/components/moon-details";
 import MuhurataDetails from "@/components/muhurata-details";
 import CalendarDateSelector from "@/components/calendar-date-selector";
+import FestivalCard from "@/components/festival-card";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-
-/* -------------------- Helper Functions -------------------- */
 export default function DetailsPage() {
   const { date } = useLocalSearchParams();
 
@@ -27,9 +27,7 @@ export default function DetailsPage() {
   const moonrise = new Date(panchangam.moonrise);
   const moonset = new Date(panchangam.moonset);
 
-  console.log("moon", moonrise, moonset);
-
-  // --- NEW: Calculate Duration and Formatted Timings for Card ---
+  // Calculate Duration and Formatted Timings for Card 
   const diffMs = sunset.getTime() - sunrise.getTime();
   const totalSeconds = Math.floor(diffMs / 1000);
   const dayHours = Math.floor(totalSeconds / 3600);
@@ -40,69 +38,58 @@ export default function DetailsPage() {
 
   // Format times using date-fns
   const sunriseTime = format(sunrise, "hh:mm");
-  const sunrisePeriod = format(sunrise, "a"); // "AM"
+  const sunrisePeriod = format(sunrise, "a");
   const sunsetTime = format(sunset, "hh:mm");
-  const sunsetPeriod = format(sunset, "a"); // "PM"
+  const sunsetPeriod = format(sunset, "a");
 
   const moonriseTime = format(moonrise, "hh:mm");
-  const moonrisePeriod = format(moonrise, "a"); // "AM"
+  const moonrisePeriod = format(moonrise, "a");
   const moonsetTime = format(moonset, "hh:mm");
-  const moonsetPeriod = format(moonset, "a"); // "PM"
-  // --------------------------------------------------------------
+  const moonsetPeriod = format(moonset, "a"); 
 
   return (
-    <ScrollView className="flex-1 bg-[#FFFAF0]">
-      {/* Header */}
-      <View>
-        <CalendarDateSelector />
-      </View>
-
-      <View className="px-4 py-6 flex flex-col gap-8">
-        {/* Sun/Moon Timings - UPDATED */}
-        <View> 
-          <SunriseSunsetCard
-            duration={ formattedDuration}
-            sunriseTime={sunriseTime}
-            sunrisePeriod={sunrisePeriod}
-            sunsetTime={sunsetTime}
-            sunsetPeriod={sunsetPeriod}
-          />
+    <SafeAreaView className="flex-1 bg-[#FFFAF0]">
+      <ScrollView>
+        {/* Header */}
+        <View>
+          <CalendarDateSelector />
         </View>
 
-        {/* Panchang Details */}
-        <PanchangamDetails panchangam={panchangam} />
-        <MuhurataDetails panchangam={panchangam} />
-
-        {/* Chandrabalam */}
-        <MoonDetails
-          moonriseTime={`${moonriseTime} ${moonrisePeriod}`}
-          moonsetTime={`${moonsetTime} ${moonsetPeriod}`}
-          panchangam={panchangam}
-        />
-
-        {/* Planetary Positions */}
-        <PlanetaryPositions
-          data={{ planetaryPositions: panchangam.planetaryPositions }}
-        />
-
-        {/* Festivals */}
-        {panchangam.festivals?.length > 0 && (
-          <View className="bg-pink-50 p-4 rounded-xl border border-pink-100">
-            <Text className="font-semibold text-pink-700 mb-2 flex-row items-center">
-              🎉 <Text className="ml-2">Festivals</Text>
-            </Text>
-            {panchangam.festivals.map((festival: string, i: number) => (
-              <Text
-                key={i}
-                className="text-pink-600 ml-2 mb-1 text-sm font-medium"
-              >
-                • {festival}
-              </Text>
-            ))}
+        <View className="px-4 py-6 flex flex-col gap-8">
+          {/* Sun/Moon Timings  */}
+          <View>
+            <SunriseSunsetCard
+              duration={formattedDuration}
+              sunriseTime={sunriseTime}
+              sunrisePeriod={sunrisePeriod}
+              sunsetTime={sunsetTime}
+              sunsetPeriod={sunsetPeriod}
+            />
           </View>
-        )}
-      </View>
-      <View className="h-10" />
-    </ScrollView>
+
+          {/* Panchang Details */}
+          <PanchangamDetails panchangam={panchangam} />
+          <MuhurataDetails panchangam={panchangam} />
+
+          {/* Chandrabalam */}
+          <MoonDetails
+            moonriseTime={`${moonriseTime} ${moonrisePeriod}`}
+            moonsetTime={`${moonsetTime} ${moonsetPeriod}`}
+            panchangam={panchangam}
+          />
+
+          {/* Planetary Positions */}
+          <PlanetaryPositions
+            data={{ planetaryPositions: panchangam.planetaryPositions }}
+          />
+
+          {/* Festivals */}
+          {panchangam.festivals[0] && (
+            <FestivalCard festivals={panchangam.festivals} />
+          )}
+        </View>
+        <View className="h-10" />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
