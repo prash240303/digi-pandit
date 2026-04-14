@@ -36,6 +36,7 @@ export default function DetailsPage() {
 
   const formattedDuration = `${dayHours}h ${dayMinutes}m ${daySeconds}s`;
 
+
   // Format times using date-fns
   const sunriseTime = format(sunrise, "hh:mm");
   const sunrisePeriod = format(sunrise, "a");
@@ -84,7 +85,7 @@ export default function DetailsPage() {
           />
 
           {/* Festivals */}
-          {panchangam.festivals[0] && (
+          {panchangam.festivals.length>0 && (
             <FestivalCard festivals={panchangam.festivals} />
           )}
         </View>
