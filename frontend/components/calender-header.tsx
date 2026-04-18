@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, ScrollView, View, Text } from "react-native";
 
 import {
   ArrowLeft01Icon,
@@ -102,11 +102,15 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
             />
           </SelectTrigger>
           <SelectContent>
-            <NativeSelectScrollView>
+            <ScrollView
+              style={{ maxHeight: 250 }}
+              showsVerticalScrollIndicator
+              nestedScrollEnabled
+            >
               {years.map((y) => (
                 <SelectItem key={y} label={y.toString()} value={y.toString()} />
               ))}
-            </NativeSelectScrollView>
+            </ScrollView>
           </SelectContent>
         </Select>
       </View>

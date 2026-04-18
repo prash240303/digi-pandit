@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text } from "@/components/ui/text";
 import { COLOR } from "@/constants/colors";
 import OmBookIcon from "@/components/icons/om-book";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import FadeSlideIn from "@/components/ui/fade-in-slide";
 import { useAuth } from "@/contexts/auth-context";
 import {
@@ -76,13 +76,18 @@ function TopBar({
 function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
   const label = observance.isToday ? "Today" : `In ${observance.daysAway} days`;
 
- const selectedDate = new Date();
+  const selectedDate = new Date();
   const observer = new Observer(23.1, 75.46, 494);
   const panchangam = getPanchangam(selectedDate, observer);
-  const tithi = panchangam.tithis[0].name || "Not available";
+  const tithi = panchangam.tithis?.[0]?.name || "Not available";
+
+  const router = useRouter();
 
   return (
-    <TouchableOpacity activeOpacity={0.88}>
+    <TouchableOpacity 
+      activeOpacity={0.88} 
+      onPress={() => router.push("/calendar")}
+    >
       <View
         className="rounded-3xl overflow-hidden shadow-md shadow-primary"
         style={{ backgroundColor: observance.color, minHeight: 160 }}
@@ -376,7 +381,8 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
 // ─── HomeScreen ───────────────────────────────────────────────────────────────
 export default function HomeScreen() {
   const [dayTime, setDayTime] = useState<DayPeriod>("Morning");
-  const { profile } = useAuth(); // ← real data from Supabase
+  const { profile } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const hours = getHours(new Date());

@@ -17,36 +17,61 @@ export default function DetailsPage() {
   const { date } = useLocalSearchParams();
 
   // Parse date and regenerate panchangam
-  const selectedDate = new Date(date as string);
+  const selectedDate = date ? new Date(date as string) : new Date();
+  if (isNaN(selectedDate.getTime())) {
+    // Fallback if invalid date
+    return (
+      <View className="flex-1 bg-[#FFFAF0] items-center justify-center">
+        <Text>Invalid Date Selected</Text>
+      </View>
+    );
+  }
+
   const observer = new Observer(23.1, 75.46, 494);
   const panchangam = getPanchangam(selectedDate, observer);
 
   // Get sunrise/sunset Dates
-  const sunrise = new Date(panchangam.sunrise);
-  const sunset = new Date(panchangam.sunset);
-  const moonrise = new Date(panchangam.moonrise);
-  const moonset = new Date(panchangam.moonset);
+  const sunrise = panchangam.sunrise ? new Date(panchangam.sunrise) : null;
+  const sunset = panchangam.sunset ? new Date(panchangam.sunset) : null;
+  const moonrise = panchangam.moonrise ? new Date(panchangam.moonrise) : null;
+  const moonset = panchangam.moonset ? new Date(panchangam.moonset) : null;
 
-  // Calculate Duration and Formatted Timings for Card 
-  const diffMs = sunset.getTime() - sunrise.getTime();
-  const totalSeconds = Math.floor(diffMs / 1000);
-  const dayHours = Math.floor(totalSeconds / 3600);
-  const dayMinutes = Math.floor((totalSeconds % 3600) / 60);
-  const daySeconds = totalSeconds % 60;
-
-  const formattedDuration = `${dayHours}h ${dayMinutes}m ${daySeconds}s`;
-
+  // Calculate Duration and Formatted Timings for Card
+  let formattedDuration = "N/A";
+  if (
+    sunrise &&
+    sunset &&
+    !isNaN(sunrise.getTime()) &&
+    !isNaN(sunset.getTime())
+  ) {
+    const diffMs = sunset.getTime() - sunrise.getTime();
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const dayHours = Math.floor(totalSeconds / 3600);
+    const dayMinutes = Math.floor((totalSeconds % 3600) / 60);
+    const daySeconds = totalSeconds % 60;
+    formattedDuration = `${dayHours}h ${dayMinutes}m ${daySeconds}s`;
+  }
 
   // Format times using date-fns
-  const sunriseTime = format(sunrise, "hh:mm");
-  const sunrisePeriod = format(sunrise, "a");
-  const sunsetTime = format(sunset, "hh:mm");
-  const sunsetPeriod = format(sunset, "a");
+  const sunriseTime =
+    sunrise && !isNaN(sunrise.getTime()) ? format(sunrise, "hh:mm") : "--:--";
+  const sunrisePeriod =
+    sunrise && !isNaN(sunrise.getTime()) ? format(sunrise, "a") : "";
+  const sunsetTime =
+    sunset && !isNaN(sunset.getTime()) ? format(sunset, "hh:mm") : "--:--";
+  const sunsetPeriod =
+    sunset && !isNaN(sunset.getTime()) ? format(sunset, "a") : "";
 
-  const moonriseTime = format(moonrise, "hh:mm");
-  const moonrisePeriod = format(moonrise, "a");
-  const moonsetTime = format(moonset, "hh:mm");
-  const moonsetPeriod = format(moonset, "a"); 
+  const moonriseTime =
+    moonrise && !isNaN(moonrise.getTime())
+      ? format(moonrise, "hh:mm")
+      : "--:--";
+  const moonrisePeriod =
+    moonrise && !isNaN(moonrise.getTime()) ? format(moonrise, "a") : "";
+  const moonsetTime =
+    moonset && !isNaN(moonset.getTime()) ? format(moonset, "hh:mm") : "--:--";
+  const moonsetPeriod =
+    moonset && !isNaN(moonset.getTime()) ? format(moonset, "a") : "";
 
   return (
     <SafeAreaView className="flex-1 bg-[#FFFAF0]">
@@ -85,7 +110,7 @@ export default function DetailsPage() {
           />
 
           {/* Festivals */}
-          {panchangam.festivals.length>0 && (
+          {panchangam.festivals.length > 0 && (
             <FestivalCard festivals={panchangam.festivals} />
           )}
         </View>

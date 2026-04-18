@@ -10,9 +10,9 @@ import React, { useEffect } from "react";
 import "react-native-reanimated";
 import * as SplashScreen from "expo-splash-screen";
 import { PortalHost } from "@rn-primitives/portal";
-import { ActivityIndicator, View } from 'react-native';
-import { AuthProvider, useAuth } from '../contexts/auth-context';
-import { OnboardingProvider } from '../contexts/onboarding-context';
+import { ActivityIndicator, View } from "react-native";
+import { AuthProvider, useAuth } from "../contexts/auth-context";
+import { OnboardingProvider } from "../contexts/onboarding-context";
 
 import {
   Merriweather_300Light,
@@ -62,19 +62,19 @@ function AuthGate() {
   useEffect(() => {
     if (loading) return;
 
-    const inAuth = segments[0] === '(auth)';
-    const inOnboarding = segments[0] === '(onboarding)';
-    const inTabs = segments[0] === '(tabs)';
+    const inAuth = segments[0] === "(auth)";
+    const inOnboarding = segments[0] === "(onboarding)";
+    const inTabs = segments[0] === "(tabs)";
 
     if (!session) {
       // Not logged in → auth
-      if (!inAuth) router.replace('/(auth)');
+      if (!inAuth) router.replace("/(auth)");
     } else if (!profile?.onboarding_complete) {
       // Logged in but onboarding not done
-      if (!inOnboarding) router.replace('/(onboarding)/Step1_BasicInfo');
+      if (!inOnboarding) router.replace("/(onboarding)/Step1_BasicInfo");
     } else {
       // Fully set up → main app
-      if (inAuth || inOnboarding) router.replace('/(tabs)');
+      if (inAuth || inOnboarding) router.replace("/(tabs)");
     }
   }, [session, profile, loading, segments]);
 
@@ -88,7 +88,14 @@ function RootLayoutNav() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f0f0f' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#0f0f0f",
+        }}
+      >
         <ActivityIndicator color="#7C3AED" size="large" />
       </View>
     );
@@ -98,9 +105,9 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <AuthGate />
       <Stack>
-        <Stack.Screen name="(tabs)"        options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)"        options={{ headerShown: false }} />
-        <Stack.Screen name="(onboarding)"  options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
         <Stack.Screen
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}
@@ -147,10 +154,10 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <OnboardingProvider>
-        <RootLayoutNav />
-      </OnboardingProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <OnboardingProvider>
+          <RootLayoutNav />
+        </OnboardingProvider>
+      </AuthProvider>
   );
 }

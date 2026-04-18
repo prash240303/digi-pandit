@@ -1,10 +1,8 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { useRouter } from "expo-router";
-import { Button } from "@/components/ui/button";
 import { TouchableOpacity, View, Text } from "react-native";
 import { getPanchangam, Observer } from "@ishubhamx/panchangam-js";
-import { format } from "date-fns";
 import CalendarHeader from "./calender-header";
 
 /* -------------------- Types -------------------- */
@@ -17,68 +15,10 @@ interface CalendarDayData {
 const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 /* -------------------- Helper Functions -------------------- */
-const getCurrentTithi = (
-  panchangam: any,
-): { tithi: string; vara: string } | null => {
-  if (!panchangam?.tithis || panchangam.tithis.length === 0) {
-    return null;
-  }
-  return {
-    tithi: panchangam.tithi,
-    vara: panchangam.vara,
-  };
-};
-
 const getCurrentNakshatra = (panchangam: any) => {
   if (!panchangam.nakshatras || panchangam.nakshatras.length === 0)
     return "N/A";
   return panchangam?.nakshatras[1]?.name;
-};
-
-const getBrahmaMuhurta = (panchangam: any) => {
-  const bm = panchangam?.brahmaMuhurta;
-  if (!bm?.start || !bm?.end) return null;
-  const start = new Date(bm.start);
-  const end = new Date(bm.end);
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-  return {
-    start: format(start, "dd MMM yyyy hh:mm a"),
-    end: format(end, "dd MMM yyyy hh:mm a"),
-  };
-};
-
-const getYamagandaKalam = (panchangam: any) => {
-  const bm = panchangam?.yamagandaKalam;
-  if (!bm?.start || !bm?.end) return null;
-  const start = new Date(bm.start);
-  const end = new Date(bm.end);
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-  return {
-    start: format(start, "dd MMM yyyy hh:mm a"),
-    end: format(end, "dd MMM yyyy hh:mm a"),
-  };
-};
-
-const getGulikaKalam = (panchangam: any) => {
-  const bm = panchangam?.gulikaKalam;
-  if (!bm?.start || !bm?.end) return null;
-  const start = new Date(bm.start);
-  const end = new Date(bm.end);
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-  return {
-    start: format(start, "dd MMM yyyy hh:mm a"),
-    end: format(end, "dd MMM yyyy hh:mm a"),
-  };
-};
-
-const getRahuKalam = (panchangam: any) => {
-  const start = panchangam.rahuKalamStart;
-  const end = panchangam.rahuKalamEnd;
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-  return {
-    start: format(start, "dd MMM yyyy hh:mm a"),
-    end: format(end, "dd MMM yyyy hh:mm a"),
-  };
 };
 
 const getChandrabalam = (panchangam: any) => {
@@ -101,14 +41,12 @@ const getChandrabalam = (panchangam: any) => {
   } else {
     moon = "🌖 ";
   }
-  return <Text>{moon}</Text>;
+  return moon;
 };
 
 /* -------------------- Component -------------------- */
 const PanchangamCalendar: React.FC = () => {
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 0, 1));
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
@@ -129,9 +67,6 @@ const PanchangamCalendar: React.FC = () => {
         date,
         panchangam: getPanchangam(date, CalObserver),
       };
-      if (d === 3) {
-        console.log("2 Jan:", dayData);
-      }
       days.push(dayData);
     }
     return days;
@@ -141,13 +76,6 @@ const PanchangamCalendar: React.FC = () => {
   for (let i = 0; i < calendarDays.length; i += 7) {
     weeks.push(calendarDays.slice(i, i + 7));
   }
-
-  const brahma = selectedDay ? getBrahmaMuhurta(selectedDay.panchangam) : null;
-  const gulika = selectedDay ? getGulikaKalam(selectedDay.panchangam) : null;
-  const rahu = selectedDay ? getRahuKalam(selectedDay.panchangam) : null;
-  const yamaganda = selectedDay
-    ? getYamagandaKalam(selectedDay.panchangam)
-    : null;
 
   const router = useRouter();
   const handlePress = (selectedDay: Date) => {
@@ -160,7 +88,7 @@ const PanchangamCalendar: React.FC = () => {
   };
 
   return (
-    <View className="p-4 gap-4 flex-1">
+    <View className="p-2 gap-4 flex-1">
       {/* Header Controls — now a separate component */}
       <CalendarHeader
         month={month}
@@ -175,7 +103,7 @@ const PanchangamCalendar: React.FC = () => {
       />
 
       {/* --- GRID HEADER (Weekdays) --- */}
-      <View className="flex-row w-full">
+      <View className="flex-row w-full  gap-[1px] ">
         {WEEKDAY_NAMES.map((d) => (
           <View
             key={d}
@@ -193,19 +121,23 @@ const PanchangamCalendar: React.FC = () => {
       <View className="flex-row flex-wrap w-full">
         {weeks.flat().map((day, i) => {
           if (!day) {
-            return <View key={`empty-${i}`} style={{ width: "14.28%" }} />;
+            return <View key={`empty-${i}`} style={{ width: "14.25%" , height:"auto"}} />;
           }
 
           const isFestival = day.panchangam.festivals.length > 0;
 
           return (
-            <View key={i} style={{ width: "14.28%" }} className="p-[2px]">
+            <View
+              key={i}
+              style={{ width: "14.28%", height: "auto" }}
+              className="overflow-hidden p-px"
+            >
               <TouchableOpacity
                 onPress={() => handlePress(day.date)}
-                className={`w-full aspect-[0.6] rounded-md h-24 border flex justify-between p-[2px] ${
+                className={`flex-1 h-fit rounded-md border flex-col justify-between px-px py-1 ${
                   isFestival
                     ? "bg-purple-100 border-purple-300"
-                    : "bg-amber-50 border-amber-200"
+                    : "bg-orange-50 border-orange-200"
                 }`}
               >
                 {/* Date Number & Moon Phase */}
@@ -215,22 +147,25 @@ const PanchangamCalendar: React.FC = () => {
                   >
                     {day.date.getDate()}
                   </Text>
-                  <Text className="text-lg mt-1">
+                  <Text className="text-lg shadow-orange-500 shadow-sm mt-1">
                     {getChandrabalam(day.panchangam)}
                   </Text>
                 </View>
 
-                {/* Panchang Info (Bottom aligned) */}
-                <View>
+                {/* Panchang Info */}
+                <View className="pb-1">
                   <Text
-                    numberOfLines={1}
-                    className={`text-[7px] text-center font-medium leading-tight ${isFestival ? "text-purple-700" : "text-amber-700"}`}
+                    numberOfLines={2} // allow wrap
+                    className={`text-[7px] text-center font-medium leading-tight ${
+                      isFestival ? "text-purple-700" : "text-amber-700"
+                    }`}
                   >
-                    {day.panchangam?.tithiTransitions[1]?.name ||
-                      day.panchangam?.tithi}
+                    {day.panchangam?.tithiTransitions?.[1]?.name ||
+                      day.panchangam?.tithi ||
+                      "N/A"}
                   </Text>
                   <Text
-                    numberOfLines={1}
+                    numberOfLines={2}
                     className="text-[7px] text-center text-stone-500 italic"
                   >
                     {getCurrentNakshatra(day.panchangam)}
