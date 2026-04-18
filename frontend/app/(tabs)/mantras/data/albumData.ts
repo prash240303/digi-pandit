@@ -19,7 +19,7 @@ export interface Album {
   tracks: Track[];
 }
 
-export const ALBUMS: Album[] = [
+const ALBUMS: Album[] = [
   {
     id: '1',
     title: 'Lord Shiva',
@@ -295,5 +295,6 @@ export const ALBUMS: Album[] = [
     ],
   },
 ];
+export default ALBUMS;
 
 export const getAlbumById = (id: string) => ALBUMS.find((a) => a.id === id);

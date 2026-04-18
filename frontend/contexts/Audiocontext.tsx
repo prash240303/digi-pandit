@@ -1,27 +1,28 @@
 import React, {
   createContext,
   useContext,
-  useRef,
   useState,
   useCallback,
-  useEffect,
 } from "react";
-import { Audio, AVPlaybackStatus } from "expo-av";
+import {
+  useAudioPlayer,
+  useAudioPlayerStatus,
+} from "expo-audio";
 import { Track, Album } from "../app/(tabs)/mantras/data/albumData";
 
 interface PlayerState {
   currentTrack: Track | null;
   currentAlbum: Album | null;
+}
+
+interface AudioContextType extends PlayerState {
   isPlaying: boolean;
   positionSecs: number;
   durationSecs: number;
   isLoading: boolean;
-}
-
-interface AudioContextType extends PlayerState {
   playTrack: (track: Track, album: Album) => Promise<void>;
-  togglePlayPause: () => Promise<void>;
-  seekTo: (secs: number) => Promise<void>;
+  togglePlayPause: () => void;
+  seekTo: (secs: number) => void;
   playNext: () => void;
   playPrev: () => void;
 }
@@ -37,113 +38,75 @@ export const useAudio = () => {
 export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const soundRef = useRef<Audio.Sound | null>(null);
-  const [state, setState] = useState<PlayerState>({
-    currentTrack: null,
-    currentAlbum: null,
-    isPlaying: false,
-    positionSecs: 0,
-    durationSecs: 0,
-    isLoading: false,
-  });
+  const player = useAudioPlayer();
+  const status = useAudioPlayerStatus(player);
 
-  useEffect(() => {
-    Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      staysActiveInBackground: true,
-      playsInSilentModeIOS: true,
-      shouldDuckAndroid: true,
-    });
-    return () => {
-      soundRef.current?.unloadAsync();
-    };
-  }, []);
-
-  const onPlaybackStatusUpdate = useCallback((status: AVPlaybackStatus) => {
-    if (!status.isLoaded) return;
-    setState((prev) => ({
-      ...prev,
-      isPlaying: status.isPlaying,
-      positionSecs: (status.positionMillis ?? 0) / 1000,
-      durationSecs: (status.durationMillis ?? 0) / 1000,
-      isLoading: status.isBuffering,
-    }));
-    if (status.didJustFinish) {
-      setState((prev) => ({ ...prev, isPlaying: false, positionSecs: 0 }));
-    }
-  }, []);
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [currentAlbum, setCurrentAlbum] = useState<Album | null>(null);
 
   const playTrack = useCallback(
     async (track: Track, album: Album) => {
       try {
-        setState((prev) => ({
-          ...prev,
-          isLoading: true,
-          currentTrack: track,
-          currentAlbum: album,
-        }));
+        setCurrentTrack(track);
+        setCurrentAlbum(album);
 
-        if (soundRef.current) {
-          await soundRef.current.unloadAsync();
-          soundRef.current = null;
-        }
+        await player.replace({
+          uri: track.audioUrl,
+        });
 
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: track.audioUrl },
-          { shouldPlay: true, progressUpdateIntervalMillis: 500 },
-          onPlaybackStatusUpdate,
-        );
-        soundRef.current = sound;
-        setState((prev) => ({
-          ...prev,
-          isLoading: false,
-          isPlaying: true,
-          positionSecs: 0,
-          durationSecs: track.durationSecs,
-        }));
+        player.play();
       } catch (e) {
         console.warn("Audio load error:", e);
-        setState((prev) => ({ ...prev, isLoading: false }));
       }
     },
-    [onPlaybackStatusUpdate],
+    [player],
   );
 
-  const togglePlayPause = useCallback(async () => {
-    if (!soundRef.current) return;
-    if (state.isPlaying) {
-      await soundRef.current.pauseAsync();
+  const togglePlayPause = useCallback(() => {
+    if (!status) return;
+    if (status.playing) {
+      player.pause();
     } else {
-      await soundRef.current.playAsync();
+      player.play();
     }
-  }, [state.isPlaying]);
+  }, [player, status]);
 
-  const seekTo = useCallback(async (secs: number) => {
-    if (!soundRef.current) return;
-    await soundRef.current.setPositionAsync(secs * 1000);
-    setState((prev) => ({ ...prev, positionSecs: secs }));
-  }, []);
+  const seekTo = useCallback(
+    (secs: number) => {
+      player.seekTo(secs);
+    },
+    [player],
+  );
 
   const playNext = useCallback(() => {
-    if (!state.currentTrack || !state.currentAlbum) return;
-    const tracks = state.currentAlbum.tracks;
-    const idx = tracks.findIndex((t) => t.id === state.currentTrack!.id);
+    if (!currentTrack || !currentAlbum) return;
+
+    const tracks = currentAlbum.tracks;
+    const idx = tracks.findIndex((t) => t.id === currentTrack.id);
     const next = tracks[(idx + 1) % tracks.length];
-    playTrack(next, state.currentAlbum);
-  }, [state.currentTrack, state.currentAlbum, playTrack]);
+
+    playTrack(next, currentAlbum);
+  }, [currentTrack, currentAlbum, playTrack]);
 
   const playPrev = useCallback(() => {
-    if (!state.currentTrack || !state.currentAlbum) return;
-    const tracks = state.currentAlbum.tracks;
-    const idx = tracks.findIndex((t) => t.id === state.currentTrack!.id);
+    if (!currentTrack || !currentAlbum) return;
+
+    const tracks = currentAlbum.tracks;
+    const idx = tracks.findIndex((t) => t.id === currentTrack.id);
     const prev = tracks[(idx - 1 + tracks.length) % tracks.length];
-    playTrack(prev, state.currentAlbum);
-  }, [state.currentTrack, state.currentAlbum, playTrack]);
+
+    playTrack(prev, currentAlbum);
+  }, [currentTrack, currentAlbum, playTrack]);
 
   return (
     <AudioContext.Provider
       value={{
-        ...state,
+        currentTrack,
+        currentAlbum,
+        isPlaying: status?.playing ?? false,
+        positionSecs: status?.currentTime ?? 0,
+        durationSecs: status?.duration ?? 0,
+        isLoading: status?.loading ?? false,
         playTrack,
         togglePlayPause,
         seekTo,

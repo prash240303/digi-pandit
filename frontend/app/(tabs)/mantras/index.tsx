@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { ALBUMS, Album } from "./data/albumData";
+import ALBUMS, { Album } from "./data/albumData";
 import { useAudio } from "../../../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";

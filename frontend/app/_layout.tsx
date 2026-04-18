@@ -1,3 +1,4 @@
+// app/_layout.tsx
 import {
   DarkTheme,
   DefaultTheme,
@@ -5,10 +6,13 @@ import {
 } from "@react-navigation/native";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import "react-native-reanimated";
 import * as SplashScreen from "expo-splash-screen";
 import { PortalHost } from "@rn-primitives/portal";
+import { ActivityIndicator, View } from 'react-native';
+import { AuthProvider, useAuth } from '../contexts/auth-context';
+import { OnboardingProvider } from '../contexts/onboarding-context';
 
 import {
   Merriweather_300Light,
@@ -47,30 +51,68 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+// ─── Auth Guard ───────────────────────────────────────────────────────────────
+function AuthGate() {
+  const { session, profile, loading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+
+    const inAuth = segments[0] === '(auth)';
+    const inOnboarding = segments[0] === '(onboarding)';
+    const inTabs = segments[0] === '(tabs)';
+
+    if (!session) {
+      // Not logged in → auth
+      if (!inAuth) router.replace('/(auth)');
+    } else if (!profile?.onboarding_complete) {
+      // Logged in but onboarding not done
+      if (!inOnboarding) router.replace('/(onboarding)/Step1_BasicInfo');
+    } else {
+      // Fully set up → main app
+      if (inAuth || inOnboarding) router.replace('/(tabs)');
+    }
+  }, [session, profile, loading, segments]);
+
+  return null; // just handles redirects, renders nothing
+}
+
+// ─── Nav ──────────────────────────────────────────────────────────────────────
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f0f0f' }}>
+        <ActivityIndicator color="#7C3AED" size="large" />
+      </View>
+    );
+  }
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      {/* <AuthGate> */}
+      <AuthGate />
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)"        options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)"        options={{ headerShown: false }} />
+        <Stack.Screen name="(onboarding)"  options={{ headerShown: false }} />
         <Stack.Screen
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}
         />
       </Stack>
-      {/* </AuthGate>  */}
       <StatusBar style="auto" />
       <PortalHost />
     </ThemeProvider>
   );
 }
 
+// ─── Root ─────────────────────────────────────────────────────────────────────
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     PlayfairDisplay_400Regular,
@@ -96,7 +138,6 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
-      // Hide the splash screen after the fonts have loaded (or an error was returned) and the UI is ready.
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
@@ -106,6 +147,10 @@ export default function RootLayout() {
   }
 
   return (
-      <RootLayoutNav />
+    <AuthProvider>
+      <OnboardingProvider>
+        <RootLayoutNav />
+      </OnboardingProvider>
+    </AuthProvider>
   );
 }
