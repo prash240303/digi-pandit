@@ -41,7 +41,6 @@ import {
 import { IBMPlexMono_300Light } from "@expo-google-fonts/ibm-plex-mono";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { AuthProvider, useAuth } from "@/contexts";
 import "@/global.css";
 
 export const unstable_settings = {
@@ -50,31 +49,6 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-// Auth navigation guard component
-function AuthGate({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
-  const segments = useSegments();
-  const router = useRouter();
-
-  useEffect(() => {
-    // Don't redirect while loading
-    if (isLoading) return;
-
-    // Check if user is in auth group
-    const inAuthGroup = segments[0] === "(auth)";
-
-    if (!isAuthenticated && !inAuthGroup) {
-      // Redirect to login if not authenticated and not already on auth screen
-      router.replace("/(auth)/login");
-    } else if (isAuthenticated && inAuthGroup) {
-      // Redirect to home if authenticated but on auth screen
-      router.replace("/(tabs)");
-    }
-  }, [isAuthenticated, isLoading, segments]);
-
-  return <>{children}</>;
-}
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
@@ -132,8 +106,6 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
       <RootLayoutNav />
-    </AuthProvider>
   );
 }
