@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
-import { View, ScrollView, TouchableOpacity, Platform } from "react-native";
+import { View, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getHours } from "date-fns";
+import { format, getHours } from "date-fns";
 import { Ionicons } from "@expo/vector-icons";
 import { Text } from "@/components/ui/text";
 import { COLOR } from "@/constants/colors";
 import OmBookIcon from "@/components/icons/om-book";
 import { useNavigation } from "expo-router";
 import FadeSlideIn from "@/components/ui/fade-in-slide";
+import { useAuth } from "@/contexts/auth-context";
 import {
   FAVORITES,
   FEATURE_CARDS,
-  USER_NAME,
-  USER_ZODIAC,
-  USER_ZODIAC_SET,
   TODAY_OBSERVANCE,
+  ZODIAC_META,
 } from "@/constants/user-mock-data";
+import { getPanchangam, Observer } from "@ishubhamx/panchangam-js";
 
 type DayPeriod = "Morning" | "Afternoon" | "Evening";
 
@@ -26,15 +26,19 @@ const GREETING_CONFIG: Record<DayPeriod, { icon: string; salutation: string }> =
     Evening: { icon: "moon", salutation: "evening" },
   };
 
+// ─── TopBar ───────────────────────────────────────────────────────────────────
 function TopBar({
   salutation,
   name,
+  avatarUrl,
 }: {
   salutation: string;
   name: string | null;
+  avatarUrl?: string | null;
   icon: string;
 }) {
   const displayName = name ?? "Namaste";
+  const initial = name ? name.charAt(0).toUpperCase() : "M";
 
   return (
     <View className="flex-row items-center justify-between">
@@ -51,18 +55,31 @@ function TopBar({
       </View>
 
       <TouchableOpacity>
-        <View className="w-10 h-10 rounded-full  items-center bg-white border-terracotta/40 border justify-center">
-          <Text variant="small" className="font-bold text-terracotta">
-            {name ? name.charAt(0).toUpperCase() : "M"}
-          </Text>
+        <View className="w-10 h-10 rounded-full items-center bg-white border-terracotta/40 border justify-center overflow-hidden">
+          {avatarUrl ? (
+            <Image
+              source={{ uri: avatarUrl }}
+              style={{ width: 40, height: 40, borderRadius: 20 }}
+            />
+          ) : (
+            <Text variant="small" className="font-bold text-terracotta">
+              {initial}
+            </Text>
+          )}
         </View>
       </TouchableOpacity>
     </View>
   );
 }
 
+// ─── HeroBanner ───────────────────────────────────────────────────────────────
 function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
   const label = observance.isToday ? "Today" : `In ${observance.daysAway} days`;
+
+ const selectedDate = new Date();
+  const observer = new Observer(23.1, 75.46, 494);
+  const panchangam = getPanchangam(selectedDate, observer);
+  const tithi = panchangam.tithis[0].name || "Not available";
 
   return (
     <TouchableOpacity activeOpacity={0.88}>
@@ -70,7 +87,6 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
         className="rounded-3xl overflow-hidden shadow-md shadow-primary"
         style={{ backgroundColor: observance.color, minHeight: 160 }}
       >
-        {/* Decorative circles */}
         <View
           className="absolute"
           style={{
@@ -109,7 +125,6 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
         />
 
         <View className="p-5 z-10">
-          {/* Label pill */}
           <View
             className="self-start rounded-full px-3 py-1"
             style={{ backgroundColor: "#FFFFFF22" }}
@@ -121,35 +136,22 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
               {label.toUpperCase()}
             </Text>
           </View>
-
           <View className="h-3" />
-
-          {/* Icon + Title */}
           <View className="flex-row items-center gap-3">
             <Ionicons name={observance.iconName} size={28} color="#FFFFFFCC" />
             <Text
               variant="h3"
               className="text-left text-white font-playfair-medium"
             >
-              {observance.name}
+              {/* {observance.name} */}
+              {tithi}
             </Text>
           </View>
-
-          {/* Description */}
-          <Text
-            variant="muted"
-            className="mt-1.5 text-neutral-300 leading-5"
-  
-          >
+          <Text variant="muted" className="mt-1.5 text-neutral-300 leading-5">
             {observance.description}
           </Text>
-
-          {/* Tap hint */}
           <View className="flex-row items-center gap-1 mt-3">
-            <Text
-              variant="small"
-              className="font-semibold text-white"
-            >
+            <Text variant="small" className="font-semibold text-white">
               Learn more
             </Text>
             <Ionicons
@@ -164,14 +166,12 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
   );
 }
 
-function ZodiacCard({
-  isSet,
-  zodiac,
-}: {
-  isSet: boolean;
-  zodiac: typeof USER_ZODIAC;
-}) {
-  if (!isSet) {
+// ─── ZodiacCard ───────────────────────────────────────────────────────────────
+function ZodiacCard({ zodiacSign }: { zodiacSign: string | null | undefined }) {
+  // icon + prediction come from local lookup — sign comes from Supabase
+  const meta = zodiacSign ? ZODIAC_META[zodiacSign] : null;
+
+  if (!zodiacSign || !meta) {
     return (
       <TouchableOpacity activeOpacity={0.9}>
         <View className="rounded-2xl border-[1.5px] border-dashed border-cream-dark bg-white px-4 py-3.5">
@@ -207,32 +207,28 @@ function ZodiacCard({
     <TouchableOpacity activeOpacity={0.9}>
       <View className="rounded-2xl px-4 py-3.5 border border-cream-dark bg-white">
         <View className="flex-row items-center gap-3">
-          {/* Zodiac glyph */}
           <View className="w-11 h-11 rounded-full items-center bg-gold/10 border border-gold justify-center">
-            <Text variant="large">{zodiac.icon}</Text>
+            <Text variant="large">{meta.icon}</Text>
           </View>
-
           <View className="flex-1">
             <View className="flex-row items-center gap-2">
               <Text variant="small" className="font-bold text-ink">
-                {zodiac.sign}
+                {zodiacSign}
               </Text>
               <Text variant="muted" className="text-ink-light">
                 — Monthly
               </Text>
             </View>
             <Text variant="muted" className="mt-0.5 leading-4 text-ink-muted">
-              {zodiac.prediction}
+              {meta.prediction}
             </Text>
           </View>
-
           <Ionicons
             name="chevron-forward-outline"
             size={18}
             className="text-ink-light"
           />
         </View>
-
         <TouchableOpacity className="mt-2 ml-14">
           <Text variant="small" className="font-semibold text-terracotta">
             Read full prediction →
@@ -243,9 +239,9 @@ function ZodiacCard({
   );
 }
 
+// ─── FavoritesRow & FeatureGrid unchanged ─────────────────────────────────────
 function FavoritesRow({ items }: { items: typeof FAVORITES }) {
   const isEmpty = items.length === 0;
-
   return (
     <View className="gap-2">
       <View className="flex-row items-center justify-between">
@@ -260,11 +256,10 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
           </TouchableOpacity>
         )}
       </View>
-
       {isEmpty ? (
         <View className="rounded-xl items-center bg-card-bg border border-cream-dark border-dashed justify-center py-4">
           <Ionicons name="heart-outline" className="text-ink-light" size={22} />
-          <Text variant="muted" className="mt-1 text-ink-light ">
+          <Text variant="muted" className="mt-1 text-ink-light">
             Start saving your favorites here
           </Text>
         </View>
@@ -278,7 +273,7 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
             >
               <View className="flex-row items-center bg-white border border-cream-dark rounded-xl pl-1 pr-2 py-1 gap-2">
                 <View
-                  className="w-8 h-8  rounded-md items-center justify-center"
+                  className="w-8 h-8 rounded-md items-center justify-center"
                   style={{
                     backgroundColor:
                       item.type === "mantra"
@@ -305,7 +300,7 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
                 </View>
                 <Text
                   variant="small"
-                  className=" leading-relaxed text-ink flex-1"
+                  className="leading-relaxed text-ink flex-1"
                   numberOfLines={1}
                 >
                   {item.label}
@@ -321,12 +316,9 @@ function FavoritesRow({ items }: { items: typeof FAVORITES }) {
 
 function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
   const navigation = useNavigation();
-
   return (
     <View className="gap-2">
-      <Text className="text-xl font-playfair-medium text-primary">
-        Explore
-      </Text>
+      <Text className="text-xl font-playfair-medium text-primary">Explore</Text>
       <View className="flex-row flex-wrap gap-2.5">
         {cards.map((card) => (
           <TouchableOpacity
@@ -338,7 +330,7 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
             <View className="rounded-2xl bg-white border border-cream-dark min-h-28 justify-between p-4">
               <View className="flex-row items-start justify-between">
                 <View
-                  className="w-10 h-10 rounded-xl items-center  justify-center"
+                  className="w-10 h-10 rounded-xl items-center justify-center"
                   style={{
                     backgroundColor: card.color + "14",
                     borderColor: card.color + 20,
@@ -357,7 +349,6 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
                   className="text-ink-light"
                 />
               </View>
-
               <View className="gap-1">
                 <Text
                   variant="small"
@@ -368,7 +359,7 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
                 </Text>
                 <Text
                   variant="muted"
-                  className="leading-4  text-ink-light"
+                  className="leading-4 text-ink-light"
                   numberOfLines={1}
                 >
                   {card.badge}
@@ -382,8 +373,10 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
   );
 }
 
+// ─── HomeScreen ───────────────────────────────────────────────────────────────
 export default function HomeScreen() {
   const [dayTime, setDayTime] = useState<DayPeriod>("Morning");
+  const { profile } = useAuth(); // ← real data from Supabase
 
   useEffect(() => {
     const hours = getHours(new Date());
@@ -407,7 +400,12 @@ export default function HomeScreen() {
         }}
       >
         <FadeSlideIn delay={80}>
-          <TopBar salutation={salutation} name={USER_NAME} icon={icon} />
+          <TopBar
+            salutation={salutation}
+            icon={icon}
+            name={profile?.full_name ?? null}
+            avatarUrl={profile?.avatar_url}
+          />
         </FadeSlideIn>
 
         <FadeSlideIn delay={80}>
@@ -415,7 +413,7 @@ export default function HomeScreen() {
         </FadeSlideIn>
 
         <FadeSlideIn delay={160}>
-          <ZodiacCard isSet={USER_ZODIAC_SET} zodiac={USER_ZODIAC} />
+          <ZodiacCard zodiacSign={profile?.zodiac_sign} />
         </FadeSlideIn>
 
         <FadeSlideIn delay={240}>

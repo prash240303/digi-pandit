@@ -20,6 +20,21 @@ const TODAY_OBSERVANCE = {
   iconName: "leaf-outline" as const,
 };
 
+export const ZODIAC_META: Record<string, { icon: string; prediction: string }> = {
+  Aries:       { icon: "♈", prediction: "Bold moves bring rewards this month." },
+  Taurus:      { icon: "♉", prediction: "Stability and growth are your themes." },
+  Gemini:      { icon: "♊", prediction: "Communication opens new doors." },
+  Cancer:      { icon: "♋", prediction: "Home and heart are your anchors." },
+  Leo:         { icon: "♌", prediction: "Your energy draws people to you." },
+  Virgo:       { icon: "♍", prediction: "Precision leads to breakthroughs." },
+  Libra:       { icon: "♎", prediction: "Balance brings unexpected joy." },
+  Scorpio:     { icon: "♏", prediction: "Deep intuition guides your path." },
+  Sagittarius: { icon: "♐", prediction: "Adventure awaits — say yes." },
+  Capricorn:   { icon: "♑", prediction: "Discipline pays off this cycle." },
+  Aquarius:    { icon: "♒", prediction: "Innovation is your superpower." },
+  Pisces:      { icon: "♓", prediction: "Creativity and dreams align." },
+};
+
 const FAVORITES = [
   { id: "1", label: "Hanuman Chalisa", type: "mantra", icon: "book-outline" },
   {
