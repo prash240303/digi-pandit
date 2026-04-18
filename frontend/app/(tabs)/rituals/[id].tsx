@@ -662,49 +662,6 @@ export default function GuideDetailScreen() {
         </ScrollView>
       )}
 
-      {/* ── Bottom Navigation ── */}
-      <View
-        className="flex-row bg-white border-t border-cream-dark pb-2 pt-1"
-        style={{
-          shadowColor: "#000",
-          shadowOpacity: 0.06,
-          shadowRadius: 12,
-          shadowOffset: { width: 0, height: -3 },
-          elevation: 10,
-        }}
-      >
-        {(
-          [
-            { icon: "home-outline", label: "Home", active: false },
-            { icon: "book-outline", label: "Guides", active: true },
-            { icon: "compass-outline", label: "Explore", active: false },
-            { icon: "person-outline", label: "Profile", active: false },
-          ] as const
-        ).map((item) => (
-          <TouchableOpacity
-            key={item.label}
-            className="flex-1 items-center py-2"
-            activeOpacity={0.7}
-          >
-            <Ionicons
-              name={item.icon}
-              size={22}
-              color={item.active ? COLOR.terracotta : COLOR.inkLight}
-            />
-            <Text
-              variant="small"
-              className={`mt-0.5 font-inter-medium ${
-                item.active ? "text-terracotta" : "text-ink-light"
-              }`}
-            >
-              {item.label}
-            </Text>
-            {item.active && (
-              <View className="w-1 h-1 rounded-full bg-terracotta mt-0.5" />
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
     </SafeAreaView>
   );
 }

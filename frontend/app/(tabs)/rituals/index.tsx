@@ -63,7 +63,7 @@ const ARTICLES: Article[] = [
     readTime: "6 min read",
     locked: true,
     imageUri:
-      "https://images.unsplash.com/photo-1551958219-acbc05fb2b6e?w=200&q=80",
+      "https://unsplash.com/photos/happy-people-crowd-partying-under-colorful-powder-cloud-hi6Cri0Z38A",
   },
   {
     id: "4",
