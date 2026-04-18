@@ -4,12 +4,12 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  SafeAreaView,
   StatusBar,
   Dimensions,
   PanResponder,
   ActivityIndicator,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAudio } from "../../../contexts/Audiocontext";
@@ -37,6 +37,9 @@ export default function PlayerScreen() {
     seekTo,
     playNext,
     playPrev,
+    isLooping,
+    setIsLooping,
+    isBuffering,
   } = useAudio();
 
   const [isScrubbing, setIsScrubbing] = useState(false);
@@ -267,7 +270,7 @@ export default function PlayerScreen() {
             elevation: 12,
           }}
         >
-          {isLoading ? (
+          {isLoading || isBuffering ? (
             <ActivityIndicator size="large" color="#fff" />
           ) : (
             <Ionicons
@@ -289,8 +292,15 @@ export default function PlayerScreen() {
         </TouchableOpacity>
 
         {/* Repeat */}
-        <TouchableOpacity className="p-2">
-          <Ionicons name="repeat" size={22} color="rgba(255,255,255,0.4)" />
+        <TouchableOpacity
+          onPress={() => setIsLooping(!isLooping)}
+          className="p-2"
+        >
+          <Ionicons
+            name="repeat"
+            size={22}
+            color={isLooping ? ORANGE : "rgba(255,255,255,0.4)"}
+          />
         </TouchableOpacity>
       </View>
 

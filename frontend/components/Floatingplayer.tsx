@@ -19,6 +19,7 @@ export const FloatingPlayer: React.FC = () => {
     currentAlbum,
     isPlaying,
     isLoading,
+    isBuffering,
     togglePlayPause,
     playNext,
     playPrev,
@@ -83,7 +84,7 @@ export const FloatingPlayer: React.FC = () => {
             style={{ backgroundColor: ORANGE }}
             hitSlop={{ top: 4, bottom: 4, left: 4, right: 4 }}
           >
-            {isLoading ? (
+            {isLoading || isBuffering ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
               <Ionicons

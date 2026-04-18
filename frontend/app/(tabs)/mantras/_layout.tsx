@@ -4,14 +4,17 @@ import { AudioProvider } from "../../../contexts/Audiocontext";
 import { FloatingPlayer } from "../../../components/Floatingplayer";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function MantrasLayout() {
-  return (
-    <AudioProvider>
-      {/*
+{
+  /*
         FloatingPlayer sits OUTSIDE the Stack so it persists across
         index → album navigation without unmounting.
         It is absolutely positioned at the bottom (see FloatingPlayer.tsx).
-      */}
+      */
+}
+
+export default function MantrasLayout() {
+  return (
+    <AudioProvider>
       <SafeAreaView className="flex-1 bg-neutral-50">
         <Stack
           screenOptions={{ headerShown: false, animation: "slide_from_right" }}
