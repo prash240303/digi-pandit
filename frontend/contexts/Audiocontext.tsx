@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useMemo,
 } from "react";
-import { AudioModule, useAudioPlayerStatus } from "expo-audio";
+import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import { Track, Album } from "../app/(tabs)/mantras/data/albumData";
 
 /**
@@ -56,19 +56,7 @@ export const useAudio = () => {
 export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Initialize expo-audio player manually to fix "Received 4 arguments, but 3 was expected" error.
-  // The built-in useAudioPlayer hook in this version passes 4 arguments, but the native side expects 3.
-  const player = useMemo(() => {
-    try {
-      // @ts-ignore - Manual constructor call with 3 arguments
-      return new AudioModule.AudioPlayer(null, 500, false);
-    } catch (e) {
-      // Fallback if 3 args fails
-      // @ts-ignore
-      return new AudioModule.AudioPlayer(null, 500, false, 0);
-    }
-  }, []);
-
+  const player = useAudioPlayer(null);
   const status = useAudioPlayerStatus(player);
 
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
@@ -154,17 +142,14 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [player, isLooping]);
 
   /**
-   * Event Listener: Handle track completion
-   * Automatically advances to the next track if looping is disabled
+   * Track completion: expo-audio surfaces end-of-playback via status.didJustFinish.
+   * Auto-advance when looping is disabled.
    */
   useEffect(() => {
-    const subscription = player.addListener("playbackFinished", () => {
-      if (!isLooping) {
-        playNext();
-      }
-    });
-    return () => subscription.remove();
-  }, [player, isLooping, playNext]);
+    if (status.didJustFinish && !isLooping) {
+      playNext();
+    }
+  }, [status.didJustFinish, isLooping, playNext]);
 
   const value = useMemo(
     () => ({

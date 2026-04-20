@@ -1,7 +1,13 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "expo-router";
-import { TouchableOpacity, View, Text } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ActivityIndicator,
+  InteractionManager,
+} from "react-native";
 import { getPanchangam, Observer } from "@ishubhamx/panchangam-js";
 import CalendarHeader from "./calender-header";
 
@@ -47,12 +53,29 @@ const getChandrabalam = (panchangam: any) => {
 /* -------------------- Component -------------------- */
 const PanchangamCalendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [isReady, setIsReady] = useState(false);
+  const [isComputing, setIsComputing] = useState(true);
 
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
   const [yearValue, setYearValue] = useState(year.toString());
 
+  // Defer heavy panchangam computation until after the tab transition paints,
+  // so the loading indicator is visible immediately when the tab is tapped.
+  useEffect(() => {
+    const task = InteractionManager.runAfterInteractions(() => {
+      setIsReady(true);
+    });
+    return () => task.cancel();
+  }, []);
+
+  // Recompute flag when month/year changes so the spinner shows during re-compute.
+  useEffect(() => {
+    setIsComputing(true);
+  }, [month, year]);
+
   const calendarDays = useMemo(() => {
+    if (!isReady) return [] as (CalendarDayData | null)[];
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
@@ -70,7 +93,11 @@ const PanchangamCalendar: React.FC = () => {
       days.push(dayData);
     }
     return days;
-  }, [month, year]);
+  }, [month, year, isReady]);
+
+  useEffect(() => {
+    if (isReady) setIsComputing(false);
+  }, [calendarDays, isReady]);
 
   const weeks: (CalendarDayData | null)[][] = [];
   for (let i = 0; i < calendarDays.length; i += 7) {
@@ -118,8 +145,14 @@ const PanchangamCalendar: React.FC = () => {
       </View>
 
       {/* --- GRID BODY (Days) --- */}
-      <View className="flex-row flex-wrap w-full">
-        {weeks.flat().map((day, i) => {
+      {!isReady || isComputing ? (
+        <View className="w-full items-center justify-center py-24 gap-3">
+          <ActivityIndicator size="large" color="#f97316" />
+          <Text className="text-amber-700 text-sm">Loading calendar…</Text>
+        </View>
+      ) : (
+        <View className="flex-row flex-wrap w-full">
+          {weeks.flat().map((day, i) => {
           if (!day) {
             return <View key={`empty-${i}`} style={{ width: "14.25%" , height:"auto"}} />;
           }
@@ -172,10 +205,11 @@ const PanchangamCalendar: React.FC = () => {
                   </Text>
                 </View>
               </TouchableOpacity>
-            </View>
-          );
-        })}
-      </View>
+              </View>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 };
