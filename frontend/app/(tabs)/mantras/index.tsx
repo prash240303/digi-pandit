@@ -223,7 +223,7 @@ export default function MantrasIndex() {
             </View>
 
             {/* 2-col grid for featured */}
-            <View className="px-5">
+            <View className="px-5 w-full">
               {[featuredAlbums.slice(0, 2), featuredAlbums.slice(2, 4)].map(
                 (pair, ri) => (
                   <View key={ri} className="flex-row justify-between">

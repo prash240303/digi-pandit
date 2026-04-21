@@ -89,25 +89,19 @@ export default function AlbumScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: currentTrack ? 100 : 32 }}
       >
-        {/* Hero Image */}
         <View style={{ height: HERO_HEIGHT, position: "relative" }}>
           <Image
             source={{ uri: album.image }}
             style={{ width, height: HERO_HEIGHT }}
             resizeMode="cover"
           />
-          {/* Dark gradient overlay */}
           <View
             style={{
               position: "absolute",
               inset: 0,
-              //   background:
-              //     "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%)",
-              //   backgroundColor: "rgba(0,0,0,0.4)",
             }}
           />
 
-          {/* Back button */}
           <TouchableOpacity
             onPress={() => router.push("/(tabs)/mantras")}
             className="absolute top-4 left-4 w-9 h-9 rounded-full items-center justify-center"
@@ -116,7 +110,6 @@ export default function AlbumScreen() {
             <Ionicons name="arrow-back" size={20} color="#fff" />
           </TouchableOpacity>
 
-          {/* More button */}
           <TouchableOpacity
             className="absolute top-4 right-4 w-9 h-9 rounded-full items-center justify-center"
             style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
@@ -124,7 +117,6 @@ export default function AlbumScreen() {
             <Ionicons name="ellipsis-horizontal" size={20} color="#fff" />
           </TouchableOpacity>
 
-          {/* Title overlay */}
           <View className="absolute bottom-5 left-5 right-16">
             <Text
               className="text-white text-2xl font-bold"
@@ -137,7 +129,6 @@ export default function AlbumScreen() {
             </Text>
           </View>
 
-          {/* Play button */}
           <TouchableOpacity
             onPress={handlePlayAll}
             className="absolute bottom-4 right-5 w-12 h-12 rounded-full items-center justify-center"

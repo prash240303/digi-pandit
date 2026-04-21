@@ -271,13 +271,15 @@ function ArticleCard({ article, onPress }: ArticleCardProps) {
       className="flex-row bg-white rounded-2xl border border-cream-dark overflow-hidden active:opacity-75"
       style={({ pressed }) => ({ opacity: pressed ? 0.75 : 1 })}
     >
-      <Image
-        source={{ uri: article.imageUri }}
-        className="w-24 h-24"
-        resizeMode="cover"
-      />
+      <View className="w-24 h-32">
+        <Image
+          source={{ uri: article.imageUri }}
+          style={{ height: "100%" }}
+          resizeMode="cover"
+        />
+      </View>
 
-      <View className="flex-1 px-3 py-3 justify-between">
+      <View className="flex-1 px-3 py-2 justify-between">
         {/* Category + lock */}
         <View className="flex-row items-center justify-between">
           <Text
