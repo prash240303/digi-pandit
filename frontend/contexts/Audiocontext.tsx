@@ -7,7 +7,8 @@ import React, {
   useMemo,
 } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
-import { Track, Album } from "../app/(tabs)/mantras/data/albumData";
+import { Track, Album } from "../app/(tabs)/mantras/data/types";
+import { getCachedAudio } from "@/lib/audio-cache";
 
 /**
  * Enhanced AudioContext for a premium music player experience.
@@ -73,8 +74,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
         setCurrentTrack(track);
         setCurrentAlbum(album);
 
-        // Replace source and start playback
-        await player.replace({ uri: track.audioUrl });
+        let uri = track.audioUrl;
+        try {
+          uri = await getCachedAudio(track.audioUrl);
+        } catch (cacheErr) {
+          console.warn("[AudioProvider] Cache miss, streaming:", cacheErr);
+        }
+        await player.replace({ uri });
         player.play();
       } catch (err) {
         console.warn("[AudioProvider] Playback error:", err);

@@ -9,10 +9,10 @@ import {
   PanResponder,
   ActivityIndicator,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useAudio } from "../../../contexts/Audiocontext";
+import { useAudio } from "../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";
 const { width, height } = Dimensions.get("window");
@@ -26,6 +26,7 @@ function formatSecs(s: number) {
 
 export default function PlayerScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const {
     currentTrack,
     currentAlbum,
@@ -92,9 +93,18 @@ export default function PlayerScreen() {
       <StatusBar barStyle="light-content" />
 
       {/* Background blur art */}
-      <View style={{ position: "absolute", inset: 0 }}>
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: "hidden",
+        }}
+      >
         <Image
-          source={{ uri: currentAlbum?.image }}
+          source={currentTrack.cover ?? currentAlbum?.image}
           style={{ width, height, opacity: 0.15 }}
           resizeMode="cover"
           blurRadius={40}
@@ -102,7 +112,10 @@ export default function PlayerScreen() {
         <View
           style={{
             position: "absolute",
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             backgroundColor: "rgba(15,15,15,0.75)",
           }}
         />
@@ -141,7 +154,7 @@ export default function PlayerScreen() {
           }}
         >
           <Image
-            source={{ uri: currentAlbum?.image }}
+            source={currentTrack.cover ?? currentAlbum?.image}
             style={{ width: width - 64, height: width - 64 }}
             resizeMode="cover"
           />
@@ -305,7 +318,10 @@ export default function PlayerScreen() {
       </View>
 
       {/* Bottom extras */}
-      <View className="flex-row items-center justify-between px-8 mt-8">
+      <View
+        className="flex-row items-center justify-between px-8 mt-8"
+        style={{ marginBottom: insets.bottom + 12 }}
+      >
         <TouchableOpacity className="items-center">
           <Ionicons name="list" size={22} color="rgba(255,255,255,0.45)" />
           <Text className="text-white/40 text-xs mt-1">Queue</Text>

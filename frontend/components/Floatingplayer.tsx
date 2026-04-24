@@ -6,7 +6,7 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAudio } from "../contexts/Audiocontext";
 
@@ -14,6 +14,7 @@ const ORANGE = "#E8590C";
 
 export const FloatingPlayer: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const {
     currentTrack,
     currentAlbum,
@@ -26,11 +27,12 @@ export const FloatingPlayer: React.FC = () => {
   } = useAudio();
 
   if (!currentTrack) return null;
+  if (pathname?.startsWith("/player")) return null;
 
   return (
     <TouchableOpacity
       activeOpacity={0.95}
-      onPress={() => router.push("/mantras/player")}
+      onPress={() => router.push("/player")}
       className="absolute bottom-0 left-0 right-0 mx-3 mb-2"
       style={{ zIndex: 999 }}
     >
@@ -46,11 +48,13 @@ export const FloatingPlayer: React.FC = () => {
         }}
       >
         {/* Album Art */}
-        <Image
-          source={{ uri: currentAlbum?.image }}
-          className="w-11 h-11 rounded-xl"
-          resizeMode="cover"
-        />
+        {(currentTrack.cover ?? currentAlbum?.image) && (
+          <Image
+            source={currentTrack.cover ?? currentAlbum?.image}
+            style={{ width: 44, height: 44, borderRadius: 12 }}
+            resizeMode="cover"
+          />
+        )}
 
         {/* Track Info */}
         <View className="flex-1 ml-3">

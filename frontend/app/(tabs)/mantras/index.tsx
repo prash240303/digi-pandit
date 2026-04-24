@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,11 +8,13 @@ import {
   Image,
   StatusBar,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import ALBUMS, { Album } from "./data/albumData";
+import { Album } from "./data/types";
+import { fetchAlbums } from "./data/albumSource";
 import { useAudio } from "../../../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";
@@ -21,9 +23,6 @@ const CARD_WIDTH = (width - 48) / 2;
 
 type FilterType = "All" | "Popular" | "Deity" | "Festival";
 const FILTERS: FilterType[] = ["All", "Popular", "Deity", "Festival"];
-
-const FEATURED_IDS = ["1", "2", "3", "4"];
-const POPULAR_IDS = ["1", "3"];
 
 const AlbumCard: React.FC<{ album: Album; onPress: () => void }> = ({
   album,
@@ -40,7 +39,7 @@ const AlbumCard: React.FC<{ album: Album; onPress: () => void }> = ({
       style={{ height: CARD_WIDTH }}
     >
       <Image
-        source={{ uri: album.image }}
+        source={album.image}
         className="w-full h-full"
         resizeMode="cover"
       />
@@ -75,16 +74,36 @@ export default function MantrasIndex() {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { currentTrack } = useAudio();
 
+  useEffect(() => {
+    let cancelled = false;
+    fetchAlbums()
+      .then((a) => {
+        if (!cancelled) setAlbums(a);
+      })
+      .catch((e: Error) => {
+        if (!cancelled) setError(e.message);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const filtered = useMemo(() => {
-    let list = ALBUMS;
+    let list = albums;
     if (activeFilter === "Deity")
       list = list.filter((a) => a.category === "Deity");
     else if (activeFilter === "Festival")
       list = list.filter((a) => a.category === "Festival");
     else if (activeFilter === "Popular")
-      list = list.filter((a) => POPULAR_IDS.includes(a.id));
+      list = list.filter((a) => a.category === "Popular");
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(
@@ -95,9 +114,9 @@ export default function MantrasIndex() {
       );
     }
     return list;
-  }, [activeFilter, search]);
+  }, [activeFilter, search, albums]);
 
-  const featuredAlbums = ALBUMS.filter((a) => FEATURED_IDS.includes(a.id));
+  const featuredAlbums = albums.slice(0, 4);
 
   // Pair albums into rows of 2
   const rows = [];
@@ -204,6 +223,20 @@ export default function MantrasIndex() {
             );
           })}
         </ScrollView>
+
+        {loading && (
+          <View className="items-center py-10">
+            <ActivityIndicator color={ORANGE} />
+            <Text className="text-gray-400 mt-2 text-xs">Loading aartis…</Text>
+          </View>
+        )}
+        {!loading && error && (
+          <View className="px-5 py-4">
+            <Text className="text-red-600 text-xs">
+              Could not load: {error}
+            </Text>
+          </View>
+        )}
 
         {/* Featured Albums — show only when no search or filter active */}
         {!search && activeFilter === "All" && (

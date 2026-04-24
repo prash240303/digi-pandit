@@ -9,7 +9,14 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
-import { X, Navigation, Heart, Phone, Clock, MapPin } from "lucide-react-native";
+import {
+  X,
+  Navigation,
+  Heart,
+  Phone,
+  Clock,
+  MapPin,
+} from "lucide-react-native";
 import { Temple } from "@/constants/temples-mock";
 import { haversineKm, LatLng } from "@/lib/geo";
 
@@ -22,7 +29,7 @@ type Props = {
 };
 
 const { height: SCREEN_H } = Dimensions.get("window");
-const SHEET_H = Math.min(Math.round(SCREEN_H * 0.55), 520);
+const SHEET_H = Math.min(Math.round(SCREEN_H * 0.35), 520);
 
 export default function TempleDetailSheet({
   temple,
@@ -209,15 +216,6 @@ export default function TempleDetailSheet({
                 fill={favorite ? "#dc2626" : "transparent"}
               />
             </TouchableOpacity>
-          </View>
-
-          <View className="mt-6 pt-4 border-t border-stone-200">
-            <Text className="text-sm font-bold text-stone-800 mb-1">
-              Reviews
-            </Text>
-            <Text className="text-xs text-stone-500">
-              Reviews coming soon — share your experience in a future update.
-            </Text>
           </View>
         </ScrollView>
       </Animated.View>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,13 @@ import {
   Image,
   StatusBar,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { getAlbumById, Track } from "./data/albumData";
+import { Track, Album } from "./data/types";
+import { fetchAlbumById } from "./data/albumSource";
 import { useAudio } from "../../../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";
@@ -34,11 +36,38 @@ function formatSecs(s: number) {
 export default function AlbumScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const album = getAlbumById(id ?? "1");
+  const [album, setAlbum] = useState<Album | null>(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<FilterTab>("All Mantras");
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
 
   const { playTrack, currentTrack, isPlaying, togglePlayPause } = useAudio();
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+    fetchAlbumById(id)
+      .then((a) => {
+        if (!cancelled) setAlbum(a);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-neutral-50">
+        <ActivityIndicator color={ORANGE} />
+      </SafeAreaView>
+    );
+  }
 
   if (!album) {
     return (
@@ -91,7 +120,7 @@ export default function AlbumScreen() {
       >
         <View style={{ height: HERO_HEIGHT, position: "relative" }}>
           <Image
-            source={{ uri: album.image }}
+            source={album.image}
             style={{ width, height: HERO_HEIGHT }}
             resizeMode="cover"
           />
@@ -212,30 +241,48 @@ export default function AlbumScreen() {
                   elevation: 1,
                 }}
               >
-                {/* Icon / Number */}
                 <View
-                  className="w-11 h-11 rounded-xl items-center justify-center mr-3"
-                  style={{ backgroundColor: isCurrent ? "#FDEEE6" : "#FFF5F0" }}
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 10,
+                    marginRight: 12,
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
                 >
-                  {isCurrent && isPlaying ? (
+                  <Image
+                    source={track.cover ?? album.image}
+                    style={{ width: 44, height: 44 }}
+                    resizeMode="cover"
+                  />
+                  {isCurrent && isPlaying && (
                     <View
-                      className="flex-row items-end gap-x-0.5"
-                      style={{ height: 16 }}
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        backgroundColor: "rgba(0,0,0,0.45)",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
                     >
-                      {[0, 1, 2].map((i) => (
-                        <View
-                          key={i}
-                          style={{
-                            width: 3,
-                            height: 8 + i * 4,
-                            backgroundColor: ORANGE,
-                            borderRadius: 2,
-                          }}
-                        />
-                      ))}
+                      <View
+                        className="flex-row items-end gap-x-0.5"
+                        style={{ height: 14 }}
+                      >
+                        {[0, 1, 2].map((i) => (
+                          <View
+                            key={i}
+                            style={{
+                              width: 3,
+                              height: 6 + i * 3,
+                              backgroundColor: "#fff",
+                              borderRadius: 2,
+                            }}
+                          />
+                        ))}
+                      </View>
                     </View>
-                  ) : (
-                    <Ionicons name="musical-note" size={18} color={ORANGE} />
                   )}
                 </View>
 
@@ -252,7 +299,7 @@ export default function AlbumScreen() {
                     className="text-gray-500 text-xs mt-0.5"
                     numberOfLines={1}
                   >
-                    {track.subtitle} · {track.duration}
+                    {track.subtitle} 
                   </Text>
                 </View>
 

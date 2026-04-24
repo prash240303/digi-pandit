@@ -13,6 +13,7 @@ import { PortalHost } from "@rn-primitives/portal";
 import { ActivityIndicator, View } from "react-native";
 import { AuthProvider, useAuth } from "../contexts/auth-context";
 import { OnboardingProvider } from "../contexts/onboarding-context";
+import { AudioProvider } from "../contexts/Audiocontext";
 
 import {
   Merriweather_300Light,
@@ -112,6 +113,14 @@ function RootLayoutNav() {
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}
         />
+        <Stack.Screen
+          name="player"
+          options={{
+            presentation: "modal",
+            animation: "slide_from_bottom",
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
       <PortalHost />
@@ -156,7 +165,9 @@ export default function RootLayout() {
   return (
       <AuthProvider>
         <OnboardingProvider>
-          <RootLayoutNav />
+          <AudioProvider>
+            <RootLayoutNav />
+          </AudioProvider>
         </OnboardingProvider>
       </AuthProvider>
   );
