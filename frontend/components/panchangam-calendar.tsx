@@ -180,7 +180,7 @@ const PanchangamCalendar: React.FC = () => {
                   >
                     {day.date.getDate()}
                   </Text>
-                  <Text className="text-lg shadow-orange-500 shadow-sm mt-1">
+                  <Text className="text-lg mt-1">
                     {getChandrabalam(day.panchangam)}
                   </Text>
                 </View>
