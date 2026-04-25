@@ -1,29 +1,67 @@
 import { useState, useEffect } from "react";
 import { View, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { format, getHours } from "date-fns";
+import { format, formatDate, getHours } from "date-fns";
 import { Ionicons } from "@expo/vector-icons";
+import resolveConfig from "tailwindcss/resolveConfig";
 import { Text } from "@/components/ui/text";
-import { COLOR } from "@/constants/colors";
 import OmBookIcon from "@/components/icons/om-book";
 import { useNavigation, useRouter } from "expo-router";
 import FadeSlideIn from "@/components/ui/fade-in-slide";
 import { useAuth } from "@/contexts/auth-context";
 import {
   FAVORITES,
-  FEATURE_CARDS,
   TODAY_OBSERVANCE,
   ZODIAC_META,
 } from "@/constants/user-mock-data";
 import { getPanchangam, Observer } from "@ishubhamx/panchangam-js";
 
+const FEATURE_CARDS = [
+  {
+    id: "calendar",
+    label: "Calendar",
+    icon: "calendar-outline",
+    badge: "2 festivals this week",
+    route: "calendar",
+    iconClass: "text-primary",
+    className: "bg-primary/10 border border-primary/10",
+  },
+  {
+    id: "mantras",
+    label: "Mantras",
+    icon: "book-outline",
+    badge: "Top pick: Hanuman Chalisa",
+    route: "mantras",
+    iconClass: "text-green",
+    className: "bg-green/10 border border-green/10",
+  },
+  {
+    id: "rituals",
+    label: "Rituals",
+    icon: "flame-outline",
+    badge: "Diwali puja guide ready",
+    iconClass: "text-gold",
+    route: "rituals",
+    className: "bg-gold/10 border border-gold/10",
+  },
+  {
+    id: "temples",
+    label: "Temples",
+    icon: "location-outline",
+    badge: "3 temples nearby",
+    iconClass: "text-blue-500",
+    route: "temples",
+    className: "bg-blue-100 border border-blue-200",
+  },
+];
+
 type DayPeriod = "Morning" | "Afternoon" | "Evening";
 
 const GREETING_CONFIG: Record<DayPeriod, { icon: string; salutation: string }> =
   {
-    Morning: { icon: "sunny-outline", salutation: "morning" },
-    Afternoon: { icon: "partly-sunny", salutation: "afternoon" },
-    Evening: { icon: "moon", salutation: "evening" },
+    Morning: { icon: "sunny-outline", salutation: "प्रातः" },
+    Afternoon: { icon: "partly-sunny", salutation: "दोपहर" },
+    Evening: { icon: "moon", salutation: "सायंकाल" },
   };
 
 // ─── TopBar ───────────────────────────────────────────────────────────────────
@@ -45,24 +83,24 @@ function TopBar({
       <View>
         <Text
           variant="small"
-          className="uppercase font-inter-medium text-ink-light tracking-widest"
+          className="uppercase font-inter-medium text-ink-faint tracking-widest"
         >
-          Good {salutation}
+          शुभ {salutation}
         </Text>
-        <Text variant="h3" className="font-playfair-medium text-ink">
+        <Text variant="h3" className="font-fraunces text-ink capitalize">
           {displayName}
         </Text>
       </View>
 
       <TouchableOpacity>
-        <View className="w-10 h-10 rounded-full items-center bg-white border-terracotta/40 border justify-center overflow-hidden">
+        <View className="w-10 h-10 rounded-full items-center bg-white border-primary border justify-center overflow-hidden">
           {avatarUrl ? (
             <Image
               source={{ uri: avatarUrl }}
               style={{ width: 40, height: 40, borderRadius: 20 }}
             />
           ) : (
-            <Text variant="small" className="font-bold text-terracotta">
+            <Text variant="small" className="font-bold text-primary">
               {initial}
             </Text>
           )}
@@ -72,50 +110,131 @@ function TopBar({
   );
 }
 
+// Tiny stroked glyph background for card corners.
+function Torana({ c = "rgba(255,255,255,0.12)", w = "100%" }) {
+  return (
+    <svg
+      width={w}
+      viewBox="0 0 360 90"
+      fill="none"
+      style={{
+        display: "block",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        pointerEvents: "none",
+      }}
+    >
+      <path
+        d="M0 80 C60 50 90 30 120 30 C140 10 160 0 180 0 C200 0 220 10 240 30 C270 30 300 50 360 80"
+        stroke={c}
+        strokeWidth="1.2"
+      />
+      <path
+        d="M0 90 C60 60 90 40 120 40 C140 20 160 10 180 10 C200 10 220 20 240 40 C270 40 300 60 360 90"
+        stroke={c}
+        strokeWidth="0.8"
+        strokeDasharray="2 3"
+      />
+      <circle cx="180" cy="3" r="2" fill={c} />
+    </svg>
+  );
+}
+
+// Tiny stroked glyph background for card corners.
+function CornerMandala({ c = "rgba(0,0,0,0.05)", size = 120 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 120 120"
+      style={{
+        position: "absolute",
+        right: -30,
+        top: -30,
+        pointerEvents: "none",
+      }}
+    >
+      <g stroke={c} strokeWidth="1" fill="none">
+        <circle cx="60" cy="60" r="55" />
+        <circle cx="60" cy="60" r="42" />
+        <circle cx="60" cy="60" r="28" />
+        {Array.from({ length: 12 }).map((_, i) => {
+          const a = (i * Math.PI) / 6;
+          const x1 = 60 + Math.cos(a) * 28;
+          const y1 = 60 + Math.sin(a) * 28;
+          const x2 = 60 + Math.cos(a) * 55;
+          const y2 = 60 + Math.sin(a) * 55;
+          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />;
+        })}
+      </g>
+    </svg>
+  );
+}
+
+const Blinker = ({ isFest = false }) => {
+  return (
+    <View
+      className={`w-2 h-2 rounded-full ${isFest ? "bg-gold" : "bg-yellow-300"} animate-pulse`}
+    />
+  );
+};
+
 // ─── HeroBanner ───────────────────────────────────────────────────────────────
 function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
-  const label = observance.isToday ? "Today" : `In ${observance.daysAway} days`;
+  const label = observance.isToday
+    ? "आज • Today"
+    : `In ${observance.daysAway} days`;
 
   const selectedDate = new Date();
   const observer = new Observer(23.1, 75.46, 494);
   const panchangam = getPanchangam(selectedDate, observer);
+  console.log("panch data", panchangam);
   const tithi = panchangam.tithis?.[0]?.name || "Not available";
+
+  const sunrise = panchangam.sunrise ? new Date(panchangam.sunrise) : null;
+  const sunset = panchangam.sunset ? new Date(panchangam.sunset) : null;
+
+  // Calculate Duration and Formatted Timings for Card
+  let formattedDuration = "N/A";
+  if (
+    sunrise &&
+    sunset &&
+    !isNaN(sunrise.getTime()) &&
+    !isNaN(sunset.getTime())
+  ) {
+    const diffMs = sunset.getTime() - sunrise.getTime();
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const dayHours = Math.floor(totalSeconds / 3600);
+    const dayMinutes = Math.floor((totalSeconds % 3600) / 60);
+    const daySeconds = totalSeconds % 60;
+    formattedDuration = `${dayHours}h ${dayMinutes}m ${daySeconds}s`;
+  }
+
+  // Format times using date-fns
+  const sunriseTime =
+    sunrise && !isNaN(sunrise.getTime()) ? format(sunrise, "hh:mm") : "--:--";
+  const sunrisePeriod =
+    sunrise && !isNaN(sunrise.getTime()) ? format(sunrise, "a") : "";
+  const sunsetTime =
+    sunset && !isNaN(sunset.getTime()) ? format(sunset, "hh:mm") : "--:--";
+  const sunsetPeriod =
+    sunset && !isNaN(sunset.getTime()) ? format(sunset, "a") : "";
 
   const router = useRouter();
 
   return (
-    <TouchableOpacity 
-      activeOpacity={0.88} 
+    <TouchableOpacity
+      activeOpacity={0.88}
       onPress={() => router.push("/calendar")}
     >
       <View
-        className="rounded-3xl overflow-hidden shadow-md shadow-primary"
-        style={{ backgroundColor: observance.color, minHeight: 160 }}
+        className="rounded-3xl overflow-hidden bg-gradient-primary"
+        style={{ minHeight: 160 }}
       >
-        <View
-          className="absolute"
-          style={{
-            top: -30,
-            right: -30,
-            width: 140,
-            height: 140,
-            borderRadius: 70,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.06,
-          }}
-        />
-        <View
-          className="absolute"
-          style={{
-            bottom: -40,
-            left: -20,
-            width: 160,
-            height: 160,
-            borderRadius: 80,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.04,
-          }}
-        />
+        <CornerMandala c="rgba(255,240,200,0.09)" size={200} />
+        <Torana c="rgba(255,240,200,0.22)" />
         <View
           className="absolute"
           style={{
@@ -130,17 +249,27 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
         />
 
         <View className="p-5 z-10">
-          <View
-            className="self-start rounded-full px-3 py-1"
-            style={{ backgroundColor: "#FFFFFF22" }}
-          >
-            <Text
-              variant="small"
-              className="font-semibold text-neutral-200 tracking-wide"
+          <View className="flex flex-row items-center gap-3">
+            <View
+              className="self-start rounded-full px-3 py-1 flex-row items-center gap-2"
+              style={{ backgroundColor: "#FFFFFF22" }}
             >
-              {label.toUpperCase()}
-            </Text>
+              <Blinker />
+              <Text variant="small" className="text-neutral-200 text-xs">
+                {label?.toUpperCase()}
+              </Text>
+            </View>
+            <View className="flex flex-row gap-1">
+              <Text variant="small" className="text-white text-xs">
+                {format(new Date(), "dd MMM") || "Not available"} •
+              </Text>
+              <Text variant="small" className="text-white text-xs">
+                {panchangam.masa.name + " " + panchangam.paksha ||
+                  "Not available"}
+              </Text>
+            </View>
           </View>
+
           <View className="h-3" />
           <View className="flex-row items-center gap-3">
             <Ionicons name={observance.iconName} size={28} color="#FFFFFFCC" />
@@ -148,22 +277,41 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
               variant="h3"
               className="text-left text-white font-playfair-medium"
             >
-              {/* {observance.name} */}
               {tithi}
             </Text>
           </View>
           <Text variant="muted" className="mt-1.5 text-neutral-300 leading-5">
             {observance.description}
           </Text>
-          <View className="flex-row items-center gap-1 mt-3">
-            <Text variant="small" className="font-semibold text-white">
-              Learn more
-            </Text>
-            <Ionicons
-              name="chevron-forward-outline"
-              size={13}
-              color="#FFFFFFBB"
-            />
+          <View className="flex-row bg-white/5 p-2 rounded-lg items-center w-full justify-between mt-3">
+            <View className="flex border-r border-line/30 pr-4 flex-col gap-1 items-start">
+              <Text variant="small" className="text-white text-sm">
+                Sunrise
+              </Text>
+              <Text variant="small" className="text-white text-sm">
+                {/* {panchangam.sunrise} */}
+                {sunriseTime + " " + sunrisePeriod}
+              </Text>
+            </View>
+
+            <View className="flex border-r border-line/30 pr-4 flex-col gap-1 items-start">
+              <Text variant="small" className="text-white text-sm">
+                Abhijit
+              </Text>
+              <Text variant="small" className="text-white text-sm">
+                {format(new Date(panchangam.abhijitMuhurta.start), "hh:mm a")}
+              </Text>
+            </View>
+
+            <View className="flex flex-col gap-1 items-start">
+              <Text variant="small" className="text-white text-sm">
+                Sunset
+              </Text>
+              <Text variant="small" className="text-white text-sm">
+                {/* {panchangam.sunrise} */}
+                {sunsetTime + " " + sunsetPeriod}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -173,18 +321,14 @@ function HeroBanner({ observance }: { observance: typeof TODAY_OBSERVANCE }) {
 
 // ─── ZodiacCard ───────────────────────────────────────────────────────────────
 function ZodiacCard({ zodiacSign }: { zodiacSign: string | null | undefined }) {
-  // icon + prediction come from local lookup — sign comes from Supabase
   const meta = zodiacSign ? ZODIAC_META[zodiacSign] : null;
 
   if (!zodiacSign || !meta) {
     return (
       <TouchableOpacity activeOpacity={0.9}>
-        <View className="rounded-2xl border-[1.5px] border-dashed border-cream-dark bg-white px-4 py-3.5">
+        <View className="rounded-2xl border-[1.5px] border-dashed border-line-soft bg-white px-4 py-3.5">
           <View className="flex-row items-center gap-3">
-            <View
-              className="w-10 h-10 rounded-full items-center justify-center"
-              style={{ backgroundColor: COLOR.gold + "15" }}
-            >
+            <View className="w-10 h-10 rounded-full items-center justify-center bg-gold/10">
               <Text variant="large" className="text-gold">
                 ✦
               </Text>
@@ -193,13 +337,13 @@ function ZodiacCard({ zodiacSign }: { zodiacSign: string | null | undefined }) {
               <Text variant="small" className="font-semibold text-ink">
                 Discover your zodiac predictions
               </Text>
-              <Text variant="muted" className="mt-0.5 text-ink-light">
+              <Text variant="muted" className="mt-0.5 text-ink-faint">
                 Set your date of birth to get personalized insights
               </Text>
             </View>
             <Ionicons
               name="chevron-forward-outline"
-              className="text-ink-light"
+              className="text-ink-faint"
               size={18}
             />
           </View>
@@ -210,9 +354,9 @@ function ZodiacCard({ zodiacSign }: { zodiacSign: string | null | undefined }) {
 
   return (
     <TouchableOpacity activeOpacity={0.9}>
-      <View className="rounded-2xl px-4 py-3.5 border border-cream-dark bg-white">
+      <View className="rounded-2xl p-2.5 border border-line-soft bg-white">
         <View className="flex-row items-center gap-3">
-          <View className="w-11 h-11 rounded-full items-center bg-gold/10 border border-gold justify-center">
+          <View className="w-11 h-11 rounded-lg items-center justify-center bg-gold/10 border border-gold/40">
             <Text variant="large">{meta.icon}</Text>
           </View>
           <View className="flex-1">
@@ -220,7 +364,7 @@ function ZodiacCard({ zodiacSign }: { zodiacSign: string | null | undefined }) {
               <Text variant="small" className="font-bold text-ink">
                 {zodiacSign}
               </Text>
-              <Text variant="muted" className="text-ink-light">
+              <Text variant="muted" className="text-ink-faint">
                 — Monthly
               </Text>
             </View>
@@ -231,99 +375,91 @@ function ZodiacCard({ zodiacSign }: { zodiacSign: string | null | undefined }) {
           <Ionicons
             name="chevron-forward-outline"
             size={18}
-            className="text-ink-light"
+            className="text-ink-faint"
           />
         </View>
-        <TouchableOpacity className="mt-2 ml-14">
-          <Text variant="small" className="font-semibold text-terracotta">
-            Read full prediction →
-          </Text>
-        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
 }
 
-// ─── FavoritesRow & FeatureGrid unchanged ─────────────────────────────────────
+// ─── FavoritesRow ─────────────────────────────────────────────────────────────
 function FavoritesRow({ items }: { items: typeof FAVORITES }) {
   const isEmpty = items.length === 0;
   return (
     <View className="gap-2">
       <View className="flex-row items-center justify-between">
-        <Text className="text-xl font-playfair-medium text-primary">
-          My Favorites
+        <Text className="text-xl font-fraunces font-bold text-primary">
+          My favorites
         </Text>
         {!isEmpty && (
           <TouchableOpacity>
-            <Text variant="small" className="font-semibold text-terracotta">
+            <Text variant="small" className="font-medium text-primary">
               See all
             </Text>
           </TouchableOpacity>
         )}
       </View>
       {isEmpty ? (
-        <View className="rounded-xl items-center bg-card-bg border border-cream-dark border-dashed justify-center py-4">
-          <Ionicons name="heart-outline" className="text-ink-light" size={22} />
-          <Text variant="muted" className="mt-1 text-ink-light">
+        <View className="rounded-xl items-center bg-surface-tint border border-line-soft border-dashed justify-center py-4">
+          <Ionicons name="heart-outline" className="text-ink-faint" size={22} />
+          <Text variant="muted" className="mt-1 text-ink-faint">
             Start saving your favorites here
           </Text>
         </View>
       ) : (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {items.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              activeOpacity={0.85}
-              className="mr-2.5"
-            >
-              <View className="flex-row items-center bg-white border border-cream-dark rounded-xl pl-1 pr-2 py-1 gap-2">
-                <View
-                  className="w-8 h-8 rounded-md items-center justify-center"
-                  style={{
-                    backgroundColor:
-                      item.type === "mantra"
-                        ? COLOR.gold + "15"
-                        : COLOR.sage + "15",
-                    borderColor:
-                      item.type === "mantra"
-                        ? COLOR.gold + "15"
-                        : COLOR.sage + "15",
-                    borderWidth: 1,
-                  }}
-                >
-                  {item.icon === "book-outline" ? (
-                    <OmBookIcon
-                      color={item.type === "mantra" ? COLOR.gold : COLOR.sage}
-                    />
-                  ) : (
-                    <Ionicons
-                      name={item.icon as any}
-                      size={15}
-                      color={item.type === "mantra" ? COLOR.gold : COLOR.sage}
-                    />
-                  )}
+          {items.map((item) => {
+            const isMantra = item.type === "mantra";
+            return (
+              <TouchableOpacity
+                key={item.id}
+                activeOpacity={0.85}
+                className="mr-2.5"
+              >
+                <View className="flex-row items-center bg-white border border-line-soft rounded-xl pl-1 pr-2 py-1 gap-2">
+                  <View
+                    className={`w-8 h-8 rounded-md items-center justify-center border ${
+                      isMantra
+                        ? "bg-gold/10 border-gold/30"
+                        : "bg-primary/10 border-primary/30"
+                    }`}
+                  >
+                    {item.icon === "book-outline" ? (
+                      <OmBookIcon color="#D4AF37" />
+                    ) : (
+                      <Ionicons
+                        name={item.icon as any}
+                        size={15}
+                        className={isMantra ? "text-gold" : "text-primary"}
+                      />
+                    )}
+                  </View>
+                  <Text
+                    variant="small"
+                    className="leading-relaxed font-inter-medium text-ink flex-1"
+                    numberOfLines={1}
+                  >
+                    {item.label}
+                  </Text>
                 </View>
-                <Text
-                  variant="small"
-                  className="leading-relaxed text-ink flex-1"
-                  numberOfLines={1}
-                >
-                  {item.label}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       )}
     </View>
   );
 }
 
+// ─── FeatureGrid ──────────────────────────────────────────────────────────────
 function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
   const navigation = useNavigation();
   return (
     <View className="gap-2">
-      <Text className="text-xl font-playfair-medium text-primary">Explore</Text>
+      <Text className="text-xl font-fraunces font-bold text-primary">
+        Explore
+      </Text>
       <View className="flex-row flex-wrap gap-2.5">
         {cards.map((card) => (
           <TouchableOpacity
@@ -332,39 +468,30 @@ function FeatureGrid({ cards }: { cards: typeof FEATURE_CARDS }) {
             activeOpacity={0.88}
             style={{ width: "48.5%" }}
           >
-            <View className="rounded-2xl bg-white border border-cream-dark min-h-28 justify-between p-4">
+            <View className="rounded-2xl bg-white border border-line-soft min-h-28 justify-between p-4">
               <View className="flex-row items-start justify-between">
                 <View
-                  className="w-10 h-10 rounded-xl items-center justify-center"
-                  style={{
-                    backgroundColor: card.color + "14",
-                    borderColor: card.color + 20,
-                    borderWidth: 1,
-                  }}
+                  className={`w-10 h-10 rounded-xl items-center justify-center ${card.className}`}
                 >
                   <Ionicons
                     name={card.icon as any}
                     size={20}
-                    color={card.color}
+                    className={card.iconClass}
                   />
                 </View>
                 <Ionicons
                   name="chevron-forward-outline"
                   size={16}
-                  className="text-ink-light"
+                  className="text-ink-faint"
                 />
               </View>
               <View className="gap-1">
-                <Text
-                  variant="small"
-                  className="font-bold text-ink"
-                  style={{ color: COLOR.ink }}
-                >
+                <Text variant="small" className="font-bold text-ink">
                   {card.label}
                 </Text>
                 <Text
                   variant="muted"
-                  className="leading-4 text-ink-light"
+                  className="leading-4 text-ink-faint"
                   numberOfLines={1}
                 >
                   {card.badge}
@@ -394,7 +521,7 @@ export default function HomeScreen() {
   const { salutation, icon } = GREETING_CONFIG[dayTime];
 
   return (
-    <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
+    <SafeAreaView className="flex-1 bg-background">
       <ScrollView
         showsVerticalScrollIndicator={false}
         className="flex-1"

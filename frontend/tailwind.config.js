@@ -19,284 +19,148 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
   },
+
+  // ─── Safelist ───────────────────────────────────────────────────────────
+  // Includes opacity modifiers (/5, /10, /15, /20, /30, /40, /50, /70, /80)
   safelist: [
     {
       pattern:
-        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
-    },
-    // Safelist brand palette utilities
-    {
-      pattern:
-        /(bg|border|text|stroke|fill)-(cream|terracotta|gold|sage|ink)(Dark|Light|Muted)?/,
+        /(bg|border|text|stroke|fill)-(background|surface|ink|line|primary|gold|indigo|green|red)(-(tint|muted|faint|soft|ink))?(\/(5|10|15|20|25|30|40|50|60|70|75|80|90))?/,
     },
   ],
+
   theme: {
     extend: {
+      // ─── Typography ──────────────────────────────────────────────────────
       fontFamily: {
-        'playfair': ["PlayfairDisplay_400Regular"],
-        'playfair-medium': ["PlayfairDisplay_500Medium"],
-        'playfair-bold': ["PlayfairDisplay_700Bold"],
+        // Fraunces
+        fraunces:                   ['Fraunces_400Regular'],
+        'fraunces-light':           ['Fraunces_300Light'],
 
-        'merriweather-light': ["Merriweather_300Light"],
-        'merriweather-light-italic': ["Merriweather_300Light_Italic"],
-        'merriweather-regular': ["Merriweather_400Regular"],
-        'merriweather-italic': ["Merriweather_400Regular_Italic"],
-        'merriweather-medium': ["Merriweather_500Medium"],
-        'merriweather-semibold': ["Merriweather_600SemiBold"],
-        'merriweather-bold': ["Merriweather_700Bold"],
+        // Playfair Display
+        playfair:                   ['PlayfairDisplay_400Regular'],
+        'playfair-medium':          ['PlayfairDisplay_500Medium'],
+        'playfair-bold':            ['PlayfairDisplay_700Bold'],
 
-        'inter-extralight': ["Inter_200ExtraLight"],
-        'inter-light': ["Inter_300Light"],
-        'inter-regular': ["Inter_400Regular"],
-        'inter-medium': ["Inter_500Medium"],
-        'inter-semibold': ["Inter_600SemiBold"],
-        'inter-bold': ["Inter_700Bold"],
-        'inter-extrabold': ["Inter_800ExtraBold"],
-        'inter-black': ["Inter_900Black"],
+        // Devanagari
+        'tiro-devanagari-hindi':    ['TiroDevanagariHindi_400Regular'],
+        'noto-sans-devanagari':     ['NotoSansDevanagari_400Regular'],
 
-        'ibm-mono-light': ["IBMPlexMono_300Light"],
+        // Merriweather
+        'merriweather-light':         ['Merriweather_300Light'],
+        'merriweather-light-italic':  ['Merriweather_300Light_Italic'],
+        'merriweather-regular':       ['Merriweather_400Regular'],
+        'merriweather-italic':        ['Merriweather_400Regular_Italic'],
+        'merriweather-medium':        ['Merriweather_500Medium'],
+        'merriweather-semibold':      ['Merriweather_600SemiBold'],
+        'merriweather-bold':          ['Merriweather_700Bold'],
 
-        'playfair-display-bold': ["PlayfairDisplay_700Bold"],
-        'playfair-display-regular': ["PlayfairDisplay_400Regular"],
-        'playfair-display-medium': ["PlayfairDisplay_400Medium"],
+        // Inter
+        'inter-extralight': ['Inter_200ExtraLight'],
+        'inter-light':      ['Inter_300Light'],
+        'inter-regular':    ['Inter_400Regular'],
+        'inter-medium':     ['Inter_500Medium'],
+        'inter-semibold':   ['Inter_600SemiBold'],
+        'inter-bold':       ['Inter_700Bold'],
+        'inter-extrabold':  ['Inter_800ExtraBold'],
+        'inter-black':      ['Inter_900Black'],
 
+        // Mono
+        'ibm-mono-light': ['IBMPlexMono_300Light'],
+
+        // Reset nativewind defaults
         heading: undefined,
-        body: undefined,
-        mono: undefined,
-        jakarta: ['var(--font-plus-jakarta-sans)'],
-        roboto: ['var(--font-roboto)'],
-        code: ['var(--font-source-code-pro)'],
-        inter: ['var(--font-inter)'],
+        body:    undefined,
+        mono:    undefined,
+
+        // CSS variable–driven (web)
+        jakarta:      ['var(--font-plus-jakarta-sans)'],
+        roboto:       ['var(--font-roboto)'],
+        code:         ['var(--font-source-code-pro)'],
+        inter:        ['var(--font-inter)'],
         'space-mono': ['var(--font-space-mono)'],
       },
 
-      colors: {
-        // ─── Brand Palette ──────────────────────────────────────────────
-        cream: {
-          DEFAULT: '#FDF6EC',
-          dark: '#F0E6D4',
-        },
-        terracotta: {
-          DEFAULT: '#C2562D',
-          light: '#D97A4F',
-        },
-        gold: {
-          DEFAULT: '#D4A843',
-          light: '#E8C96D',
-        },
-        sage: {
-          DEFAULT: '#7A8C6E',
-          dark: '#5E6F52',
-        },
-        ink: {
-          DEFAULT: '#2C2420',
-          muted: '#6B5B50',
-          light: '#9C8E82',
-        },
-        'card-bg': '#FFFAF3',
-
-        // ─── shadcn/rn-primitives tokens ────────────────────────────────
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        foreground: 'hsl(var(--foreground))',
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-
-        // ─── Gluestack / design system tokens ───────────────────────────
-        primary: {
-          DEFAULT: '#DE6A4D',
-          foreground: 'hsl(var(--primary-foreground))',
-          0: 'rgb(var(--color-primary-0)/<alpha-value>)',
-          50: 'rgb(var(--color-primary-50)/<alpha-value>)',
-          100: 'rgb(var(--color-primary-100)/<alpha-value>)',
-          200: 'rgb(var(--color-primary-200)/<alpha-value>)',
-          300: 'rgb(var(--color-primary-300)/<alpha-value>)',
-          400: 'rgb(var(--color-primary-400)/<alpha-value>)',
-          500: 'rgb(var(--color-primary-500)/<alpha-value>)',
-          600: 'rgb(var(--color-primary-600)/<alpha-value>)',
-          700: 'rgb(var(--color-primary-700)/<alpha-value>)',
-          800: 'rgb(var(--color-primary-800)/<alpha-value>)',
-          900: 'rgb(var(--color-primary-900)/<alpha-value>)',
-          950: 'rgb(var(--color-primary-950)/<alpha-value>)',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-          0: 'rgb(var(--color-secondary-0)/<alpha-value>)',
-          50: 'rgb(var(--color-secondary-50)/<alpha-value>)',
-          100: 'rgb(var(--color-secondary-100)/<alpha-value>)',
-          200: 'rgb(var(--color-secondary-200)/<alpha-value>)',
-          300: 'rgb(var(--color-secondary-300)/<alpha-value>)',
-          400: 'rgb(var(--color-secondary-400)/<alpha-value>)',
-          500: 'rgb(var(--color-secondary-500)/<alpha-value>)',
-          600: 'rgb(var(--color-secondary-600)/<alpha-value>)',
-          700: 'rgb(var(--color-secondary-700)/<alpha-value>)',
-          800: 'rgb(var(--color-secondary-800)/<alpha-value>)',
-          900: 'rgb(var(--color-secondary-900)/<alpha-value>)',
-          950: 'rgb(var(--color-secondary-950)/<alpha-value>)',
-        },
-        background: {
-          DEFAULT: 'hsl(var(--background))',
-          0: 'rgb(var(--color-background-0)/<alpha-value>)',
-          50: 'rgb(var(--color-background-50)/<alpha-value>)',
-          100: 'rgb(var(--color-background-100)/<alpha-value>)',
-          200: 'rgb(var(--color-background-200)/<alpha-value>)',
-          300: 'rgb(var(--color-background-300)/<alpha-value>)',
-          400: 'rgb(var(--color-background-400)/<alpha-value>)',
-          500: 'rgb(var(--color-background-500)/<alpha-value>)',
-          600: 'rgb(var(--color-background-600)/<alpha-value>)',
-          700: 'rgb(var(--color-background-700)/<alpha-value>)',
-          800: 'rgb(var(--color-background-800)/<alpha-value>)',
-          900: 'rgb(var(--color-background-900)/<alpha-value>)',
-          950: 'rgb(var(--color-background-950)/<alpha-value>)',
-          error: 'rgb(var(--color-background-error)/<alpha-value>)',
-          warning: 'rgb(var(--color-background-warning)/<alpha-value>)',
-          muted: 'rgb(var(--color-background-muted)/<alpha-value>)',
-          success: 'rgb(var(--color-background-success)/<alpha-value>)',
-          info: 'rgb(var(--color-background-info)/<alpha-value>)',
-          light: '#FBFBFB',
-          dark: '#181719',
-        },
-        tertiary: {
-          50: 'rgb(var(--color-tertiary-50)/<alpha-value>)',
-          100: 'rgb(var(--color-tertiary-100)/<alpha-value>)',
-          200: 'rgb(var(--color-tertiary-200)/<alpha-value>)',
-          300: 'rgb(var(--color-tertiary-300)/<alpha-value>)',
-          400: 'rgb(var(--color-tertiary-400)/<alpha-value>)',
-          500: 'rgb(var(--color-tertiary-500)/<alpha-value>)',
-          600: 'rgb(var(--color-tertiary-600)/<alpha-value>)',
-          700: 'rgb(var(--color-tertiary-700)/<alpha-value>)',
-          800: 'rgb(var(--color-tertiary-800)/<alpha-value>)',
-          900: 'rgb(var(--color-tertiary-900)/<alpha-value>)',
-          950: 'rgb(var(--color-tertiary-950)/<alpha-value>)',
-        },
-        error: {
-          0: 'rgb(var(--color-error-0)/<alpha-value>)',
-          50: 'rgb(var(--color-error-50)/<alpha-value>)',
-          100: 'rgb(var(--color-error-100)/<alpha-value>)',
-          200: 'rgb(var(--color-error-200)/<alpha-value>)',
-          300: 'rgb(var(--color-error-300)/<alpha-value>)',
-          400: 'rgb(var(--color-error-400)/<alpha-value>)',
-          500: 'rgb(var(--color-error-500)/<alpha-value>)',
-          600: 'rgb(var(--color-error-600)/<alpha-value>)',
-          700: 'rgb(var(--color-error-700)/<alpha-value>)',
-          800: 'rgb(var(--color-error-800)/<alpha-value>)',
-          900: 'rgb(var(--color-error-900)/<alpha-value>)',
-          950: 'rgb(var(--color-error-950)/<alpha-value>)',
-        },
-        success: {
-          0: 'rgb(var(--color-success-0)/<alpha-value>)',
-          50: 'rgb(var(--color-success-50)/<alpha-value>)',
-          100: 'rgb(var(--color-success-100)/<alpha-value>)',
-          200: 'rgb(var(--color-success-200)/<alpha-value>)',
-          300: 'rgb(var(--color-success-300)/<alpha-value>)',
-          400: 'rgb(var(--color-success-400)/<alpha-value>)',
-          500: 'rgb(var(--color-success-500)/<alpha-value>)',
-          600: 'rgb(var(--color-success-600)/<alpha-value>)',
-          700: 'rgb(var(--color-success-700)/<alpha-value>)',
-          800: 'rgb(var(--color-success-800)/<alpha-value>)',
-          900: 'rgb(var(--color-success-900)/<alpha-value>)',
-          950: 'rgb(var(--color-success-950)/<alpha-value>)',
-        },
-        warning: {
-          0: 'rgb(var(--color-warning-0)/<alpha-value>)',
-          50: 'rgb(var(--color-warning-50)/<alpha-value>)',
-          100: 'rgb(var(--color-warning-100)/<alpha-value>)',
-          200: 'rgb(var(--color-warning-200)/<alpha-value>)',
-          300: 'rgb(var(--color-warning-300)/<alpha-value>)',
-          400: 'rgb(var(--color-warning-400)/<alpha-value>)',
-          500: 'rgb(var(--color-warning-500)/<alpha-value>)',
-          600: 'rgb(var(--color-warning-600)/<alpha-value>)',
-          700: 'rgb(var(--color-warning-700)/<alpha-value>)',
-          800: 'rgb(var(--color-warning-800)/<alpha-value>)',
-          900: 'rgb(var(--color-warning-900)/<alpha-value>)',
-          950: 'rgb(var(--color-warning-950)/<alpha-value>)',
-        },
-        info: {
-          0: 'rgb(var(--color-info-0)/<alpha-value>)',
-          50: 'rgb(var(--color-info-50)/<alpha-value>)',
-          100: 'rgb(var(--color-info-100)/<alpha-value>)',
-          200: 'rgb(var(--color-info-200)/<alpha-value>)',
-          300: 'rgb(var(--color-info-300)/<alpha-value>)',
-          400: 'rgb(var(--color-info-400)/<alpha-value>)',
-          500: 'rgb(var(--color-info-500)/<alpha-value>)',
-          600: 'rgb(var(--color-info-600)/<alpha-value>)',
-          700: 'rgb(var(--color-info-700)/<alpha-value>)',
-          800: 'rgb(var(--color-info-800)/<alpha-value>)',
-          900: 'rgb(var(--color-info-900)/<alpha-value>)',
-          950: 'rgb(var(--color-info-950)/<alpha-value>)',
-        },
-        typography: {
-          0: 'rgb(var(--color-typography-0)/<alpha-value>)',
-          50: 'rgb(var(--color-typography-50)/<alpha-value>)',
-          100: 'rgb(var(--color-typography-100)/<alpha-value>)',
-          200: 'rgb(var(--color-typography-200)/<alpha-value>)',
-          300: 'rgb(var(--color-typography-300)/<alpha-value>)',
-          400: 'rgb(var(--color-typography-400)/<alpha-value>)',
-          500: 'rgb(var(--color-typography-500)/<alpha-value>)',
-          600: 'rgb(var(--color-typography-600)/<alpha-value>)',
-          700: 'rgb(var(--color-typography-700)/<alpha-value>)',
-          800: 'rgb(var(--color-typography-800)/<alpha-value>)',
-          900: 'rgb(var(--color-typography-900)/<alpha-value>)',
-          950: 'rgb(var(--color-typography-950)/<alpha-value>)',
-          white: '#FFFFFF',
-          gray: '#D4D4D4',
-          black: '#181718',
-        },
-        outline: {
-          0: 'rgb(var(--color-outline-0)/<alpha-value>)',
-          50: 'rgb(var(--color-outline-50)/<alpha-value>)',
-          100: 'rgb(var(--color-outline-100)/<alpha-value>)',
-          200: 'rgb(var(--color-outline-200)/<alpha-value>)',
-          300: 'rgb(var(--color-outline-300)/<alpha-value>)',
-          400: 'rgb(var(--color-outline-400)/<alpha-value>)',
-          500: 'rgb(var(--color-outline-500)/<alpha-value>)',
-          600: 'rgb(var(--color-outline-600)/<alpha-value>)',
-          700: 'rgb(var(--color-outline-700)/<alpha-value>)',
-          800: 'rgb(var(--color-outline-800)/<alpha-value>)',
-          900: 'rgb(var(--color-outline-900)/<alpha-value>)',
-          950: 'rgb(var(--color-outline-950)/<alpha-value>)',
-        },
-        indicator: {
-          primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',
-          info: 'rgb(var(--color-indicator-info)/<alpha-value>)',
-          error: 'rgb(var(--color-indicator-error)/<alpha-value>)',
-        },
-      },
-
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
-      borderWidth: {
-        hairline: hairlineWidth(),
-      },
       fontWeight: {
         extrablack: '950',
       },
       fontSize: {
         '2xs': '10px',
       },
+
+      // ─── Colors ──────────────────────────────────────────────────────────
+      // Every value uses the <alpha-value> placeholder so opacity modifiers
+      // (e.g. `bg-gold/30`, `border-primary/15`) work in NativeWind.
+      colors: {
+        // Page background — warm ivory paper
+        background: 'oklch(0.97 0.015 75 / <alpha-value>)',
+
+        // Surfaces — cards, sheets
+        surface: {
+          DEFAULT: 'rgb(255 255 255 / <alpha-value>)',
+          tint:    'oklch(0.95 0.022 70 / <alpha-value>)',
+        },
+
+        // Ink — body text
+        ink: {
+          DEFAULT: 'oklch(0.22 0.02 40 / <alpha-value>)',
+          muted:   'oklch(0.48 0.025 40 / <alpha-value>)',
+          faint:   'oklch(0.65 0.02 40 / <alpha-value>)',
+        },
+
+        // Lines / dividers
+        line: {
+          DEFAULT: 'oklch(0.88 0.02 55 / <alpha-value>)',
+          soft:    'oklch(0.92 0.015 55 / <alpha-value>)',
+        },
+
+        // Primary — deep kumkum maroon
+        primary: {
+          DEFAULT: 'oklch(0.46 0.15 28 / <alpha-value>)',
+          ink:     'rgb(255 255 255 / <alpha-value>)',
+          soft:    'oklch(0.93 0.04 40 / <alpha-value>)',
+        },
+
+        // Gold — brass / auspicious accent
+        gold: {
+          DEFAULT: 'oklch(0.70 0.11 78 / <alpha-value>)',
+          soft:    'oklch(0.94 0.05 82 / <alpha-value>)',
+        },
+
+        // Semantic accents
+        indigo: 'oklch(0.30 0.08 270 / <alpha-value>)', // dusk / night
+        green:  'oklch(0.52 0.09 150 / <alpha-value>)', // shubh
+        red:    'oklch(0.55 0.14 28 / <alpha-value>)',  // ashubh
+      },
+
+      // ─── Radii ───────────────────────────────────────────────────────────
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+        // Density card radii
+        'card-compact':     '14px',
+        'card-regular':     '18px',
+        'card-comfortable': '22px',
+      },
+      borderWidth: {
+        hairline: hairlineWidth(),
+      },
+
+      // ─── Spacing — density tokens ────────────────────────────────────────
+      spacing: {
+        'pad-compact':      '14px',
+        'pad-regular':      '18px',
+        'pad-comfortable':  '22px',
+        'gap-compact':      '10px',
+        'gap-regular':      '14px',
+        'gap-comfortable':  '18px',
+        'card-compact':     '14px',
+        'card-regular':     '18px',
+        'card-comfortable': '22px',
+      },
+
+      // ─── Shadows ─────────────────────────────────────────────────────────
       boxShadow: {
         'hard-1': '-2px 2px 8px 0px rgba(38, 38, 38, 0.20)',
         'hard-2': '0px 3px 10px 0px rgba(38, 38, 38, 0.20)',
@@ -308,19 +172,29 @@ module.exports = {
         'soft-3': '0px 0px 30px rgba(38, 38, 38, 0.1)',
         'soft-4': '0px 0px 40px rgba(38, 38, 38, 0.1)',
       },
+
+      // ─── Background images / gradients ───────────────────────────────────
+      // ⚠ Gradients only render on web with NativeWind. For iOS/Android use
+      // <LinearGradient/> from `expo-linear-gradient` with the same stops.
+      backgroundImage: {
+        'gradient-primary':
+          'linear-gradient(155deg, oklch(0.46 0.15 28) 0%, oklch(0.32 0.10 25) 100%)',
+      },
+
+      // ─── Animation ───────────────────────────────────────────────────────
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
+          to:   { height: 'var(--radix-accordion-content-height)' },
         },
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
+          to:   { height: '0' },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+        'accordion-up':   'accordion-up 0.2s ease-out',
       },
     },
   },

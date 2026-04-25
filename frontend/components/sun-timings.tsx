@@ -25,11 +25,11 @@ export default function SunriseSunsetCard({
   sunsetPeriod = "PM",
 }) {
   return (
-    // screen — cream-dark background
+    // screen — line-soft background
     <View className="flex-1 items-center justify-center px-4">
       {/* ── Card ──────────────────────────────────────────────────── */}
       <View
-        className="rounded-3xl bg-white border border-cream-dark px-6 pt-6 pb-5 shadow-md shadow-cream-dark"
+        className="rounded-3xl bg-white border border-line-soft px-6 pt-6 pb-5 shadow-md shadow-line-soft"
         style={{ width: CARD_WIDTH }}
       >
         {/* ── Top Row: label + TODAY pill ───────────────────────────── */}
@@ -52,7 +52,7 @@ export default function SunriseSunsetCard({
         </Text>
 
         {/* ── Horizontal divider ────────────────────────────────────── */}
-        <View className="h-px bg-cream-dark mb-5" />
+        <View className="h-px bg-line-soft mb-5" />
 
         {/* ── Bottom Row: sunrise / divider / sunset ────────────────── */}
         <View className="flex-row items-center">
@@ -79,7 +79,7 @@ export default function SunriseSunsetCard({
           </View>
 
           {/* Vertical divider */}
-          <View className="w-px h-14 bg-cream-dark mx-4" />
+          <View className="w-px h-14 bg-line-soft mx-4" />
 
           {/* Sunset */}
           <View className="flex-1 items-end">

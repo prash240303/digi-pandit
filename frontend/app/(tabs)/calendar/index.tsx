@@ -1,4 +1,3 @@
-import { COLOR } from "@/constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ScrollView,
@@ -22,7 +21,7 @@ export default function TabTwoScreen() {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
+    <SafeAreaView className="flex-1 bg-background">
       <ScrollView className="px-1 pb-2 text-black">
         {mounted ? (
           <PanchangamCalendar />

@@ -12,6 +12,7 @@ import MuhurataDetails from "@/components/muhurata-details";
 import CalendarDateSelector from "@/components/calendar-date-selector";
 import FestivalCard from "@/components/festival-card";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Text } from "react-native-svg";
 
 export default function DetailsPage() {
   const { date } = useLocalSearchParams();

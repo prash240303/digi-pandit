@@ -44,6 +44,9 @@ import {
 } from "@expo-google-fonts/playfair-display";
 
 import { IBMPlexMono_300Light } from "@expo-google-fonts/ibm-plex-mono";
+import { Fraunces_300Light, Fraunces_400Regular } from "@expo-google-fonts/fraunces";
+import {TiroDevanagariHindi_400Regular} from "@expo-google-fonts/tiro-devanagari-hindi"
+import {NotoSansDevanagari_400Regular} from "@expo-google-fonts/noto-sans-devanagari"
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import "@/global.css";
@@ -150,6 +153,10 @@ export default function RootLayout() {
     Inter_800ExtraBold,
     Inter_900Black,
     IBMPlexMono_300Light,
+    Fraunces_300Light,
+    Fraunces_400Regular,
+    TiroDevanagariHindi_400Regular,
+    NotoSansDevanagari_400Regular,
   });
 
   useEffect(() => {

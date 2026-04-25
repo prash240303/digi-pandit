@@ -292,7 +292,7 @@ function ChecklistCard({ block }: { block: ChecklistBlock }) {
 
 function StepImageCard({ block }: { block: ImageBlock }) {
   return (
-    <View className="mt-3 rounded-2xl overflow-hidden border border-cream-dark">
+    <View className="mt-3 rounded-2xl overflow-hidden border border-line-soft">
       <Image
         source={{ uri: block.uri }}
         className="w-full"
@@ -315,7 +315,7 @@ function StepImageCard({ block }: { block: ImageBlock }) {
 
 function StepCard({ step }: { step: Step }) {
   return (
-    <View className="bg-white rounded-2xl border border-cream-dark p-4">
+    <View className="bg-white rounded-2xl border border-line-soft p-4">
       <View className="flex-row items-start">
         {/* Number bubble */}
         <View
@@ -440,19 +440,19 @@ export default function GuideDetailScreen() {
       {/* ── Floating top bar ── */}
       <View className="flex-row items-center justify-between px-4 py-2 absolute top-10 left-0 right-0 z-10">
         <TouchableOpacity onPress={() => router.back()}>
-          <View className="w-9 h-9 rounded-full items-center justify-center bg-white/90 border border-cream-dark">
+          <View className="w-9 h-9 rounded-full items-center justify-center bg-white/90 border border-line-soft">
             <Ionicons name="arrow-back-outline" size={18} color={COLOR.ink} />
           </View>
         </TouchableOpacity>
 
         <View className="flex-row gap-2">
           <TouchableOpacity onPress={handleShare}>
-            <View className="w-9 h-9 rounded-full items-center justify-center bg-white/90 border border-cream-dark">
+            <View className="w-9 h-9 rounded-full items-center justify-center bg-white/90 border border-line-soft">
               <Ionicons name="share-outline" size={17} color={COLOR.ink} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setBookmarked((b) => !b)}>
-            <View className="w-9 h-9 rounded-full items-center justify-center bg-white/90 border border-cream-dark">
+            <View className="w-9 h-9 rounded-full items-center justify-center bg-white/90 border border-line-soft">
               <Ionicons
                 name={bookmarked ? "bookmark" : "bookmark-outline"}
                 size={17}
@@ -536,7 +536,7 @@ export default function GuideDetailScreen() {
               <View className="flex-row items-center gap-3">
                 <Image
                   source={{ uri: guide.author.avatarUri }}
-                  className="w-9 h-9 rounded-full border border-cream-dark"
+                  className="w-9 h-9 rounded-full border border-line-soft"
                   resizeMode="cover"
                 />
                 <View>
@@ -578,7 +578,7 @@ export default function GuideDetailScreen() {
 
             {/* Likes / Comments bar */}
             <FadeSlideIn delay={460}>
-              <View className="flex-row items-center gap-4 bg-white rounded-2xl border border-cream-dark px-4 py-3">
+              <View className="flex-row items-center gap-4 bg-white rounded-2xl border border-line-soft px-4 py-3">
                 <TouchableOpacity
                   onPress={() => setLiked((l) => !l)}
                   className="flex-row items-center gap-1.5"
@@ -599,7 +599,7 @@ export default function GuideDetailScreen() {
                   </Text>
                 </TouchableOpacity>
 
-                <View className="w-px h-4 bg-cream-dark" />
+                <View className="w-px h-4 bg-line-soft" />
 
                 <TouchableOpacity className="flex-row items-center gap-1.5">
                   <Ionicons
@@ -632,7 +632,7 @@ export default function GuideDetailScreen() {
                   router.push(`/rituals/${guide.nextGuide.id}` as any)
                 }
               >
-                <View className="flex-row items-center justify-between bg-white rounded-2xl border border-cream-dark px-4 py-3.5">
+                <View className="flex-row items-center justify-between bg-white rounded-2xl border border-line-soft px-4 py-3.5">
                   <View className="flex-1 pr-3">
                     <Text variant="muted" className="text-ink-light mb-0.5">
                       Next
@@ -661,7 +661,6 @@ export default function GuideDetailScreen() {
           </View>
         </ScrollView>
       )}
-
     </SafeAreaView>
   );
 }

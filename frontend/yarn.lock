@@ -895,10 +895,20 @@
     "@eslint/core" "^0.17.0"
     levn "^0.4.1"
 
+"@expo-google-fonts/fraunces@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/fraunces/-/fraunces-0.4.1.tgz#1dd641c322436dccb7cc156e07e247d146cd000c"
+  integrity sha512-gYc9P92ObyWvz1rWPOeWSvVKyBFIuA8hgOdhvo4DSiPBaWLbFA6v8uLIEIBwW+0oWTlXbBzjeBReHQI2H7UNjQ==
+
 "@expo-google-fonts/ibm-plex-mono@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/ibm-plex-mono/-/ibm-plex-mono-0.4.1.tgz#a3985622223a5de40dddb7e75c9f74cbc070e445"
   integrity sha512-/yYz1mPZq8Nd4tSiH0SBDPEdJUqiOGBwVgSrQvLuw7SPh6C7ezBzmi6eFyHY4QaQwjHDmOLSBKsxzq8ZDFXVAg==
+
+"@expo-google-fonts/instrument-serif@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/instrument-serif/-/instrument-serif-0.4.1.tgz#f4514bb83130f891bf681a0190d7276b899ba795"
+  integrity sha512-1CgCrLbTSgE7RV8ZrTT7i06UAyNQDBrhxQuxkReNnfq5yvUhTmvpOK17grlEsXG5p04lJ1ZXGiIjPeHo6X0sXg==
 
 "@expo-google-fonts/inter@^0.4.2":
   version "0.4.2"
@@ -910,10 +920,20 @@
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/merriweather/-/merriweather-0.4.2.tgz#b2afa7a2220c1c6e143bba81dce984c47282b522"
   integrity sha512-jUlmDzo5hQ36fPDXZvdt2VIZGCFkdg2Gfx+oWnbzvfygdCvx3AIe8O74IdsN1IZ65mxSSgsajM1c2XV2L/eYkw==
 
+"@expo-google-fonts/noto-sans-devanagari@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/noto-sans-devanagari/-/noto-sans-devanagari-0.4.1.tgz#a1ea7df4bc044f27d707d9364b280d8080ab5eb7"
+  integrity sha512-26boYPNKGP1r4R5MxsMAY/zCQOwiXLOJzX8sh1a2oEWyQurQsyniaCv4992c+9jjwshEEt2NNVv5GcnyzaL7QQ==
+
 "@expo-google-fonts/playfair-display@^0.4.2":
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/playfair-display/-/playfair-display-0.4.2.tgz#a2ce52b803eebf5e8fa62cdbb26e85b08f0665b7"
   integrity sha512-mWhBV59RUjSS3aYpytUb7UyHHTnXcHh7epAn7gq+M4XAEh5PuMKUrP8eiUfkJLb6UwHZCi7EhQpUzxHu5OL96w==
+
+"@expo-google-fonts/tiro-devanagari-hindi@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/tiro-devanagari-hindi/-/tiro-devanagari-hindi-0.4.0.tgz#170f57086d7a57978bf06abea8f4828454ee2b4d"
+  integrity sha512-hr5ILVrmjkREPFfxm3zHx1SOzKvQhbdreoKfr08SNKgTlwTVMxLUVBygObY0cZDgB06wvcYuBT+ybaoIUUq5Kw==
 
 "@expo/apple-utils@2.1.19":
   version "2.1.19"
@@ -6205,6 +6225,13 @@ expo-file-system@~19.0.21:
   version "19.0.21"
   resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-19.0.21.tgz"
   integrity sha512-s3DlrDdiscBHtab/6W1osrjGL+C2bvoInPJD7sOwmxfJ5Woynv2oc+Fz1/xVXaE/V7HE/+xrHC/H45tu6lZzzg==
+
+expo-font@^55.0.6:
+  version "55.0.6"
+  resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-55.0.6.tgz#f6ef6c7a9d2ff70bd7c22fc2b01f7db0bdbbeefc"
+  integrity sha512-x9czUA3UQWjIwa0ZUEs/eWJNqB4mAue/m4ltESlNPLZhHL0nWWqIfsyHmklTLFH7mVfcHSJvew6k+pR2FE1zVw==
+  dependencies:
+    fontfaceobserver "^2.1.0"
 
 expo-font@~14.0.11:
   version "14.0.11"
