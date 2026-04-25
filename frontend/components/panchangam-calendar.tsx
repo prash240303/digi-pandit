@@ -18,7 +18,7 @@ interface CalendarDayData {
 }
 
 /* -------------------- Mock Data -------------------- */
-const WEEKDAY_NAMES = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const WEEKDAY_NAMES = ["S", "M", "T", "W", "T", "F", "S"];
 
 /* -------------------- Helper Functions -------------------- */
 const getCurrentNakshatra = (panchangam: any) => {
@@ -48,6 +48,15 @@ const getChandrabalam = (panchangam: any) => {
     moon = "🌖 ";
   }
   return moon;
+};
+
+const isToday = (date: Date) => {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
 };
 
 /* -------------------- Component -------------------- */
@@ -137,7 +146,7 @@ const PanchangamCalendar: React.FC = () => {
             style={{ width: "14.28%" }}
             className="items-center justify-center"
           >
-            <Text className="text-orange-500 font-bold text-xs uppercase tracking-wider">
+            <Text className="text-primary font-bold text-xs uppercase tracking-wider">
               {d}
             </Text>
           </View>
@@ -153,58 +162,70 @@ const PanchangamCalendar: React.FC = () => {
       ) : (
         <View className="flex-row flex-wrap w-full">
           {weeks.flat().map((day, i) => {
-          if (!day) {
-            return <View key={`empty-${i}`} style={{ width: "14.25%" , height:"auto"}} />;
-          }
+            if (!day) {
+              return (
+                <View
+                  key={`empty-${i}`}
+                  style={{ width: "14.25%", height: "auto" }}
+                />
+              );
+            }
 
-          const isFestival = day.panchangam.festivals.length > 0;
+            const isFestival = day.panchangam.festivals.length > 0;
+            const isCurrentDay = isToday(day.date);
 
-          return (
-            <View
-              key={i}
-              style={{ width: "14.28%", height: "auto" }}
-              className="overflow-hidden p-px"
-            >
-              <TouchableOpacity
-                onPress={() => handlePress(day.date)}
-                className={`flex-1 h-fit rounded-md border flex-col justify-between px-px py-1 ${
-                  isFestival
-                    ? "bg-purple-100 border-purple-300"
-                    : "bg-orange-50 border-orange-200"
-                }`}
+            return (
+              <View
+                key={i}
+                style={{ width: "14.28%", height: "auto" }}
+                className="overflow-hidden p-px"
               >
-                {/* Date Number & Moon Phase */}
-                <View className="items-center">
-                  <Text
-                    className={`text-lg font-bold ${isFestival ? "text-purple-900" : "text-amber-900"}`}
-                  >
-                    {day.date.getDate()}
-                  </Text>
-                  <Text className="text-lg mt-1">
-                    {getChandrabalam(day.panchangam)}
-                  </Text>
-                </View>
+                <TouchableOpacity
+                  onPress={() => handlePress(day.date)}
+                  className={`flex-1 h-fit rounded-md border flex-col justify-between px-px py-1 ${
+                    isCurrentDay
+                      ? "bg-primary-soft border-primary"
+                      : isFestival
+                        ? "bg-gold-soft/90 border-gold"
+                        : "bg-orange-50 border-orange-200"
+                  }`}
+                >
+                  {/* Date Number & Moon Phase */}
+                  <View className="items-center">
+                    <Text
+                      className={`text-lg font-fraunces font-bold text-primary`}
+                    >
+                      {day.date.getDate()}
+                    </Text>
+                    <Text className="text-lg mt-1">
+                      {getChandrabalam(day.panchangam)}
+                    </Text>
+                  </View>
 
-                {/* Panchang Info */}
-                <View className="pb-1">
-                  <Text
-                    numberOfLines={2} // allow wrap
-                    className={`text-[7px] text-center font-medium leading-tight ${
-                      isFestival ? "text-purple-700" : "text-amber-700"
-                    }`}
-                  >
-                    {day.panchangam?.tithiTransitions?.[1]?.name ||
-                      day.panchangam?.tithi ||
-                      "N/A"}
-                  </Text>
-                  <Text
-                    numberOfLines={2}
-                    className="text-[7px] text-center text-stone-500 italic"
-                  >
-                    {getCurrentNakshatra(day.panchangam)}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                  {/* Panchang Info */}
+                  <View className="pb-1">
+                    <Text
+                      numberOfLines={2} // allow wrap
+                      className={`text-[7px] text-center font-medium leading-tight ${
+                        isCurrentDay
+                          ? "text-primary"
+                          : isFestival
+                            ? "text-yellow-600"
+                            : "text-amber-700"
+                      }`}
+                    >
+                      {day.panchangam?.tithiTransitions?.[1]?.name ||
+                        day.panchangam?.tithi ||
+                        "N/A"}
+                    </Text>
+                    <Text
+                      numberOfLines={2}
+                      className="text-[7px] text-center text-stone-500 italic"
+                    >
+                      {getCurrentNakshatra(day.panchangam)}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               </View>
             );
           })}

@@ -13,7 +13,6 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-  NativeSelectScrollView,
 } from "./ui/select";
 
 const MONTH_NAMES = [
@@ -31,7 +30,7 @@ const MONTH_NAMES = [
   "December",
 ];
 
-const NEPALI_MONTHS: Record<number, string> = {
+const HINDU_MONTHS: Record<number, string> = {
   0: "POUSH — MAGH",
   1: "MAGHA — PHALGUNA",
   2: "FALGUN — CHAITRA",
@@ -67,35 +66,45 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 }) => {
   const years = Array.from({ length: 100 }, (_, i) => 1980 + i);
   const nepaliYear = parseInt(yearValue || String(year)) + NEPALI_YEAR_OFFSET;
-  const nepaliMonthLabel = `${NEPALI_MONTHS[month]} ${nepaliYear}`;
+  const hinduMonthLabel = `${HINDU_MONTHS[month]} ${nepaliYear}`;
 
   return (
-    <View className=" rounded-2xl flex-row items-center justify-between px-3 py-2">
-      {/* Left Arrow */}
-      <TouchableOpacity
-        onPress={onPrevMonth}
-        className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center border-slate-300`}
-      >
-        <HugeiconsIcon icon={ArrowLeft01Icon} color={"#334155"} />
-      </TouchableOpacity>
+    <View className="flex flex-col gap-2 w-full">
+      <View className=" rounded-2xl flex-row items-center justify-betwee pt-5">
+        {/* Left Arrow */}
+        <TouchableOpacity
+          onPress={onPrevMonth}
+          className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center border-line`}
+        >
+          <HugeiconsIcon icon={ArrowLeft01Icon} color={"#334155"} />
+        </TouchableOpacity>
 
-      {/* Center Content */}
-      <View className="flex-1 items-center gap-1">
-        <Text className="text-3xl font-playfair-display-bold text-slate-800 tracking-tight">
-          {MONTH_NAMES[month]}
-        </Text>
+        {/* Center Content */}
+        <View className="flex-1 items-center gap-1">
+          <Text className="text-3xl font-fraunces text-slate-800 tracking-tight">
+            {MONTH_NAMES[month]}
+          </Text>
 
-        <Text className="text-xs font-inter-light tracking-widest text-[#e8642a] uppercase mt-1">
-          {nepaliMonthLabel}
-        </Text>
+          <Text className="text-xs font-inter tracking-widest text-primary uppercase mt-1">
+            {hinduMonthLabel}
+          </Text>
+        </View>
 
-        {/* Year selector pill */}
+        {/* Right Arrow */}
+        <TouchableOpacity
+          onPress={onNextMonth}
+          className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center border-line`}
+        >
+          <HugeiconsIcon icon={ArrowRight01FreeIcons} color={"#334155"} />
+        </TouchableOpacity>
+      </View>
+      <View className="flex flex-row w-full justify-between items-center">
         <Select
-          className="w-fit mt-3 mx-auto"
+          className="w-fit flex-1 mx-auto"
           value={yearValue ? { value: yearValue, label: yearValue } : undefined}
           onValueChange={(option) => onYearChange(option?.value ?? "")}
         >
-          <SelectTrigger className="bg-white  text-slate-800 border-slate-200 border rounded-lg px-3 py-2 flex-row items-center justify-center">
+          <SelectTrigger className="bg-white  text-slate-800 border-line border rounded-lg px-3 py-2 flex-row items-center justify-center">
             <SelectValue
               placeholder="Year"
               className="text-sm font-medium text-slate-800 text-center"
@@ -113,15 +122,17 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
             </ScrollView>
           </SelectContent>
         </Select>
+        <View className="flex  flex-row gap-4">
+          <View className="flex-row items-center gap-2">
+            <View className="h-2 w-2 rounded-full bg-red" />
+            <Text className="text-ink-muted">Today</Text>
+          </View>
+          <View className="flex-row items-center gap-2">
+            <View className="h-2 w-2 rounded-full bg-gold" />
+            <Text className="text-ink-muted">Festival</Text>
+          </View>
+        </View>
       </View>
-
-      {/* Right Arrow */}
-      <TouchableOpacity
-        onPress={onNextMonth}
-        className={`w-8 h-8 p-2 border shadow-md shadow-black/5 rounded-md bg-white items-center justify-center border-slate-200`}
-      >
-        <HugeiconsIcon icon={ArrowRight01FreeIcons} color={"#334155"} />
-      </TouchableOpacity>
     </View>
   );
 };
