@@ -12,7 +12,7 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
-const PRIMARY = "#DE6A4D";
+const PRIMARY = "#9a2a23";
 
 // Width of each date card + the gap between cards
 const CARD_WIDTH = 52;
@@ -98,11 +98,11 @@ export default function CalendarDateSelector() {
 
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
-            className="p-2 bg-primary rounded-full"
+            className="p-2 bg-white rounded-lg border border-line"
             onPress={goToCalendarView}
             activeOpacity={0.7}
           >
-            <HugeiconsIcon icon={Calendar01Icon} size={22} color="white" />
+            <HugeiconsIcon icon={Calendar01Icon} size={22} color={PRIMARY} />
           </TouchableOpacity>
         </View>
       </View>
@@ -134,54 +134,21 @@ export default function CalendarDateSelector() {
                   key={day.toISOString()}
                   onPress={() => handleDatePress(day, index)}
                   activeOpacity={0.9}
-                  className="shadow-sm"
-                  style={[
-                    {
-                      width: CARD_WIDTH,
-                      height: 72,
-                      borderRadius: 8,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderWidth: 2,
-                      backgroundColor: isSelected ? PRIMARY : "#ffffff",
-                      borderColor: isToday ? PRIMARY : "transparent",
-                    },
-                    isSelected
-                      ? {
-                          shadowColor: PRIMARY,
-                          shadowOffset: { width: 0, height: 10 },
-                          shadowOpacity: 0.3,
-                          shadowRadius: 12,
-                          elevation: 10,
-                        }
-                      : {
-                          shadowColor: "#A0aec0",
-                          shadowOffset: { width: 0, height: 4 },
-                          shadowOpacity: 0.1,
-                          shadowRadius: 6,
-                          elevation: 2,
-                        },
-                  ]}
+                  className={`flex-1 flex-col py-4 items-center justify-center border h-[52px] w-[40px] rounded-lg ${isSelected ? "border-primary bg-primary shadow-sm" : "border-line bg-white shadow-none"}`}
                 >
-                  {/* Day label  e.g. MON */}
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      fontWeight: "600",
-                      color: isSelected ? "rgba(255,255,255,0.8)" : "#9CA3AF",
-                      marginBottom: 4,
-                    }}
-                  >
-                    {format(day, "EEE").toUpperCase()}
-                  </Text>
+                  {isToday && (
+                    <View
+                      className={`absolute top-1 right-1 w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-primary"}`}
+                    />
+                  )}
 
-                  {/* Date number  e.g. 07 */}
                   <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "700",
-                      color: isSelected ? "#ffffff" : "#1F2937",
-                    }}
+                    className={`text-xs font-inter-light ${isSelected ? "text-white" : "text-ink-muted"}`}
+                  >
+                    {format(day, "EEE")}
+                  </Text>
+                  <Text
+                    className={`text-xl font-bold font-fraunces ${isSelected ? "text-white" : "text-ink-muted"}`}
                   >
                     {format(day, "dd")}
                   </Text>
