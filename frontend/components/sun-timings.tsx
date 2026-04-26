@@ -9,6 +9,7 @@ import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { View, Text, Dimensions } from "react-native";
 import Svg, { Circle, Line, G } from "react-native-svg";
+import { CornerMandala } from "./ui/mandala";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH - 32;
@@ -21,7 +22,7 @@ const colors = {
 };
 
 export default function SunriseSunsetCard({
-  duration = "10h 47m 4s",
+  duration = "10h 47m",
   sunriseTime = "07:10",
   sunrisePeriod = "AM",
   sunsetTime = "05:57",
@@ -32,9 +33,14 @@ export default function SunriseSunsetCard({
     <View className="flex-1 items-center justify-center px-4">
       {/* ── Card ──────────────────────────────────────────────────── */}
       <View
-        className="rounded-3xl bg-white border border-line px-6 pt-6 pb-5"
+        className="rounded-3xl relative overflow-hidden bg-white border border-line px-6 py-4"
         style={{ width: CARD_WIDTH }}
       >
+        <CornerMandala
+          positionProp={{ top: -60, right: -40 }}
+          c="rgba(150,50,30,0.05)"
+          size={160}
+        />
         {/* ── Top Row: label + TODAY pill ───────────────────────────── */}
         <View className="flex-row items-center justify-between mb-1.5">
           <Text className="text-primary text-sm font-inter-medium leading-tight tracking-tighter">
@@ -50,7 +56,7 @@ export default function SunriseSunsetCard({
         </View>
 
         {/* ── Duration value ────────────────────────────────────────── */}
-        <Text className="text-ink text-[38px] font-merriweather-bold tracking-tight mt-1 mb-6">
+        <Text className="text-ink text-5xl font-fraunces tracking-tight mt-1 mb-6">
           {duration}
         </Text>
 
@@ -58,46 +64,38 @@ export default function SunriseSunsetCard({
         <View className="h-px bg-line-soft mb-5" />
 
         {/* ── Bottom Row: sunrise / divider / sunset ────────────────── */}
-        <View className="flex-row items-center">
+        <View className="flex-row gap-5 items-center">
           {/* Sunrise */}
           <View className="flex-1">
             <View className="flex-row items-center gap-1.5 mb-1.5">
-              <HugeiconsIcon
-                icon={Sun02Icon}
-                size={14}
-                color="#a3a3a3"
-              />
-              <Text className="text-ink-light text-[11px] text-lg font-inter-medium tracking-[1.5px] uppercase">
+              <HugeiconsIcon icon={Sun02Icon} size={14} color="#a3a3a3" />
+              <Text className="text-ink-muted text-sm font-inter-medium tracking-[1.5px] uppercase">
                 SUNRISE
               </Text>
             </View>
             <View className="flex-row items-end gap-1">
-              <Text className="text-ink text-3xl font-merriweather-medium tracking-tight leading-[34px]">
+              <Text className="text-ink text-3xl font-fraunces tracking-tight leading-[34px]">
                 {sunriseTime}
               </Text>
-              <Text className="text-ink-light text-base font-semibold mb-0.5">
+              <Text className="text-ink-muted text-base font-fraunces mb-0.5">
                 {sunrisePeriod}
               </Text>
             </View>
           </View>
 
           {/* Sunset */}
-          <View className="flex-1 items-end">
-            <View className="flex-row items-center justify-end gap-1.5 mb-1.5">
-              <Text className="text-ink-light text-[11px] text-lg font-inter-medium tracking-[1.5px] uppercase">
+          <View className="flex-1 items-start">
+            <View className="flex-row items-center justify-start gap-1.5 mb-1.5">
+              <HugeiconsIcon icon={Moon01Icon} size={14} color="#a3a3a3" />
+              <Text className="text-ink-muted text-sm font-inter-medium tracking-[1.5px] uppercase">
                 SUNSET
               </Text>
-              <HugeiconsIcon
-                icon={Moon01Icon}
-                size={14}
-                color="#a3a3a3"
-              />
             </View>
             <View className="flex-row items-end justify-end gap-1">
-              <Text className="text-ink text-3xl  font-merriweather-medium tracking-tight leading-[34px]">
+              <Text className="text-ink text-3xl font-fraunces tracking-tight leading-[34px]">
                 {sunsetTime}
               </Text>
-              <Text className="text-ink-light text-base font-semibold mb-0.5">
+              <Text className="text-ink-muted text-base font-fraunces mb-0.5">
                 {sunsetPeriod}
               </Text>
             </View>

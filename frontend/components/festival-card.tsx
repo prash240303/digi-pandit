@@ -17,8 +17,8 @@ const FestivalCard = ({ festivals }: FestivalCardProps) => {
     <View className="w-full">
       {/* Section Header */}
       <View className="flex-row items-center gap-2 mb-4">
-        <HugeiconsIcon size={28} color={PRIMARY} icon={CalendarIcon} />
-        <Text className="text-2xl font-playfair-medium text-[#DE6A4D]">
+        <HugeiconsIcon size={24} color={"#9a2a23"} icon={CalendarIcon} />
+        <Text className="text-2xl font-fraunces font-bold text-primary">
           Festivals
         </Text>
       </View>
@@ -31,17 +31,17 @@ const FestivalCard = ({ festivals }: FestivalCardProps) => {
             className="bg-white p-3 rounded-2xl border border-neutral-300 flex-row items-center"
           >
             {/* Icon Container (Mint Green style from Abhijit Muhurta) */}
-            <View className="p-3 rounded-xl mr-4 bg-[#EEFAF6] border border-[#EEFAF6]">
+            <View className="p-3 rounded-xl mr-4 bg-green/10 border border-green/30">
               <HugeiconsIcon
                 icon={SparklesIcon}
-                size={24}
-                color="#39B99E"
+                size={20}
+                color="#3f774d"
               />
             </View>
 
             {/* Content Section */}
             <View className="flex-1">
-              <Text className="text-neutral-900 text-xl font-playfair-medium">
+              <Text className="text-neutral-900 text-xl font-fraunces">
                 {festivalName}
               </Text>
               <Text className="text-neutral-500 text-sm  mt-1">

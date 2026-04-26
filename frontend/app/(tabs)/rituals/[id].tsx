@@ -561,7 +561,7 @@ export default function GuideDetailScreen() {
               >
                 <Text
                   variant="muted"
-                  className="font-playfair-medium leading-6 italic"
+                  className="font-fraunces leading-6 italic"
                   style={{ color: COLOR.terracotta }}
                 >
                   {guide.pullQuote}

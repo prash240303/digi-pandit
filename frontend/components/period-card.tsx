@@ -20,12 +20,11 @@ export default function PeriodCard({
 }: PeriodCardProps) {
   const isAvoid = status === "AVOID";
 
-  const containerBg = isAvoid ? "bg-red-50" : "bg-emerald-50";
-  const textColor = isAvoid ? "text-red-600" : "text-emerald-600";
-  const iconColor = isAvoid ? "#c2410c" : "#047857";
+  const containerBg = isAvoid ? "bg-red/10" : "bg-green/10";
+  const textColor = isAvoid ? "text-red" : "text-green";
 
   return (
-    <View className="flex-row items-center justify-between p-3 border border-neutral-200/70 bg-white rounded-xl shadow-sm shadow-slate-900/5">
+    <View className="flex-row items-center justify-between p-3 border border-neutral-200/70 bg-white rounded-xl">
       <View className="flex-row items-center flex-1">
         {/* Icon Container */}
         <View
@@ -47,13 +46,13 @@ export default function PeriodCard({
 
       {/* Time Range */}
       <View className="items-end">
-        <Text className={`text-xs font-ibm-mono-light ${textColor}`}>
+        <Text className={`text-xs font-fraunces ${textColor}`}>
           {start}
         </Text>
 
-        <Text className="text-xs text-neutral-600 font-ibm-mono-light">to</Text>
+        <Text className="text-xs text-neutral-600 font-fraunces-light">to</Text>
 
-        <Text className={`text-xs font-ibm-mono-light ${textColor}`}>
+        <Text className={`text-xs font-fraunces ${textColor}`}>
           {end}
         </Text>
       </View>

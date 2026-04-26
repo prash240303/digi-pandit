@@ -34,18 +34,21 @@ function MuhurataDetails({ panchangam }: any) {
   return (
     <View className="flex  flex-col gap-4">
       {/* Section Header */}
-      <View className="flex-row gap-2 items-center mb-1">
-        <HugeiconsIcon icon={ClockIcon} color={PRIMARY} size={32} />
-        <Text className="text-2xl font-playfair-medium text-primary">
+      <View className="flex-row gap-1 items-center">
+        <HugeiconsIcon icon={ClockIcon} color={"#9a2a23"} size={24} />
+        <Text className="text-2xl font-fraunces font-semibold tracking-tight text-primary">
           Muhurta & Timings
         </Text>
       </View>
 
       {/* Auspicious Section */}
-      <View className="">
-        <Text className="text-xs font-inter-regular text-emerald-600 uppercase tracking-wider mb-3">
-          Abhijit Muhurta
-        </Text>
+      <View className="flex flex-col gap-2">
+        <View className="flex flex-row items-center  gap-1">
+          <View className="h-2 w-2 rounded-full bg-green" />
+          <Text className="text-xs font-inter-regular text-green uppercase tracking-wider">
+            SHUBH • AUSPICIOUS
+          </Text>
+        </View>
         {abhijit.start ? (
           <PeriodCard
             title="Abhijit Muhurta"
@@ -53,7 +56,7 @@ function MuhurataDetails({ panchangam }: any) {
             start={abhijit.start}
             end={abhijit.end}
             status="AUSPICIOUS"
-            icon={<HugeiconsIcon icon={StarsIcon} color={"#0D9488"} />}
+            icon={<HugeiconsIcon icon={StarsIcon} color={"#3f774d"} />}
           />
         ) : (
           <Text className="text-neutral-400 text-sm italic">
@@ -63,12 +66,12 @@ function MuhurataDetails({ panchangam }: any) {
       </View>
 
       {/* Inauspicious Section */}
-      <View className="">
-        <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-xs font-inter-regular text-red-600 uppercase tracking-wider">
-            Avoid (Ashubh)
+      <View className="flex flex-col gap-2">
+        <View className="flex flex-row items-center  gap-1">
+          <View className="h-2 w-2 rounded-full bg-red" />
+          <Text className="text-xs font-inter-regular text-red uppercase tracking-wider">
+            ASHUBH • INAUSPICIOUS
           </Text>
-          {/* <View className="w-6 h-6 rounded-full bg-amber-50 items-center justify-center border border-amber-100" /> */}
         </View>
 
         <View className="flex flex-col gap-2">
@@ -79,7 +82,7 @@ function MuhurataDetails({ panchangam }: any) {
               start={rahu.start}
               end={rahu.end}
               status="AVOID"
-              icon={<HugeiconsIcon color={"#DC2626"} icon={AlertCircleIcon} />}
+              icon={<HugeiconsIcon color={"#E30425"} icon={AlertCircleIcon} />}
             />
           )}
 

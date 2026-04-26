@@ -4,14 +4,12 @@ import { Text } from "./ui/text";
 import { AiContentGenerator01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { format } from "date-fns";
-const PRIMARY = "#DE6A4D";
 
 function Panchangalgetails({ panchangam }: any) {
-  // Helper to safely format time
   const formatTime = (dateString: string | undefined) => {
     if (!dateString) return "N/A";
     try {
-      return format(new Date(dateString), "p"); // e.g., 12:00 PM
+      return format(new Date(dateString), "p"); 
     } catch (error) {
       console.error("Invalid date provided", error);
       return "N/A";
@@ -59,26 +57,35 @@ function Panchangalgetails({ panchangam }: any) {
   const yogaData = getCurrentYoga(panchangam);
   const karanaData = getCurrentKarana(panchangam);
 
+  const formatNakshatra = (name) => {
+    if (!name) return "N/A";
+
+    const words = name.split(" ");
+    if (words.length === 1) return name;
+
+    return `${words[0][0]}.${words.slice(1).join("  ")}`;
+  };
+
   return (
     <View className="flex flex-col font-inter gap-4">
-      <View className="flex flex-row items-center w-full gap-2 mb-1">
+      <View className="flex flex-row items-center w-full gap-1">
         <HugeiconsIcon
-          color={PRIMARY}
-          size={32}
+          color={"#9a2a23"}
+          size={24}
           icon={AiContentGenerator01Icon}
         />
-        <Text className="text-primary text-2xl font-playfair-medium">
+        <Text className="text-primary text-2xl font-fraunces font-semibold tracking-tight">
           Core Panchang
         </Text>
       </View>
 
       <View className="flex-row flex-wrap gap-3">
         {/* Tithi Card */}
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
-          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
+        <View className="flex-1 min-w-[45%] bg-white rounded-2xl border border-line p-3">
+          <Text className="text-ink-muted text-xs uppercase font-semibold tracking-wider">
             Tithi
           </Text>
-          <Text className="text-orange-600 text-lg font-bold font-merriweather-semibold mt-1">
+          <Text className="text-primary text-lg font-bold font-merriweather-semibold mt-1">
             {tithiData?.tithi || "N/A"}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">
@@ -87,12 +94,12 @@ function Panchangalgetails({ panchangam }: any) {
         </View>
 
         {/* Nakshatra Card */}
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
-          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
+        <View className="flex-1 min-w-[45%] bg-white rounded-2xl border border-line p-3">
+          <Text className="text-ink-muted text-xs uppercase font-semibold tracking-wider">
             Nakshatra
           </Text>
-          <Text className="text-orange-600 font-merriweather-semibold text-lg mt-1">
-            {nakshatraData?.name || "N/A"}
+          <Text className="text-primary font-merriweather-semibold text-lg mt-1">
+            {formatNakshatra(nakshatraData?.name)}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">
             Ends: {nakshatraData?.endtime || "N/A"}
@@ -100,11 +107,11 @@ function Panchangalgetails({ panchangam }: any) {
         </View>
 
         {/* Karana Card */}
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
-          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
+        <View className="flex-1 min-w-[45%] bg-white rounded-2xl border border-line p-3">
+          <Text className="text-ink-muted text-xs uppercase font-semibold tracking-wider">
             Karana
           </Text>
-          <Text className="text-orange-600 text-lg font-merriweather-semibold mt-1">
+          <Text className="text-gold text-lg font-merriweather-semibold mt-1">
             {karanaData?.name || "N/A"}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">
@@ -113,11 +120,11 @@ function Panchangalgetails({ panchangam }: any) {
         </View>
 
         {/* Yoga Card */}
-        <View className="flex-1 min-w-[45%] bg-white rounded-xl border border-neutral-200 p-4 shadow-sm">
-          <Text className="text-neutral-500 text-xs uppercase font-semibold tracking-wider">
+        <View className="flex-1 min-w-[45%] bg-white rounded-2xl border border-line p-3">
+          <Text className="text-ink-muted text-xs uppercase font-semibold tracking-wider">
             Yoga
           </Text>
-          <Text className="text-orange-600 text-lg font-merriweather-semibold mt-1">
+          <Text className="text-gold text-lg font-merriweather-semibold mt-1">
             {yogaData?.name || "N/A"}
           </Text>
           <Text className="text-neutral-400 text-xs mt-1">

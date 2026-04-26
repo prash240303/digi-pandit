@@ -49,8 +49,7 @@ export default function DetailsPage() {
     const totalSeconds = Math.floor(diffMs / 1000);
     const dayHours = Math.floor(totalSeconds / 3600);
     const dayMinutes = Math.floor((totalSeconds % 3600) / 60);
-    const daySeconds = totalSeconds % 60;
-    formattedDuration = `${dayHours}h ${dayMinutes}m ${daySeconds}s`;
+    formattedDuration = `${dayHours}h ${dayMinutes}m`;
   }
 
   // Format times using date-fns

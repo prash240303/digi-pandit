@@ -145,14 +145,14 @@ export const KetuIcon = ({ color }: { color: string }) => (
     />
   </Svg>
 );
-// --- Metadata with Tailwind Classes ---
+
 const PLANET_METADATA = [
   {
     key: "sun",
     name: "Sun",
     sanskrit: "Surya",
     icon: SunIcon,
-    bgColor: "bg-orange-50",
+    bgColor: "bg-orange-100",
     borderColor: "border-orange-200",
     textColor: "text-orange-700",
     hex: "#C2410C",
@@ -162,7 +162,7 @@ const PLANET_METADATA = [
     name: "Moon",
     sanskrit: "Chandra",
     icon: MoonIcon,
-    bgColor: "bg-purple-50",
+    bgColor: "bg-purple-100",
     borderColor: "border-purple-200",
     textColor: "text-purple-700",
     hex: "#7E22CE",
@@ -172,7 +172,7 @@ const PLANET_METADATA = [
     name: "Mars",
     sanskrit: "Mangal",
     icon: MarsIcon,
-    bgColor: "bg-rose-50",
+    bgColor: "bg-rose-100",
     borderColor: "border-rose-200",
     textColor: "text-rose-700",
     hex: "#BE123C",
@@ -182,7 +182,7 @@ const PLANET_METADATA = [
     name: "Mercury",
     sanskrit: "Budha",
     icon: MercuryIcon,
-    bgColor: "bg-sky-50",
+    bgColor: "bg-sky-100",
     borderColor: "border-sky-200",
     textColor: "text-sky-700",
     hex: "#0369A1",
@@ -192,9 +192,9 @@ const PLANET_METADATA = [
     name: "Jupiter",
     sanskrit: "Guru",
     icon: JupiterIcon,
-    bgColor: "bg-indigo-50",
-    borderColor: "border-indigo-200",
-    textColor: "text-indigo-700",
+    bgColor: "bg-emerald-100",
+    borderColor: "border-emerald-200",
+    textColor: "text-emerald-700",
     hex: "#4338CA",
   },
   {
@@ -202,7 +202,7 @@ const PLANET_METADATA = [
     name: "Venus",
     sanskrit: "Shukra",
     icon: VenusIcon,
-    bgColor: "bg-pink-50",
+    bgColor: "bg-pink-100",
     borderColor: "border-pink-200",
     textColor: "text-pink-700",
     hex: "#BE185D",
@@ -212,9 +212,9 @@ const PLANET_METADATA = [
     name: "Rahu",
     sanskrit: "Rāhu",
     icon: RahuIcon,
-    bgColor: "bg-slate-100",
-    borderColor: "border-slate-300",
-    textColor: "text-slate-700",
+    bgColor: "bg-red/20",
+    borderColor: "border-red/40",
+    textColor: "text-red",
     hex: "#334155",
   },
   {
@@ -222,9 +222,9 @@ const PLANET_METADATA = [
     name: "Ketu",
     sanskrit: "Kētu",
     icon: KetuIcon,
-    bgColor: "bg-zinc-100",
-    borderColor: "border-zinc-300",
-    textColor: "text-zinc-700",
+    bgColor: "bg-red/20",
+    borderColor: "border-red/40",
+    textColor: "text-red",
     hex: "#3F3F46",
   },
 ] as const;
@@ -232,15 +232,13 @@ const PLANET_METADATA = [
 export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
   if (!data) return null;
 
-  const sunData = data.planetaryPositions.sun;
-
   return (
     <View className="flex flex-col gap-4">
       {/* Header Section */}
       <View className="flex-row items-center gap-2 mb-1">
         {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
-        <HugeiconsIcon size={32} color={PRIMARY} icon={SolarSystem01Icon} />
-        <Text className="text-2xl font-playfair-medium text-primary">
+        <HugeiconsIcon size={24} color={"#9a2a23"} icon={SolarSystem01Icon} />
+        <Text className="text-2xl font-fraunces font-bold text-primary">
           Graha Sthiti
         </Text>
       </View>
@@ -270,7 +268,7 @@ export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
                 </Text>
               </View>
 
-              <View className="flex flex-row w-full justify-between items-center">
+              <View className="flex border-t pt-2 border-line flex-row w-full justify-between items-center">
                 <Text
                   className={`text-base font-inter-regular ${planet.textColor}`}
                 >
