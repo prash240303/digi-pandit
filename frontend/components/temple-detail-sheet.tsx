@@ -138,8 +138,8 @@ export default function TempleDetailSheet({
               {temple.name}
             </Text>
             <View className="flex-row gap-2 mt-2">
-              <View className="bg-orange-100 px-2 py-0.5 rounded-full">
-                <Text className="text-[11px] text-orange-700 font-semibold">
+              <View className="bg-primary-soft px-2 py-0.5 rounded-full">
+                <Text className="text-[11px] text-primary font-semibold">
                   {temple.deity}
                 </Text>
               </View>
@@ -179,7 +179,7 @@ export default function TempleDetailSheet({
               className="flex-row items-center gap-2 py-2"
             >
               <Phone size={14} color="#c2410c" />
-              <Text className="text-sm text-orange-700 underline">
+              <Text className="text-sm text-primary underline">
                 {temple.phone}
               </Text>
             </TouchableOpacity>
@@ -197,7 +197,7 @@ export default function TempleDetailSheet({
           <View className="flex-row gap-2 mt-3">
             <TouchableOpacity
               onPress={openDirections}
-              className="flex-1 flex-row items-center justify-center gap-2 bg-orange-500 py-3 rounded-xl"
+              className="flex-1 flex-row items-center justify-center gap-2 bg-primary py-3 rounded-xl"
             >
               <Navigation size={16} color="#fff" />
               <Text className="text-white font-semibold">Get Directions</Text>
@@ -206,14 +206,13 @@ export default function TempleDetailSheet({
               onPress={() => onToggleFavorite(temple.id)}
               className={`px-4 items-center justify-center rounded-xl border ${
                 favorite
-                  ? "bg-red-50 border-red-300"
+                  ? "bg-red/10 border-red"
                   : "bg-white border-stone-200"
               }`}
             >
               <Heart
                 size={20}
-                color={favorite ? "#dc2626" : "#78716c"}
-                fill={favorite ? "#dc2626" : "transparent"}
+                className={favorite ? "text-red fill-red " : "text-stone-500"}
               />
             </TouchableOpacity>
           </View>

@@ -13,9 +13,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import  Album  from "../../../mantras-data/album-data/types";
+import Album from "../../../mantras-data/album-data/types";
 import { fetchAlbums } from "../../../mantras-data/album-data/albumSource";
 import { useAudio } from "../../../contexts/Audiocontext";
+import PageHeader from "@/components/ui/page-header";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
@@ -147,15 +148,10 @@ export default function MantrasIndex() {
             >
               मंत्र एवं आरती
             </Text>
-            <Text
-              className="text-2xl font-fraunces text-ink"
-              style={{ letterSpacing: -0.5 }}
-            >
-              Mantras & Aarti
-            </Text>
-            <Text className="text-gray-500 font-inter-regular text-sm mt-0.5">
-              Sacred chants & devotional music
-            </Text>
+            <PageHeader
+              title="Mantras"
+              subtitle="Sacred chants & devotional music"
+            />
           </View>
           <TouchableOpacity
             className="w-9 h-9 rounded-md bg-white border border-line items-center justify-center"
@@ -237,9 +233,7 @@ export default function MantrasIndex() {
                 Featured Albums
               </Text>
               <TouchableOpacity>
-                <Text
-                  className="text-sm text-primary font-medium"
-                >
+                <Text className="text-sm text-primary font-medium">
                   View All
                 </Text>
               </TouchableOpacity>

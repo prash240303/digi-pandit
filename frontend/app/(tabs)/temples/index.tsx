@@ -15,6 +15,7 @@ import TempleDetailSheet from "@/components/temple-detail-sheet";
 import { Temple, Deity } from "@/constants/temples-mock";
 import { haversineKm, zoomForRadius, LatLng } from "@/lib/geo";
 import { fetchHinduTemples } from "@/lib/temples-api";
+import PageHeader from "@/components/ui/page-header";
 
 const DEFAULT_CENTER: LatLng = { lat: 28.6139, lng: 77.209 }; // New Delhi
 
@@ -86,14 +87,7 @@ export default function TemplesScreen() {
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
-      <View className="px-4 pt-2 pb-1">
-        <Text className="text-2xl font-playfair-medium text-stone-900">
-          Temples
-        </Text>
-        <Text className="text-xs text-stone-500">
-          Discover Hindu temples near you
-        </Text>
-      </View>
+      <PageHeader title="Temples" subtitle="Discover Hindu temples near you" />
 
       {permissionDenied && (
         <View className="px-4 pb-2">

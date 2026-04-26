@@ -25,9 +25,7 @@ function Pill({
     <TouchableOpacity
       onPress={onPress}
       className={`flex-row items-center gap-1 px-3 py-1.5 rounded-full border mr-2 ${
-        active
-          ? "bg-orange-500 border-orange-500"
-          : "bg-white border-stone-200"
+        active ? "bg-primary border-none" : "bg-white border-stone-200"
       }`}
     >
       {icon}
