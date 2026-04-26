@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
-import { Album, Track } from "./types";
-import { coverFor } from "./covers";
+import Album, { Track } from "./types";
+import coverFor from "./covers";
 
 export async function fetchAlbums(): Promise<Album[]> {
   const { data, error } = await supabase
@@ -39,8 +39,7 @@ export async function fetchAlbums(): Promise<Album[]> {
       id: pl.id,
       title: pl.title,
       type: pl.slug === "aartis" ? "Aartis" : "Bhajans",
-      category:
-        pl.slug === "aartis" || pl.slug === "all" ? "Popular" : "Deity",
+      category: pl.slug === "aartis" || pl.slug === "all" ? "Popular" : "Deity",
       image: albumCover,
       accentColor: "#E8590C",
       description: pl.deity

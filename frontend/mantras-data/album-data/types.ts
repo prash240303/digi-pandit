@@ -10,7 +10,7 @@ export interface Track {
   cover?: ImageSourcePropType;
 }
 
-export interface Album {
+export default interface Album {
   id: string;
   title: string;
   type: string;

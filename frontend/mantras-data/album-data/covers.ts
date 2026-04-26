@@ -21,7 +21,7 @@ const COVERS: Record<string, ImageSourcePropType> = {
 
 const FALLBACK: ImageSourcePropType = require("@/assets/images/deities/other.png");
 
-export function coverFor(key?: string | null): ImageSourcePropType {
+export default function coverFor(key?: string | null): ImageSourcePropType {
   if (!key) return FALLBACK;
   return COVERS[key.toLowerCase()] ?? FALLBACK;
 }

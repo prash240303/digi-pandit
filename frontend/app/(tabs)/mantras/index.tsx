@@ -13,8 +13,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Album } from "./data/types";
-import { fetchAlbums } from "./data/albumSource";
+import { Album } from "../../../mantras-data/album-data/types";
+import { fetchAlbums } from "../../../mantras-data/album-data/albumSource";
 import { useAudio } from "../../../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";
@@ -61,7 +61,10 @@ const AlbumCard: React.FC<{ album: Album; onPress: () => void }> = ({
         />
       </View>
     </View>
-    <Text className="text-gray-900 font-inter-bold text-sm mt-2" numberOfLines={1}>
+    <Text
+      className="text-gray-900 font-inter-bold text-sm mt-2"
+      numberOfLines={1}
+    >
       {album.title}
     </Text>
     <Text className="text-gray-500 font-inter-regular text-xs mt-0.5">

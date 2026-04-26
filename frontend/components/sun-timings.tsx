@@ -1,6 +1,9 @@
 import {
   ArrowDownRight01Icon,
   ArrowUpRight01Icon,
+  Moon01Icon,
+  Sun01Icon,
+  Sun02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
@@ -29,17 +32,17 @@ export default function SunriseSunsetCard({
     <View className="flex-1 items-center justify-center px-4">
       {/* ── Card ──────────────────────────────────────────────────── */}
       <View
-        className="rounded-3xl bg-white border border-line-soft px-6 pt-6 pb-5 shadow-md shadow-line-soft"
+        className="rounded-3xl bg-white border border-line px-6 pt-6 pb-5"
         style={{ width: CARD_WIDTH }}
       >
         {/* ── Top Row: label + TODAY pill ───────────────────────────── */}
         <View className="flex-row items-center justify-between mb-1.5">
-          <Text className="text-terracotta text-sm font-inter-medium tracking-[2px] uppercase">
+          <Text className="text-primary text-sm font-inter-medium leading-tight tracking-tighter">
             DAY DURATION
           </Text>
 
           {/* TODAY pill */}
-          <View className="bg-cream border border-terracotta-light/20 rounded-full px-4 py-1.5">
+          <View className="bg-primary-soft rounded-full px-4 py-1.5">
             <Text className="text-primary text-sm font-inter-semibold tracking-[1.5px]">
               TODAY
             </Text>
@@ -60,7 +63,7 @@ export default function SunriseSunsetCard({
           <View className="flex-1">
             <View className="flex-row items-center gap-1.5 mb-1.5">
               <HugeiconsIcon
-                icon={ArrowUpRight01Icon}
+                icon={Sun02Icon}
                 size={14}
                 color="#a3a3a3"
               />
@@ -78,9 +81,6 @@ export default function SunriseSunsetCard({
             </View>
           </View>
 
-          {/* Vertical divider */}
-          <View className="w-px h-14 bg-line-soft mx-4" />
-
           {/* Sunset */}
           <View className="flex-1 items-end">
             <View className="flex-row items-center justify-end gap-1.5 mb-1.5">
@@ -88,7 +88,7 @@ export default function SunriseSunsetCard({
                 SUNSET
               </Text>
               <HugeiconsIcon
-                icon={ArrowDownRight01Icon}
+                icon={Moon01Icon}
                 size={14}
                 color="#a3a3a3"
               />

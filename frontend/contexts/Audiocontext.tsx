@@ -7,7 +7,7 @@ import React, {
   useMemo,
 } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
-import { Track, Album } from "../app/(tabs)/mantras/data/types";
+import { Track, Album } from "../mantras-data/album-data/types";
 import { getCachedAudio } from "@/lib/audio-cache";
 
 /**
@@ -23,21 +23,21 @@ interface AudioContextType {
   // Playlist State
   currentTrack: Track | null;
   currentAlbum: Album | null;
-  
+
   // Playback State (from expo-audio)
   isPlaying: boolean;
   isLoading: boolean;
   isBuffering: boolean;
   positionSecs: number;
   durationSecs: number;
-  
+
   // Controls
   playTrack: (track: Track, album: Album) => Promise<void>;
   togglePlayPause: () => void;
   seekTo: (secs: number) => void;
   playNext: () => void;
   playPrev: () => void;
-  
+
   // Settings
   isLooping: boolean;
   setIsLooping: (loop: boolean) => void;
@@ -86,7 +86,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
         console.warn("[AudioProvider] Playback error:", err);
       }
     },
-    [player]
+    [player],
   );
 
   /**
@@ -94,11 +94,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
    */
   const playNext = useCallback(() => {
     if (!currentTrack || !currentAlbum) return;
-    
+
     const tracks = currentAlbum.tracks;
     const currentIndex = tracks.findIndex((t) => t.id === currentTrack.id);
     const nextIndex = (currentIndex + 1) % tracks.length;
-    
+
     playTrack(tracks[nextIndex], currentAlbum);
   }, [currentTrack, currentAlbum, playTrack]);
 
@@ -107,7 +107,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
    */
   const playPrev = useCallback(() => {
     if (!currentTrack || !currentAlbum) return;
-    
+
     // If we've played more than 3 seconds, just restart the current track
     if (status.currentTime > 3) {
       player.seekTo(0);
@@ -117,7 +117,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
     const tracks = currentAlbum.tracks;
     const currentIndex = tracks.findIndex((t) => t.id === currentTrack.id);
     const prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
-    
+
     playTrack(tracks[prevIndex], currentAlbum);
   }, [currentTrack, currentAlbum, status.currentTime, player, playTrack]);
 
@@ -137,7 +137,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
       if (!status.isLoaded) return;
       player.seekTo(secs);
     },
-    [player, status.isLoaded]
+    [player, status.isLoaded],
   );
 
   /**
@@ -188,7 +188,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({
       playNext,
       playPrev,
       isLooping,
-    ]
+    ],
   );
 
   return (

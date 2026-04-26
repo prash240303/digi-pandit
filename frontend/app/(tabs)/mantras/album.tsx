@@ -12,8 +12,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Track, Album } from "./data/types";
-import { fetchAlbumById } from "./data/albumSource";
+import type { Track } from "../../../mantras-data/album-data/types";
+import Album from "../../../mantras-data/album-data/types";
+import { fetchAlbumById } from "../../../mantras-data/album-data/albumSource";
 import { useAudio } from "../../../contexts/Audiocontext";
 
 const ORANGE = "#E8590C";
@@ -299,7 +300,7 @@ export default function AlbumScreen() {
                     className="text-gray-500 text-xs mt-0.5"
                     numberOfLines={1}
                   >
-                    {track.subtitle} 
+                    {track.subtitle}
                   </Text>
                 </View>
 
