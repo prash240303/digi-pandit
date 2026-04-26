@@ -8,7 +8,7 @@ import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { View, Text } from "react-native";
 import Svg, { Path, Circle } from "react-native-svg";
-const PRIMARY = "#DE6A4D";
+const PRIMARY_COLOR = "#9a2a23";
 
 interface PlanetaryData {
   degree: number;
@@ -237,7 +237,11 @@ export function PlanetaryPositions({ data }: { data?: PanchangamData }) {
       {/* Header Section */}
       <View className="flex-row items-center gap-2 mb-1">
         {/* Note: Icon component color prop still takes hex, or you can use className if supported */}
-        <HugeiconsIcon size={24} color={"#9a2a23"} icon={SolarSystem01Icon} />
+        <HugeiconsIcon
+          size={24}
+          color={PRIMARY_COLOR}
+          icon={SolarSystem01Icon}
+        />
         <Text className="text-2xl font-fraunces font-bold text-primary">
           Graha Sthiti
         </Text>

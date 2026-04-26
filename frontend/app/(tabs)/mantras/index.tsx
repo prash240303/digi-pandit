@@ -13,11 +13,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Album } from "../../../mantras-data/album-data/types";
+import  Album  from "../../../mantras-data/album-data/types";
 import { fetchAlbums } from "../../../mantras-data/album-data/albumSource";
 import { useAudio } from "../../../contexts/Audiocontext";
 
-const ORANGE = "#E8590C";
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
 
@@ -56,7 +55,7 @@ const AlbumCard: React.FC<{ album: Album; onPress: () => void }> = ({
         <Ionicons
           name="play"
           size={14}
-          color={ORANGE}
+          color="#9a2a23"
           style={{ marginLeft: 2 }}
         />
       </View>
@@ -132,7 +131,7 @@ export default function MantrasIndex() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-neutral-50">
+    <SafeAreaView className="flex-1 bg-background">
       <StatusBar barStyle="dark-content" />
 
       <ScrollView
@@ -143,7 +142,13 @@ export default function MantrasIndex() {
         <View className="px-5 pt-4 pb-3 flex-row items-center justify-between">
           <View>
             <Text
-              className="text-2xl font-playfair-bold text-gray-900"
+              className="text-sm text-primary"
+              style={{ letterSpacing: -0.5 }}
+            >
+              मंत्र एवं आरती
+            </Text>
+            <Text
+              className="text-2xl font-fraunces text-ink"
               style={{ letterSpacing: -0.5 }}
             >
               Mantras & Aarti
@@ -153,7 +158,7 @@ export default function MantrasIndex() {
             </Text>
           </View>
           <TouchableOpacity
-            className="w-9 h-9 rounded-full bg-white items-center justify-center"
+            className="w-9 h-9 rounded-md bg-white border border-line items-center justify-center"
             style={{
               shadowColor: "#000",
               shadowOpacity: 0.06,
@@ -167,22 +172,14 @@ export default function MantrasIndex() {
 
         {/* Search bar */}
         <View className="mx-5 mb-4">
-          <View
-            className="flex-row items-center bg-white rounded-2xl px-4 py-3"
-            style={{
-              shadowColor: "#000",
-              shadowOpacity: 0.06,
-              shadowRadius: 10,
-              elevation: 2,
-            }}
-          >
-            <Ionicons name="search" size={16} color="#9CA3AF" />
+          <View className="flex-row border border-line items-center bg-white rounded-2xl px-4 py-3">
+            <Ionicons name="search" size={16} color="#9a2a23" />
             <TextInput
               placeholder="Search mantras, aarti or deities"
               placeholderTextColor="#9CA3AF"
               value={search}
               onChangeText={setSearch}
-              className=" font-inter-regular flex-1 ml-2.5 text-gray-800 text-sm"
+              className=" font-inter-regular focus:outline-none placeholder:text-ink-muted  flex-1 ml-2.5 text-sm"
             />
             {search ? (
               <TouchableOpacity onPress={() => setSearch("")}>
@@ -205,16 +202,7 @@ export default function MantrasIndex() {
               <TouchableOpacity
                 key={f}
                 onPress={() => setActiveFilter(f)}
-                className="px-5 py-2 rounded-full"
-                style={{
-                  backgroundColor: active ? ORANGE : "#fff",
-                  borderWidth: active ? 0 : 1,
-                  borderColor: "#E5E7EB",
-                  shadowColor: active ? ORANGE : "#000",
-                  shadowOpacity: active ? 0.25 : 0.05,
-                  shadowRadius: 8,
-                  elevation: active ? 4 : 1,
-                }}
+                className={`px-5 py-2 rounded-full  ${active ? "bg-primary" : "bg-white border border-line"} ${active ? "border-0" : ""}`}
               >
                 <Text
                   className="font-semibold text-sm"
@@ -229,7 +217,7 @@ export default function MantrasIndex() {
 
         {loading && (
           <View className="items-center py-10">
-            <ActivityIndicator color={ORANGE} />
+            <ActivityIndicator color="#9a2a23" />
             <Text className="text-gray-400 mt-2 text-xs">Loading aartis…</Text>
           </View>
         )}
@@ -245,13 +233,12 @@ export default function MantrasIndex() {
         {!search && activeFilter === "All" && (
           <View className="mb-6">
             <View className="flex-row items-center justify-between px-5 mb-4">
-              <Text className="text-lg font-inter-bold text-gray-900">
+              <Text className="text-xl font-semibold font-fraunces text-ink">
                 Featured Albums
               </Text>
               <TouchableOpacity>
                 <Text
-                  className="text-sm font-semibold"
-                  style={{ color: ORANGE }}
+                  className="text-sm text-primary font-medium"
                 >
                   View All
                 </Text>
