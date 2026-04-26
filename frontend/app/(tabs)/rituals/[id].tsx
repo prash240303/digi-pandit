@@ -1,4 +1,4 @@
-// /rituals/ritual.tsx
+// /rituals/[id].tsx
 import { useState, useEffect } from "react";
 import { View, ScrollView, TouchableOpacity, Image, Share } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,235 +7,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text } from "@/components/ui/text";
 import { COLOR } from "@/constants/colors";
 import FadeSlideIn from "@/components/ui/fade-in-slide";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-interface TipBlock {
-  type: "tip";
-  text: string;
-  icon?: string;
-}
-
-interface ChecklistBlock {
-  type: "checklist";
-  items: string[];
-}
-
-interface ImageBlock {
-  type: "image";
-  uri: string;
-  caption?: string;
-}
-
-type ContentBlock = TipBlock | ChecklistBlock | ImageBlock;
-
-interface Step {
-  number: number;
-  title: string;
-  description: string;
-  blocks?: ContentBlock[];
-}
-
-interface GuideDetail {
-  id: string;
-  heroImage: string;
-  category: string;
-  readTime: string;
-  title: string;
-  author: {
-    name: string;
-    avatarUri: string;
-    updatedAt: string;
-  };
-  pullQuote: string;
-  steps: Step[];
-  likes: number;
-  comments: number;
-  nextGuide: {
-    id: string;
-    title: string;
-  };
-}
-
-// ─── Mock Database ────────────────────────────────────────────────────────────
-
-const GUIDES_DB: Record<string, GuideDetail> = {
-  "mahashivratri-puja": {
-    id: "mahashivratri-puja",
-    heroImage:
-      "https://images.unsplash.com/photo-1609619385002-f40f1df9b7eb?w=800&q=80",
-    category: "SPIRITUAL GUIDE",
-    readTime: "8 min read",
-    title: "Mahashivratri Puja Guide: A Step-by-Step Spiritual Journey",
-    author: {
-      name: "Pandit Ramesh Sharma",
-      avatarUri:
-        "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=80&q=80",
-      updatedAt: "Updated March 2024",
-    },
-    pullQuote:
-      '"On this auspicious night of Mahashivratri, the spiritual energy of the universe is at its peak. This guide helps you perform the sacred rituals with devotion and precision."',
-    steps: [
-      {
-        number: 1,
-        title: "Pratahkaal Snana (Morning Bath)",
-        description:
-          "Begin your day before sunrise with a ritual bath. Use sesame seeds in the water to purify the physical body. Wear clean, preferably white or saffron-colored unstitched clothes to maintain spiritual purity.",
-        blocks: [
-          {
-            type: "tip",
-            text: "Tip: Use Ganga jal if available for extra sanctity.",
-            icon: "water-outline",
-          },
-        ],
-      },
-      {
-        number: 2,
-        title: "Sankalpa (Solemn Vow)",
-        description:
-          "Place some water and rice in your palm and take a vow to observe the fast and perform the puja with full devotion. This mental preparation aligns your consciousness with the divine energy of Lord Shiva.",
-        blocks: [],
-      },
-      {
-        number: 3,
-        title: "Abhishekam (The Holy Bath)",
-        description:
-          "The Shiva Lingam is bathed with six sacred items in a specific order. Each represents a different aspect of purification and blessing.",
-        blocks: [
-          {
-            type: "checklist",
-            items: [
-              "Milk for blessing of purity",
-              "Yogurt for prosperity",
-              "Honey for sweet speech",
-              "Ghee for victory",
-            ],
-          },
-        ],
-      },
-      {
-        number: 4,
-        title: "Offering of Bel Patra",
-        description:
-          "The leaves of the Bel tree (Wood Apple) are particularly dear to Lord Shiva. Offer them with the 'Om Namah Shivaya' mantra. The three leaflets represent the three Gunas (Sattva, Rajas, and Tamas) or the Trishula of Shiva.",
-        blocks: [
-          {
-            type: "image",
-            uri: "https://images.unsplash.com/photo-1609619386836-abf8e1dd0c67?w=600&q=80",
-            caption: "Sacred Bel Patra and offerings for the Abhishekam",
-          },
-        ],
-      },
-      {
-        number: 5,
-        title: "Jaagran (Night Vigil)",
-        description:
-          "Stay awake through the night chanting mantras. The four praharas (3-hour periods) each have their own specific puja rituals dedicated to different forms of Lord Shiva.",
-        blocks: [
-          {
-            type: "tip",
-            text: "Chant 'Om Namah Shivaya' 108 times each prahara for maximum benefit.",
-            icon: "musical-notes-outline",
-          },
-          {
-            type: "checklist",
-            items: [
-              "First prahara (6–9 PM): Milk offerings",
-              "Second prahara (9 PM–12 AM): Curd offerings",
-              "Third prahara (12–3 AM): Ghee offerings",
-              "Fourth prahara (3–6 AM): Honey offerings",
-            ],
-          },
-        ],
-      },
-    ],
-    likes: 1200,
-    comments: 48,
-    nextGuide: {
-      id: "mahashivratri-recipes",
-      title: "Mahashivratri Recipes",
-    },
-  },
-  "ekadashi-fasting": {
-    id: "ekadashi-fasting",
-    heroImage:
-      "https://images.unsplash.com/photo-1518843875459-f738682238a6?w=800&q=80",
-    category: "FASTING",
-    readTime: "5 min read",
-    title: "Benefits of Ekadashi Fasting: Body & Soul",
-    author: {
-      name: "Dr. Priya Nair",
-      avatarUri:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80",
-      updatedAt: "Updated January 2024",
-    },
-    pullQuote:
-      '"Ekadashi fasting is not just a religious observance — it is a profound practice that synchronizes the body\'s natural rhythms with the cosmic energy cycle."',
-    steps: [
-      {
-        number: 1,
-        title: "Dashami Preparation",
-        description:
-          "Begin preparation the day before (Dashami). Eat a light sattvic meal in the evening. Avoid non-vegetarian food, onion, and garlic for 24 hours prior.",
-        blocks: [
-          {
-            type: "tip",
-            text: "Sleep early on Dashami night to wake before sunrise on Ekadashi.",
-            icon: "moon-outline",
-          },
-        ],
-      },
-      {
-        number: 2,
-        title: "Morning Ritual",
-        description:
-          "Wake before sunrise, bathe, and offer prayers to Lord Vishnu. Light a lamp with ghee and offer Tulsi leaves. Recite the Ekadashi Vrat Katha.",
-        blocks: [
-          {
-            type: "checklist",
-            items: [
-              "Bathe before sunrise",
-              "Light a ghee lamp",
-              "Offer Tulsi leaves",
-              "Recite Vishnu Sahasranamam",
-            ],
-          },
-        ],
-      },
-      {
-        number: 3,
-        title: "The Fast",
-        description:
-          "Maintain a complete or partial fast based on your capacity. Nirjala (waterless) is the strictest form. Phalahar (fruit-based) is recommended for beginners.",
-        blocks: [
-          {
-            type: "tip",
-            text: "Rock salt (sendha namak) is permitted during Ekadashi fasting.",
-            icon: "leaf-outline",
-          },
-          {
-            type: "image",
-            uri: "https://images.unsplash.com/photo-1546548970-71785318a17b?w=600&q=80",
-            caption: "Allowed foods: fruits, milk, nuts, and sendha namak",
-          },
-        ],
-      },
-    ],
-    likes: 892,
-    comments: 31,
-    nextGuide: {
-      id: "mahashivratri-puja",
-      title: "Mahashivratri Puja Guide",
-    },
-  },
-};
-
-// ─── Mock API call ────────────────────────────────────────────────────────────
-
-async function fetchGuideById(id: string): Promise<GuideDetail | null> {
-  await new Promise((res) => setTimeout(res, 900)); // simulate network
-  return GUIDES_DB[id] ?? null;
-}
+import {
+  GuideDetail,
+  Block,
+  ParagraphBlock,
+  HeadingBlock,
+  TipBlock,
+  ChecklistBlock,
+  ImageBlock,
+  StepBlock,
+  fetchRitualById,
+} from "@/lib/rituals-api";
 
 function formatCount(n: number): string {
   return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
@@ -243,20 +25,34 @@ function formatCount(n: number): string {
 
 // ─── Block renderers ──────────────────────────────────────────────────────────
 
+function ParagraphCard({ block }: { block: ParagraphBlock }) {
+  return (
+    <Text className="text-ink leading-6 text-[15px]">{block.text}</Text>
+  );
+}
+
+function HeadingCard({ block }: { block: HeadingBlock }) {
+  return (
+    <Text
+      variant={block.level === 3 ? "h3" : "h2"}
+      className="font-fraunces text-ink mt-1"
+    >
+      {block.text}
+    </Text>
+  );
+}
+
 function TipCard({ block }: { block: TipBlock }) {
   return (
-    <View className="flex-row items-center gap-2 rounded-xl bg-primary-soft px-3 py-2.5 mt-3">
+    <View className="flex-row items-center gap-2 rounded-xl bg-primary-soft px-3 py-2.5">
       <View className="w-7 h-7 rounded-full items-center justify-center flex-shrink-0">
         <Ionicons
           name={(block.icon as any) ?? "bulb-outline"}
           size={14}
-          className="text-primary"
+          color={COLOR.primary}
         />
       </View>
-      <Text
-        variant="muted"
-        className="flex-1 leading-4 text-primary font-inter-medium"
-      >
+      <Text variant="muted" className="flex-1 leading-4 text-primary font-inter-medium">
         {block.text}
       </Text>
     </View>
@@ -265,7 +61,12 @@ function TipCard({ block }: { block: TipBlock }) {
 
 function ChecklistCard({ block }: { block: ChecklistBlock }) {
   return (
-    <View className="mt-3 gap-2">
+    <View className="gap-2">
+      {block.title && (
+        <Text variant="small" className="font-bold text-ink mb-1">
+          {block.title}
+        </Text>
+      )}
       {block.items.map((item, i) => (
         <View key={i} className="flex-row items-center gap-2">
           <View
@@ -283,9 +84,10 @@ function ChecklistCard({ block }: { block: ChecklistBlock }) {
   );
 }
 
-function StepImageCard({ block }: { block: ImageBlock }) {
+function ImageCard({ block }: { block: ImageBlock }) {
+  if (!block.uri) return null;
   return (
-    <View className="mt-3 rounded-2xl overflow-hidden border border-line-soft">
+    <View className="rounded-2xl overflow-hidden border border-line-soft">
       <Image
         source={{ uri: block.uri }}
         className="w-full"
@@ -294,10 +96,7 @@ function StepImageCard({ block }: { block: ImageBlock }) {
       />
       {block.caption && (
         <View className="px-3 py-2" style={{ backgroundColor: COLOR.cream }}>
-          <Text
-            variant="muted"
-            className="text-ink-light text-center leading-4"
-          >
+          <Text variant="muted" className="text-ink-light text-center leading-4">
             {block.caption}
           </Text>
         </View>
@@ -306,38 +105,38 @@ function StepImageCard({ block }: { block: ImageBlock }) {
   );
 }
 
-function StepCard({ step }: { step: Step }) {
+function StepCard({ block }: { block: StepBlock }) {
   return (
     <View className="bg-white rounded-2xl border border-line-soft p-4">
       <View className="flex-row items-start">
-        {/* Number bubble */}
         <View className="w-8 h-8 rounded-full items-center bg-primary justify-center mr-3 mt-0.5 flex-shrink-0">
           <Text variant="small" className="text-white font-bold">
-            {step.number}
+            {block.number}
           </Text>
         </View>
-
         <View className="flex-1">
           <Text variant="h3" className="font-fraunces text-ink leading-snug">
-            {step.title}
+            {block.title}
           </Text>
           <Text variant="muted" className="mt-1.5 text-ink-light leading-5">
-            {step.description}
+            {block.description}
           </Text>
-
-          {step.blocks?.map((block, i) => {
-            if (block.type === "tip")
-              return <TipCard key={i} block={block as TipBlock} />;
-            if (block.type === "checklist")
-              return <ChecklistCard key={i} block={block as ChecklistBlock} />;
-            if (block.type === "image")
-              return <StepImageCard key={i} block={block as ImageBlock} />;
-            return null;
-          })}
         </View>
       </View>
     </View>
   );
+}
+
+function BlockRenderer({ block }: { block: Block }) {
+  switch (block.type) {
+    case "paragraph":  return <ParagraphCard block={block} />;
+    case "heading":    return <HeadingCard block={block} />;
+    case "tip":        return <TipCard block={block} />;
+    case "checklist":  return <ChecklistCard block={block} />;
+    case "image":      return <ImageCard block={block} />;
+    case "step":       return <StepCard block={block} />;
+    default:           return null;
+  }
 }
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
@@ -369,12 +168,12 @@ function LoadingSkeleton() {
 function NotFound({ onBack }: { onBack: () => void }) {
   return (
     <View className="flex-1 items-center justify-center gap-3 px-8">
-      <Ionicons name="document-outline" size={48} className="text-ink-muted" />
+      <Ionicons name="document-outline" size={48} color={COLOR.inkLight} />
       <Text variant="h3" className="font-fraunces text-ink text-center">
         Guide not found
       </Text>
       <Text variant="muted" className="text-ink-muted text-center leading-5">
-        We couldn't find this guide. It may have been moved or removed.
+        This guide may have been moved or removed.
       </Text>
       <TouchableOpacity
         onPress={onBack}
@@ -403,27 +202,23 @@ export default function GuideDetailScreen() {
     let cancelled = false;
     setLoading(true);
     setGuide(null);
-
-    fetchGuideById(id ?? "").then((data) => {
+    fetchRitualById(id ?? "").then((data) => {
       if (!cancelled) {
         setGuide(data);
         setLoading(false);
       }
     });
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [id]);
 
   const handleShare = async () => {
     if (!guide) return;
-    await Share.share({ message: `${guide.title} — Read on Rituals App` });
+    await Share.share({ message: `${guide.title} — Read on Digi Pandit` });
   };
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor: COLOR.cream }}>
-      {/* ── Floating top bar ── */}
+      {/* Floating top bar */}
       <View className="flex-row items-center justify-between px-4 py-2 absolute top-10 left-0 right-0 z-10">
         <TouchableOpacity onPress={() => router.back()}>
           <View className="w-9 h-9 rounded-full items-center justify-center bg-white/90 border border-line-soft">
@@ -442,17 +237,15 @@ export default function GuideDetailScreen() {
               <Ionicons
                 name={bookmarked ? "bookmark" : "bookmark-outline"}
                 size={17}
-                className={bookmarked ? "text-primary" : "text-ink"}
+                color={bookmarked ? COLOR.primary : COLOR.ink}
               />
             </View>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* ── Body ── */}
       {loading ? (
         <>
-          {/* Show hero placeholder while loading */}
           <View
             className="absolute top-0 left-0 right-0"
             style={{ height: 240, backgroundColor: "#D8CFC6" }}
@@ -467,7 +260,7 @@ export default function GuideDetailScreen() {
           className="flex-1"
           contentContainerStyle={{ paddingBottom: 40 }}
         >
-          {/* Hero image */}
+          {/* Hero */}
           <Image
             source={{ uri: guide.heroImage }}
             className="w-full"
@@ -476,7 +269,7 @@ export default function GuideDetailScreen() {
           />
 
           <View style={{ paddingHorizontal: 18, paddingTop: 20, gap: 16 }}>
-            {/* Category breadcrumb + read time */}
+            {/* Category + read time */}
             <FadeSlideIn delay={60}>
               <View className="flex-row items-center gap-2">
                 <View className="self-start rounded-full px-2.5 py-1 bg-primary-soft">
@@ -487,15 +280,9 @@ export default function GuideDetailScreen() {
                     {guide.category}
                   </Text>
                 </View>
-                <Text variant="muted" className="text-ink-light">
-                  /
-                </Text>
+                <Text variant="muted" className="text-ink-light">/</Text>
                 <View className="flex-row items-center gap-1">
-                  <Ionicons
-                    name="time-outline"
-                    size={12}
-                    color={COLOR.inkLight}
-                  />
+                  <Ionicons name="time-outline" size={12} color={COLOR.inkLight} />
                   <Text variant="muted" className="text-ink-light">
                     {guide.readTime}
                   </Text>
@@ -505,22 +292,28 @@ export default function GuideDetailScreen() {
 
             {/* Title */}
             <FadeSlideIn delay={100}>
-              <Text
-                variant="h2"
-                className="font-fraunces text-ink leading-tight"
-              >
+              <Text variant="h2" className="font-fraunces text-ink leading-tight">
                 {guide.title}
               </Text>
             </FadeSlideIn>
 
-            {/* Author row */}
+            {/* Author */}
             <FadeSlideIn delay={140}>
               <View className="flex-row items-center gap-3">
-                <Image
-                  source={{ uri: guide.author.avatarUri }}
-                  className="w-9 h-9 rounded-full border border-line-soft"
-                  resizeMode="cover"
-                />
+                {guide.author.avatarUri ? (
+                  <Image
+                    source={{ uri: guide.author.avatarUri }}
+                    className="w-9 h-9 rounded-full border border-line-soft"
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <View
+                    className="w-9 h-9 rounded-full items-center justify-center border border-line-soft"
+                    style={{ backgroundColor: COLOR.primary + "18" }}
+                  >
+                    <Ionicons name="person-outline" size={16} color={COLOR.primary} />
+                  </View>
+                )}
                 <View>
                   <Text variant="small" className="font-bold text-ink">
                     By {guide.author.name}
@@ -533,31 +326,33 @@ export default function GuideDetailScreen() {
             </FadeSlideIn>
 
             {/* Pull quote */}
-            <FadeSlideIn delay={180}>
-              <View
-                className="rounded-2xl px-4 py-4 border-l-4"
-                style={{
-                  backgroundColor: COLOR.gold + "10",
-                  borderLeftColor: COLOR.gold,
-                }}
-              >
-                <Text
-                  variant="muted"
-                  className="font-fraunces leading-6 text-primary italic"
+            {!!guide.pullQuote && (
+              <FadeSlideIn delay={180}>
+                <View
+                  className="rounded-2xl px-4 py-4 border-l-4"
+                  style={{
+                    backgroundColor: COLOR.gold + "10",
+                    borderLeftColor: COLOR.gold,
+                  }}
                 >
-                  {guide.pullQuote}
-                </Text>
-              </View>
-            </FadeSlideIn>
+                  <Text
+                    variant="muted"
+                    className="font-fraunces leading-6 text-primary italic"
+                  >
+                    {guide.pullQuote}
+                  </Text>
+                </View>
+              </FadeSlideIn>
+            )}
 
-            {/* Steps */}
-            {guide.steps.map((step, i) => (
-              <FadeSlideIn key={step.number} delay={220 + i * 60}>
-                <StepCard step={step} />
+            {/* Article content — flat block array */}
+            {guide.content.map((block, i) => (
+              <FadeSlideIn key={i} delay={220 + i * 40}>
+                <BlockRenderer block={block} />
               </FadeSlideIn>
             ))}
 
-            {/* Likes / Comments bar */}
+            {/* Likes / Comments */}
             <FadeSlideIn delay={460}>
               <View className="flex-row items-center gap-4 bg-white rounded-2xl border border-line-soft px-4 py-3">
                 <TouchableOpacity
@@ -568,13 +363,11 @@ export default function GuideDetailScreen() {
                   <Ionicons
                     name={liked ? "thumbs-up" : "thumbs-up-outline"}
                     size={18}
-                    className={` ${liked ? "text-primary" : "text-ink-light"}`}
+                    color={liked ? COLOR.primary : COLOR.inkLight}
                   />
                   <Text
                     variant="small"
-                    className={
-                      liked ? "text-primary font-bold" : "text-ink-light"
-                    }
+                    className={liked ? "text-primary font-bold" : "text-ink-light"}
                   >
                     {formatCount(guide.likes + (liked ? 1 : 0))}
                   </Text>
@@ -582,60 +375,44 @@ export default function GuideDetailScreen() {
 
                 <View className="w-px h-4 bg-line-soft" />
 
-                <TouchableOpacity className="flex-row items-center gap-1.5">
-                  <Ionicons
-                    name="chatbubble-outline"
-                    size={17}
-                    color={COLOR.inkLight}
-                  />
+                <View className="flex-row items-center gap-1.5">
+                  <Ionicons name="chatbubble-outline" size={17} color={COLOR.inkLight} />
                   <Text variant="small" className="text-ink-light">
                     {guide.comments}
                   </Text>
-                </TouchableOpacity>
+                </View>
 
                 <View className="flex-1" />
 
                 <TouchableOpacity onPress={handleShare}>
-                  <Ionicons
-                    name="share-social-outline"
-                    size={18}
-                    color={COLOR.inkLight}
-                  />
+                  <Ionicons name="share-social-outline" size={18} color={COLOR.inkLight} />
                 </TouchableOpacity>
               </View>
             </FadeSlideIn>
 
             {/* Next guide CTA */}
-            <FadeSlideIn delay={500}>
-              <TouchableOpacity
-                activeOpacity={0.88}
-                onPress={() =>
-                  router.push(`/rituals/${guide.nextGuide.id}` as any)
-                }
-              >
-                <View className="flex-row items-center justify-between bg-white rounded-2xl border border-line-soft px-4 py-3.5">
-                  <View className="flex-1 pr-3">
-                    <Text variant="muted" className="text-ink-light mb-0.5">
-                      Next
-                    </Text>
-                    <Text
-                      variant="small"
-                      className="font-bold text-ink"
-                      numberOfLines={1}
-                    >
-                      {guide.nextGuide.title}
-                    </Text>
+            {!!guide.nextGuide.id && (
+              <FadeSlideIn delay={500}>
+                <TouchableOpacity
+                  activeOpacity={0.88}
+                  onPress={() => router.push(`/rituals/${guide.nextGuide.id}` as any)}
+                >
+                  <View className="flex-row items-center justify-between bg-white rounded-2xl border border-line-soft px-4 py-3.5">
+                    <View className="flex-1 pr-3">
+                      <Text variant="muted" className="text-ink-light mb-0.5">
+                        Next
+                      </Text>
+                      <Text variant="small" className="font-bold text-ink" numberOfLines={1}>
+                        {guide.nextGuide.title}
+                      </Text>
+                    </View>
+                    <View className="w-9 h-9 rounded-full items-center bg-primary justify-center">
+                      <Ionicons name="chevron-forward-outline" size={18} color="#fff" />
+                    </View>
                   </View>
-                  <View className="w-9 h-9 rounded-full items-center bg-primary justify-center">
-                    <Ionicons
-                      name="chevron-forward-outline"
-                      size={18}
-                      color="#fff"
-                    />
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </FadeSlideIn>
+                </TouchableOpacity>
+              </FadeSlideIn>
+            )}
           </View>
         </ScrollView>
       )}

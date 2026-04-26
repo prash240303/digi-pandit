@@ -1,11 +1,12 @@
 // /rituals/index.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
   TouchableOpacity,
   Image,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,69 +15,19 @@ import { Text } from "@/components/ui/text";
 import { COLOR } from "@/constants/colors";
 import FadeSlideIn from "@/components/ui/fade-in-slide";
 import { CornerMandala, Torana } from "@/components/ui/mandala";
+import {
+  Article,
+  fetchRituals,
+  fetchFeaturedRitual,
+} from "@/lib/rituals-api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Tab = "All" | "Festivals" | "Daily Rituals" | "Fasting" | "Puja";
 
-interface Article {
-  id: string;
-  ritualId: string; // maps to ritualDetailScreen route param
-  category: string;
-  title: string;
-  readTime: string;
-  locked: boolean;
-  imageUri: string;
-}
-
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const TABS: Tab[] = ["All", "Festivals", "Daily Rituals", "Fasting", "Puja"];
-
-const FEATURED_ritual_ID = "mahashivratri-puja";
-
-const ARTICLES: Article[] = [
-  {
-    id: "1",
-    ritualId: "ekadashi-fasting",
-    category: "Fasting",
-    title: "Benefits of Ekadashi Fasting: Body & Soul",
-    readTime: "5 min read",
-    locked: true,
-    imageUri:
-      "https://images.unsplash.com/photo-1518843875459-f738682238a6?w=200&q=80",
-  },
-  {
-    id: "2",
-    ritualId: "surya-namaskar-mantra",
-    category: "Daily Rituals",
-    title: "The Power of Morning Surya Namaskar Mantra",
-    readTime: "8 min read",
-    locked: false,
-    imageUri:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=80",
-  },
-  {
-    id: "3",
-    ritualId: "holi-science-rituals",
-    category: "Festivals",
-    title: "Holi: Scientific Reasons Behind the Rituals",
-    readTime: "6 min read",
-    locked: true,
-    imageUri:
-      "https://unsplash.com/photos/happy-people-crowd-partying-under-colorful-powder-cloud-hi6Cri0Z38A",
-  },
-  {
-    id: "4",
-    ritualId: "home-altar-setup",
-    category: "Puja rituals",
-    title: "Setting Up Your First Home Altar (Pooja Room)",
-    readTime: "12 min read",
-    locked: false,
-    imageUri:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&q=80",
-  },
-];
 
 // ─── Top Bar ──────────────────────────────────────────────────────────────────
 
@@ -123,13 +74,13 @@ function TabPill({ label, active, onPress }: TabPillProps) {
 
 // ─── Featured Banner ──────────────────────────────────────────────────────────
 
-function FeaturedBanner() {
+function FeaturedBanner({ ritualId }: { ritualId: string }) {
   const router = useRouter();
 
   return (
     <TouchableOpacity
       activeOpacity={0.88}
-      onPress={() => router.push(`/rituals/${FEATURED_ritual_ID}` as any)}
+      onPress={() => router.push(`/rituals/${ritualId}` as any)}
     >
       <View className="rounded-3xl bg-gradient-primary overflow-hidden">
         <CornerMandala
@@ -277,14 +228,38 @@ function SectionHeader({ title, onViewAll }: SectionHeaderProps) {
 
 export default function RitualsScreen() {
   const [activeTab, setActiveTab] = useState<Tab>("All");
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loadingArticles, setLoadingArticles] = useState(true);
+  const [articlesError, setArticlesError] = useState<string | null>(null);
+  const [featuredId, setFeaturedId] = useState<string | null>(null);
   const router = useRouter();
 
-  const filteredArticles =
-    activeTab === "All"
-      ? ARTICLES
-      : ARTICLES.filter((a) =>
-          a.category.toLowerCase().includes(activeTab.toLowerCase()),
-        );
+  // Fetch featured ritual once on mount
+  useEffect(() => {
+    fetchFeaturedRitual()
+      .then((a) => setFeaturedId(a?.id ?? null))
+      .catch(() => {});
+  }, []);
+
+  // Re-fetch articles when tab changes
+  useEffect(() => {
+    let cancelled = false;
+    setLoadingArticles(true);
+    setArticlesError(null);
+    fetchRituals(activeTab === "All" ? undefined : activeTab)
+      .then((list) => {
+        if (!cancelled) setArticles(list);
+      })
+      .catch((e: Error) => {
+        if (!cancelled) setArticlesError(e.message);
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingArticles(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTab]);
 
   const handleArticlePress = (article: Article) => {
     router.push(`/rituals/${article.ritualId}` as any);
@@ -325,37 +300,57 @@ export default function RitualsScreen() {
           </ScrollView>
         </FadeSlideIn>
 
-        {/* Featured banner → navigates to mahashivratri-puja detail */}
-        <FadeSlideIn delay={160}>
-          <FeaturedBanner />
-        </FadeSlideIn>
+        {/* Featured banner */}
+        {featuredId && (
+          <FadeSlideIn delay={160}>
+            <FeaturedBanner ritualId={featuredId} />
+          </FadeSlideIn>
+        )}
 
         {/* Recommended articles */}
         <FadeSlideIn delay={240}>
           <View>
             <SectionHeader title="Recommended for You" onViewAll={() => {}} />
-            <View className="gap-3">
-              {filteredArticles.map((article) => (
-                <ArticleCard
-                  key={article.id}
-                  article={article}
-                  onPress={() => handleArticlePress(article)}
-                />
-              ))}
 
-              {filteredArticles.length === 0 && (
-                <View className="items-center justify-center py-10 gap-2">
-                  <Ionicons
-                    name="file-tray-outline"
-                    size={36}
-                    color={COLOR.inkLight}
+            {loadingArticles ? (
+              <View className="items-center justify-center py-10">
+                <ActivityIndicator size="small" color={COLOR.terracotta} />
+              </View>
+            ) : articlesError ? (
+              <View className="items-center justify-center py-10 gap-2">
+                <Ionicons
+                  name="cloud-offline-outline"
+                  size={36}
+                  color={COLOR.inkLight}
+                />
+                <Text variant="muted" className="text-ink-light text-center">
+                  Could not load rituals
+                </Text>
+              </View>
+            ) : (
+              <View className="gap-3">
+                {articles.map((article) => (
+                  <ArticleCard
+                    key={article.id}
+                    article={article}
+                    onPress={() => handleArticlePress(article)}
                   />
-                  <Text variant="muted" className="text-ink-light text-center">
-                    No rituals found for "{activeTab}"
-                  </Text>
-                </View>
-              )}
-            </View>
+                ))}
+
+                {articles.length === 0 && (
+                  <View className="items-center justify-center py-10 gap-2">
+                    <Ionicons
+                      name="file-tray-outline"
+                      size={36}
+                      color={COLOR.inkLight}
+                    />
+                    <Text variant="muted" className="text-ink-light text-center">
+                      No rituals found for "{activeTab}"
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
           </View>
         </FadeSlideIn>
       </ScrollView>
