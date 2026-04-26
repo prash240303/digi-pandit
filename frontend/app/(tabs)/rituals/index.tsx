@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { Text } from "@/components/ui/text";
 import { COLOR } from "@/constants/colors";
 import FadeSlideIn from "@/components/ui/fade-in-slide";
+import { CornerMandala, Torana } from "@/components/ui/mandala";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -84,21 +85,9 @@ function TopBar() {
 
   return (
     <View className="flex-row items-center justify-between">
-      <TouchableOpacity onPress={() => router.back()}>
-        <View className="w-10 h-10 rounded-full items-center justify-center bg-white border border-line-soft">
-          <Ionicons name="arrow-back-outline" size={18} color={COLOR.ink} />
-        </View>
-      </TouchableOpacity>
-
-      <Text variant="h3" className="font-playfair-bold text-ink">
+      <Text className="font-fraunces font-bold text-2xl text-ink">
         Rituals &amp; Festivals
       </Text>
-
-      <TouchableOpacity>
-        <View className="w-10 h-10 rounded-full items-center justify-center bg-white border border-line-soft">
-          <Ionicons name="search-outline" size={18} color={COLOR.ink} />
-        </View>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -116,15 +105,13 @@ function TabPill({ label, active, onPress }: TabPillProps) {
     <TouchableOpacity onPress={onPress} activeOpacity={0.75} className="mr-2">
       <View
         className={`rounded-full px-4 py-2 border ${
-          active
-            ? "bg-terracotta border-terracotta"
-            : "bg-white border-line-soft"
+          active ? "bg-primary border-none" : "bg-white border-line-soft"
         }`}
       >
         <Text
           variant="small"
           className={`font-inter-medium tracking-wide ${
-            active ? "text-white" : "text-terracotta"
+            active ? "text-white" : "text-ink"
           }`}
         >
           {label}
@@ -144,69 +131,18 @@ function FeaturedBanner() {
       activeOpacity={0.88}
       onPress={() => router.push(`/rituals/${FEATURED_ritual_ID}` as any)}
     >
-      <View
-        className="rounded-3xl overflow-hidden"
-        style={{ backgroundColor: COLOR.terracotta, minHeight: 200 }}
-      >
-        {/* Decorative circles */}
-        <View
-          className="absolute"
-          style={{
-            top: -30,
-            right: -30,
-            width: 140,
-            height: 140,
-            borderRadius: 70,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.06,
-          }}
+      <View className="rounded-3xl bg-gradient-primary overflow-hidden">
+        <CornerMandala
+          positionProp={{ right: -30, top: -30 }}
+          c="rgba(255,240,200,0.09)"
+          size={200}
         />
-        <View
-          className="absolute"
-          style={{
-            bottom: -40,
-            left: -20,
-            width: 160,
-            height: 160,
-            borderRadius: 80,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.04,
-          }}
-        />
-        <View
-          className="absolute"
-          style={{
-            top: 20,
-            right: 40,
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: "#FFFFFF",
-            opacity: 0.08,
-          }}
-        />
-
-        {/* Background image */}
-        <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1619738884859-177b8f0c4f22?w=700&q=80",
-          }}
-          className="absolute inset-0 w-full h-full"
-          resizeMode="cover"
-          style={{ opacity: 0.22 }}
-        />
+        <Torana c="rgba(255,240,200,0.22)" />
 
         <View className="p-5 z-10">
           {/* Label pill */}
-          <View
-            className="self-start rounded-full px-3 py-1"
-            style={{ backgroundColor: "#FFFFFF22" }}
-          >
-            <Text
-              variant="small"
-              className="font-inter-medium tracking-widest uppercase"
-              style={{ color: "#FFFFFFCC" }}
-            >
+          <View className="self-start rounded-full px-3 py-1 bg-black/20">
+            <Text variant="small" className="font-inter-medium text-white/90">
               Featured ritual
             </Text>
           </View>
@@ -214,37 +150,27 @@ function FeaturedBanner() {
           <View className="h-3" />
 
           {/* Icon + title */}
-          <View className="flex-row items-center gap-3">
-            <Ionicons name="moon-outline" size={26} color="#FFFFFFCC" />
-            <Text variant="h3" className="text-white font-playfair-bold flex-1">
-              Mahashivratri ritual
+          <View className="flex-col flex items-start gap-1">
+            <Text className="text-white text-sm font-fraunces flex-1">
+              महाशिवरात्रि
+            </Text>
+            <Text variant="h3" className="text-white font-fraunces">
+              Mahashivratri
             </Text>
           </View>
 
           {/* Description */}
-          <Text
-            variant="muted"
-            className="mt-1.5 leading-5"
-            style={{ color: "#FFFFFFAA" }}
-          >
+          <Text variant="muted" className="mt-1.5 text-white/80 leading-5">
             Discover the profound spiritual significance and sacred rituals of
             the Great Night of Shiva.
           </Text>
 
           {/* Tap hint */}
           <View className="flex-row items-center gap-1 mt-3">
-            <Text
-              variant="small"
-              className="font-semibold"
-              style={{ color: "#FFFFFFBB" }}
-            >
+            <Text variant="small" className="font-semibold text-white">
               Read full ritual
             </Text>
-            <Ionicons
-              name="chevron-forward-outline"
-              size={13}
-              color="#FFFFFFBB"
-            />
+            <Ionicons name="chevron-forward-outline" size={13} color="#fff" />
           </View>
         </View>
       </View>
@@ -268,68 +194,58 @@ function ArticleCard({ article, onPress }: ArticleCardProps) {
   return (
     <Pressable
       onPress={onPress}
-      className="flex-row bg-white rounded-2xl border border-line-soft overflow-hidden active:opacity-75"
+      className="flex-row relative bg-white p-2 items-start justify-center rounded-2xl border border-line-soft overflow-hidden active:opacity-75"
       style={({ pressed }) => ({ opacity: pressed ? 0.75 : 1 })}
     >
-      <View className="w-24 h-32">
+      <View className="w-24 h-24 rounded-lg overflow-hidden">
         <Image
           source={{ uri: article.imageUri }}
-          style={{ height: "100%" }}
+          style={{ height: "100%", width: "100%" }}
           resizeMode="cover"
         />
       </View>
 
-      <View className="flex-1 px-3 py-2 justify-between">
-        {/* Category + lock */}
-        <View className="flex-row items-center justify-between">
-          <Text
-            variant="default"
-            className="text-lg font-playfair-medium"
-            style={{ color: accentColor }}
+      <View className="flex-1 px-3 h-full justify-between">
+        <View>
+          {/* Category badge */}
+          <View
+            className="px-2 py-0.5 w-fit rounded-full"
+            style={{ backgroundColor: accentColor + "20" }} 
           >
-            {article.category}
-          </Text>
-
-          {article.locked && (
-            <View
-              className="w-6 h-6 rounded-full items-center justify-center"
-              style={{ backgroundColor: COLOR.gold + "18" }}
+            <Text
+              className="text-xs font-medium font-inter text-ink"
+              style={{ color: accentColor }}
             >
-              <Ionicons name="lock-closed" size={11} color={COLOR.gold} />
-            </View>
-          )}
+              {article.category}
+            </Text>
+          </View>
+
+          {/* Title */}
+          <Text
+            className="font-fraunces text-base text-ink mt-1 leading-5"
+            numberOfLines={2}
+          >
+            {article.title}
+          </Text>
         </View>
 
-        {/* Title */}
-        <Text
-          variant="default"
-          className="font-inter-regular text-sm text-ink mt-1 leading-5"
-          numberOfLines={2}
-        >
-          {article.title}
-        </Text>
-
         {/* Read time */}
-        <View className="flex-row items-center gap-1 mt-1">
-          <Ionicons name="time-outline" size={12} color={COLOR.inkLight} />
-          <Text variant="muted" className="text-ink-light">
+        <View className="flex-row items-center gap-1">
+          <Ionicons name="time-outline" size={14} color={COLOR.inkLight} />
+          <Text className="text-ink-light font-light text-xs">
             {article.readTime}
           </Text>
         </View>
       </View>
 
-      {/* Chevron */}
-      <View className="items-center justify-center pr-3">
-        <Ionicons
-          name="chevron-forward-outline"
-          size={16}
-          color={COLOR.inkLight}
-        />
-      </View>
+      {article.locked && (
+        <View className="w-6 h-6 rounded-full absolute top-1 right-1 items-center justify-center">
+          <Ionicons name="lock-closed" size={11} color={COLOR.gold} />
+        </View>
+      )}
     </Pressable>
   );
 }
-
 // ─── Section Header ───────────────────────────────────────────────────────────
 
 interface SectionHeaderProps {
@@ -340,12 +256,15 @@ interface SectionHeaderProps {
 function SectionHeader({ title, onViewAll }: SectionHeaderProps) {
   return (
     <View className="flex-row items-center justify-between mb-3">
-      <Text variant="small" className="font-bold tracking-wide text-ink">
+      <Text
+        variant="small"
+        className="font-medium font-fraunces text-lg tracking-tight text-ink"
+      >
         {title}
       </Text>
       {onViewAll && (
         <TouchableOpacity onPress={onViewAll}>
-          <Text variant="small" className="font-semibold text-terracotta">
+          <Text variant="small" className="font-semibold text-primary">
             See all
           </Text>
         </TouchableOpacity>

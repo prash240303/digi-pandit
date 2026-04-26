@@ -245,24 +245,17 @@ function formatCount(n: number): string {
 
 function TipCard({ block }: { block: TipBlock }) {
   return (
-    <View
-      className="flex-row items-center gap-2 rounded-xl px-3 py-2.5 mt-3"
-      style={{ backgroundColor: COLOR.terracotta + "12" }}
-    >
-      <View
-        className="w-7 h-7 rounded-full items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: COLOR.terracotta + "22" }}
-      >
+    <View className="flex-row items-center gap-2 rounded-xl bg-primary-soft px-3 py-2.5 mt-3">
+      <View className="w-7 h-7 rounded-full items-center justify-center flex-shrink-0">
         <Ionicons
           name={(block.icon as any) ?? "bulb-outline"}
           size={14}
-          color={COLOR.terracotta}
+          className="text-primary"
         />
       </View>
       <Text
         variant="muted"
-        className="flex-1 leading-4 font-inter-medium"
-        style={{ color: COLOR.terracotta }}
+        className="flex-1 leading-4 text-primary font-inter-medium"
       >
         {block.text}
       </Text>
@@ -318,20 +311,14 @@ function StepCard({ step }: { step: Step }) {
     <View className="bg-white rounded-2xl border border-line-soft p-4">
       <View className="flex-row items-start">
         {/* Number bubble */}
-        <View
-          className="w-8 h-8 rounded-full items-center justify-center mr-3 mt-0.5 flex-shrink-0"
-          style={{ backgroundColor: COLOR.terracotta }}
-        >
+        <View className="w-8 h-8 rounded-full items-center bg-primary justify-center mr-3 mt-0.5 flex-shrink-0">
           <Text variant="small" className="text-white font-bold">
             {step.number}
           </Text>
         </View>
 
         <View className="flex-1">
-          <Text
-            variant="h3"
-            className="font-playfair-bold text-ink leading-snug"
-          >
+          <Text variant="h3" className="font-fraunces text-ink leading-snug">
             {step.title}
           </Text>
           <Text variant="muted" className="mt-1.5 text-ink-light leading-5">
@@ -382,17 +369,16 @@ function LoadingSkeleton() {
 function NotFound({ onBack }: { onBack: () => void }) {
   return (
     <View className="flex-1 items-center justify-center gap-3 px-8">
-      <Ionicons name="document-outline" size={48} color={COLOR.inkLight} />
-      <Text variant="h3" className="font-playfair-bold text-ink text-center">
+      <Ionicons name="document-outline" size={48} className="text-ink-muted" />
+      <Text variant="h3" className="font-fraunces text-ink text-center">
         Guide not found
       </Text>
-      <Text variant="muted" className="text-ink-light text-center leading-5">
+      <Text variant="muted" className="text-ink-muted text-center leading-5">
         We couldn't find this guide. It may have been moved or removed.
       </Text>
       <TouchableOpacity
         onPress={onBack}
-        className="mt-2 rounded-full px-6 py-2.5"
-        style={{ backgroundColor: COLOR.terracotta }}
+        className="mt-2 rounded-full px-6 py-2.5 bg-primary"
       >
         <Text variant="small" className="text-white font-bold">
           Go Back
@@ -456,7 +442,7 @@ export default function GuideDetailScreen() {
               <Ionicons
                 name={bookmarked ? "bookmark" : "bookmark-outline"}
                 size={17}
-                color={bookmarked ? COLOR.terracotta : COLOR.ink}
+                className={bookmarked ? "text-primary" : "text-ink"}
               />
             </View>
           </TouchableOpacity>
@@ -493,14 +479,10 @@ export default function GuideDetailScreen() {
             {/* Category breadcrumb + read time */}
             <FadeSlideIn delay={60}>
               <View className="flex-row items-center gap-2">
-                <View
-                  className="self-start rounded-full px-2.5 py-1"
-                  style={{ backgroundColor: COLOR.terracotta + "18" }}
-                >
+                <View className="self-start rounded-full px-2.5 py-1 bg-primary-soft">
                   <Text
                     variant="small"
-                    className="font-inter-medium tracking-widest uppercase"
-                    style={{ color: COLOR.terracotta }}
+                    className="font-inter-medium tracking-widest text-primary uppercase"
                   >
                     {guide.category}
                   </Text>
@@ -525,7 +507,7 @@ export default function GuideDetailScreen() {
             <FadeSlideIn delay={100}>
               <Text
                 variant="h2"
-                className="font-playfair-bold text-ink leading-tight"
+                className="font-fraunces text-ink leading-tight"
               >
                 {guide.title}
               </Text>
@@ -561,8 +543,7 @@ export default function GuideDetailScreen() {
               >
                 <Text
                   variant="muted"
-                  className="font-fraunces leading-6 italic"
-                  style={{ color: COLOR.terracotta }}
+                  className="font-fraunces leading-6 text-primary italic"
                 >
                   {guide.pullQuote}
                 </Text>
@@ -587,12 +568,12 @@ export default function GuideDetailScreen() {
                   <Ionicons
                     name={liked ? "thumbs-up" : "thumbs-up-outline"}
                     size={18}
-                    color={liked ? COLOR.terracotta : COLOR.inkLight}
+                    className={` ${liked ? "text-primary" : "text-ink-light"}`}
                   />
                   <Text
                     variant="small"
                     className={
-                      liked ? "text-terracotta font-bold" : "text-ink-light"
+                      liked ? "text-primary font-bold" : "text-ink-light"
                     }
                   >
                     {formatCount(guide.likes + (liked ? 1 : 0))}
@@ -645,10 +626,7 @@ export default function GuideDetailScreen() {
                       {guide.nextGuide.title}
                     </Text>
                   </View>
-                  <View
-                    className="w-9 h-9 rounded-full items-center justify-center"
-                    style={{ backgroundColor: COLOR.terracotta }}
-                  >
+                  <View className="w-9 h-9 rounded-full items-center bg-primary justify-center">
                     <Ionicons
                       name="chevron-forward-outline"
                       size={18}
