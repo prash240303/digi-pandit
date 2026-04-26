@@ -134,20 +134,16 @@ export default function AlbumScreen() {
 
           <TouchableOpacity
             onPress={() => router.push("/(tabs)/mantras")}
-            className="absolute top-4 left-4 w-9 h-9 rounded-full items-center justify-center"
-            style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
+            className="absolute top-4 bg-black/40 left-4 w-9 h-9 rounded-full items-center justify-center"
           >
             <Ionicons name="arrow-back" size={20} color="#fff" />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            className="absolute top-4 right-4 w-9 h-9 rounded-full items-center justify-center"
-            style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
-          >
+          <TouchableOpacity className="absolute top-4 bg-black/40 right-4 w-9 h-9 rounded-full items-center justify-center">
             <Ionicons name="ellipsis-horizontal" size={20} color="#fff" />
           </TouchableOpacity>
 
-          <View className="absolute bottom-5 left-5 right-16">
+          <View className="absolute w-full px-5 py-4 bg-black/40 bottom-0 left-0 right-16">
             <Text
               className="text-white text-2xl font-bold"
               style={{ letterSpacing: -0.3 }}
