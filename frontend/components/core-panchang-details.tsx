@@ -4,7 +4,7 @@ import { Text } from "./ui/text";
 import { AiContentGenerator01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { format } from "date-fns";
-const PRIMARY_COLOR= "#9a2a23"
+import { COLOR } from "@/constants/colors";
 
 function Panchangalgetails({ panchangam }: any) {
   const formatTime = (dateString: string | undefined) => {
@@ -71,7 +71,7 @@ function Panchangalgetails({ panchangam }: any) {
     <View className="flex flex-col font-inter gap-4">
       <View className="flex flex-row items-center w-full gap-1">
         <HugeiconsIcon
-          color={PRIMARY_COLOR}
+          color={COLOR.primary}
           size={24}
           icon={AiContentGenerator01Icon}
         />

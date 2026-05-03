@@ -8,7 +8,7 @@ import {
   ClockIcon,
   StarsIcon,
 } from "@hugeicons/core-free-icons";
-const PRIMARY_COLOR= "#9a2a23"
+import { COLOR } from "@/constants/colors";
 
 
 const formatTime = (date: any) => {
@@ -36,7 +36,7 @@ function MuhurataDetails({ panchangam }: any) {
     <View className="flex  flex-col gap-4">
       {/* Section Header */}
       <View className="flex-row gap-1 items-center">
-        <HugeiconsIcon icon={ClockIcon} color={PRIMARY_COLOR} size={24} />
+        <HugeiconsIcon icon={ClockIcon} color={COLOR.primary} size={24} />
         <Text className="text-2xl font-fraunces font-semibold tracking-tight text-primary">
           Muhurta & Timings
         </Text>

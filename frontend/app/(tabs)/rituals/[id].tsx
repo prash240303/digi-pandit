@@ -27,7 +27,7 @@ function formatCount(n: number): string {
 
 function ParagraphCard({ block }: { block: ParagraphBlock }) {
   return (
-    <Text className="text-ink leading-6 text-[15px]">{block.text}</Text>
+    <Text className="text-ink text-base">{block.text}</Text>
   );
 }
 

@@ -16,8 +16,8 @@ import type { Track } from "../../../mantras-data/album-data/types";
 import Album from "../../../mantras-data/album-data/types";
 import { fetchAlbumById } from "../../../mantras-data/album-data/albumSource";
 import { useAudio } from "../../../contexts/Audiocontext";
+import { COLOR } from "@/constants/colors";
 
-const PRIMARY_COLOR = "#9a2a23";
 const { width } = Dimensions.get("window");
 const HERO_HEIGHT = width * 0.55;
 
@@ -65,7 +65,7 @@ export default function AlbumScreen() {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-neutral-50">
-        <ActivityIndicator color={PRIMARY_COLOR} />
+        <ActivityIndicator color={COLOR.primary} />
       </SafeAreaView>
     );
   }
@@ -158,7 +158,7 @@ export default function AlbumScreen() {
           <TouchableOpacity
             onPress={handlePlayAll}
             className="absolute bottom-4 right-5 w-12 h-12 rounded-full items-center justify-center"
-            style={{ backgroundColor: PRIMARY_COLOR }}
+            style={{ backgroundColor: COLOR.primary }}
           >
             <Ionicons
               name="play"
@@ -175,7 +175,7 @@ export default function AlbumScreen() {
             <Text className="text-gray-900 font-bold text-lg">
               {album.title}
             </Text>
-            <Text className="text-sm mt-0.5" style={{ color: PRIMARY_COLOR }}>
+            <Text className="text-sm mt-0.5" style={{ color: COLOR.primary }}>
               {album.tracks.length} Mantras & Aartis
             </Text>
           </View>
@@ -200,7 +200,7 @@ export default function AlbumScreen() {
                 onPress={() => setActiveTab(tab)}
                 className="px-4 py-2 rounded-full"
                 style={{
-                  backgroundColor: active ? PRIMARY_COLOR : "#fff",
+                  backgroundColor: active ? COLOR.primary : "#fff",
                   borderWidth: active ? 0 : 1,
                   borderColor: "#E5E7EB",
                 }}
@@ -287,7 +287,7 @@ export default function AlbumScreen() {
                 <View className="flex-1">
                   <Text
                     className="font-semibold text-sm"
-                    style={{ color: isCurrent ? PRIMARY_COLOR : "#111827" }}
+                    style={{ color: isCurrent ? COLOR.primary : "#111827" }}
                     numberOfLines={1}
                   >
                     {track.title}
@@ -312,7 +312,7 @@ export default function AlbumScreen() {
                   <Ionicons
                     name={isLiked ? "heart" : "heart-outline"}
                     size={18}
-                    color={isLiked ? PRIMARY_COLOR : "#D1D5DB"}
+                    color={isLiked ? COLOR.primary : "#D1D5DB"}
                   />
                 </TouchableOpacity>
 

@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Text } from "./ui/text";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { SparklesIcon, CalendarIcon } from "@hugeicons/core-free-icons";
-const PRIMARY_COLOR= "#9a2a23"
+import { COLOR } from "@/constants/colors";
 
 interface FestivalCardProps {
   festivals: string[];
@@ -16,7 +16,7 @@ const FestivalCard = ({ festivals }: FestivalCardProps) => {
     <View className="w-full">
       {/* Section Header */}
       <View className="flex-row items-center gap-2 mb-4">
-        <HugeiconsIcon size={24} color={PRIMARY_COLOR} icon={CalendarIcon} />
+        <HugeiconsIcon size={24} color={COLOR.primary} icon={CalendarIcon} />
         <Text className="text-2xl font-fraunces font-bold text-primary">
           Festivals
         </Text>

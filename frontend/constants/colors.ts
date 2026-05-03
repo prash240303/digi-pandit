@@ -1,5 +1,6 @@
 // ─── Palette & Tokens ─────────────────────────────────────────
 export const COLOR = {
+  primary: "#9a2a23",
   cream: "#FDF6EC",
   creamDark: "#F0E6D4",
   terracotta: "#C2562D",
@@ -14,4 +15,3 @@ export const COLOR = {
   white: "#FFFFFF",
   cardBg: "#FFFAF3",
 };
-
